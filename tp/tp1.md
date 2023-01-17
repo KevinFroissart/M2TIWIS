@@ -1,30 +1,12 @@
 # TP1: Infrastructure et révision Java/Spring
 
-## Rendu
+## Compte-rendu
 
-Date de rendu: pour le 22/01/2023 dans tomuss case `Rendu_TP1` de l'UE `UE-INF2475M Intergiciels Et Services`
+Ce TP n'est pas à rendre, mais comporte une série des questions pour vous guider sur ce qu'il faut en retirer.
 
-Déposer sous tomuss un fichier `compte-rendu-tp1.md` (ou `.txt` si tomuss refuse les `.md`) par binôme au format [CommonMark][commonmark] dans lequel on indiquera:
+Les questions sont se différencient du reste du texte de l'énoncé comme montré ci-dessous:
 
-- les noms, prénoms et logins étudiants du binôme
-- les réponses aux questions posées dans le présent énoncé
-
-Les questions sont se différencient du reste du texte de l'énoncé comme montré ci-dessous (répondez bien à cette question):
-
-> Q1. Indiquer les noms, prénoms et numéros d'étudiants du binôme.
-
-On prendra soin de produire un fichier sobre mais bien présenté.
-Rédiger les réponses comme un compte-rendu qui serait destiné à un collègue qui pourrait être amené à reprendre tout ou partie de ce que vous avez fait lors de ce TP.
-En particulier, il est possible d'apporter une réponse à l'ensemble des parties d'une question sans respecter l'ordre de ces parties, par exemple:
-
-```markdown
-## Q1 Indiquer les noms, prénoms et numéros d'étudiants du binôme.
-
-- Lionel Mequeni p1234567
-- Emmanuel Codiry p2345678
-```
-
-Bien respecter la syntaxe de l'exemple ci-dessus pour les titres de question (_i.e._ le `## Qxy `): le fichier sera découpé automatiquement pour faciliter la correction du TP.
+> Q1. Indiquer les noms, prénoms et numéros d'étudiants du binôme, ainsi que les références du sujet de TP.
 
 ## Environnement de travail
 
@@ -349,7 +331,7 @@ Cette entité a les particularités suivantes:
 - Chacun des deux champs `machine` et `option` représente une associassion avec l'entité correrspondante, il faut donc l'annoter avec une des annotations d'assosiation (`@OneToOne`, `@OnteToMany`, `@ManyToOne`, `@ManyToMany`).
 - Le champ `cfg` pourra être volumineux, il faut donc qu'il puisse être mappé sur un champ de caractères de grande taille, type Clob ou Text.
 
-> Q21. Copier/coller les déclarations des 3 champs.
+> Q21. Copier et commenter les déclarations des 3 champs.
 
 Créer une classe `ConfigurationDTO` pour la classe `Configuration`.
 Les champs `machine` et `option` devront contenir respectivement le numéro de machine et le nom de l'option.
