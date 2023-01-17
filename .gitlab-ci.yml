@@ -9,12 +9,13 @@ variables:
   # when running from the command line.
   # `installAtEnd` and `deployAtEnd` are only effective with recent version of the corresponding plugins.
   # `-s makes make use repository-local settings that include proxy config`
-  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true -s $CI_PROJECT_DIR/ci_settings.xml"
-  HTTP_PROXY: "http://proxy.univ-lyon1.fr:3128"
-  http_proxy: "http://proxy.univ-lyon1.fr:3128"
-  HTTPS_PROXY: "http://proxy.univ-lyon1.fr:3128"
-  https_proxy: "http://proxy.univ-lyon1.fr:3128"
-  NO_PROXY: "localhost,127.0.0.1,forge.univ-lyon1.fr,docker"
+  MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true"
+  ##MAVEN_CLI_OPTS: "--batch-mode --errors --fail-at-end --show-version -DinstallAtEnd=true -DdeployAtEnd=true -s $CI_PROJECT_DIR/ci_settings.xml"
+  ##HTTP_PROXY: "http://proxy.univ-lyon1.fr:3128"
+  ##http_proxy: "http://proxy.univ-lyon1.fr:3128"
+  ##HTTPS_PROXY: "http://proxy.univ-lyon1.fr:3128"
+  ##https_proxy: "http://proxy.univ-lyon1.fr:3128"
+  ##NO_PROXY: "localhost,127.0.0.1,forge.univ-lyon1.fr,docker"
 
 
 # Cache downloaded dependencies and plugins between builds.
