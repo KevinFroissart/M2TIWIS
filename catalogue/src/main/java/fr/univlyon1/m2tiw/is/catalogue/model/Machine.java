@@ -1,6 +1,5 @@
 package fr.univlyon1.m2tiw.is.catalogue.model;
 
-import fr.univlyon1.m2tiw.is.catalogue.service.dto.MachineDTO;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
