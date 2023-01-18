@@ -31,7 +31,7 @@ public class MachineServiceTest {
     private MachineRepository machineRepository;
 
     @Test
-    public void shouldRetournerUneListeDeMachine_whenGetMachines() {
+    public void shouldRetournerUneListeDeMachines_whenGetMachines() {
         // Given
         Machine machine1 = new MachineMockBuilder()
                 .setId(1L)
@@ -80,7 +80,7 @@ public class MachineServiceTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void shouldThrowNPE_whenGetMachine_withPasDeMachine() throws NoSuchMachineException {
+    public void shouldThrowNPE_whenGetMachine_withMachineIntrouvable() throws NoSuchMachineException {
         // Given
         when(machineRepository.findById(0L)).thenReturn(null);
 
