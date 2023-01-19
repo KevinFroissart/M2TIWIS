@@ -18,6 +18,7 @@ public class OptionService {
 
     /**
      * Retourne une collection de {@link OptionDTO}.
+     *
      * @return les options.
      */
     public Collection<OptionDTO> getOptions() {
@@ -26,6 +27,7 @@ public class OptionService {
 
     /**
      * Retourne une {@link OptionDTO} pour un id donné.
+     *
      * @param nom le nom de l'option.
      * @return l'option.
      */
@@ -38,6 +40,7 @@ public class OptionService {
 
     /**
      * Crée une {@link OptionDTO}.
+     *
      * @param optionDTO l'option à créer.
      * @return l"option créée.
      */
@@ -49,6 +52,7 @@ public class OptionService {
 
     /**
      * Met à jour une {@link OptionDTO}.
+     *
      * @param optionDTO l'option à mettre à jour.
      * @return l'option mise à jour.
      */
@@ -63,9 +67,10 @@ public class OptionService {
 
     /**
      * Supprime une {@link OptionDTO} pour un id donné.
+     *
      * @param id l'id de l'option à supprimer.
      */
-    public void deleteOption(String nom)  throws NoSuchOptionException {
+    public void deleteOption(String nom) throws NoSuchOptionException {
         Option option = optionRepository
                 .findById(nom)
                 .orElseThrow(() -> new NoSuchOptionException(nom));

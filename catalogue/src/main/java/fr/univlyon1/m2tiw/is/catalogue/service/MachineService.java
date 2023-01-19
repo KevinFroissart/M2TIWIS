@@ -17,6 +17,7 @@ public class MachineService {
 
     /**
      * Retourne une collection de {@link MachineDTO}.
+     *
      * @return les machines.
      */
     public Collection<MachineDTO> getMachines() {
@@ -25,6 +26,7 @@ public class MachineService {
 
     /**
      * Retourne une {@link MachineDTO} pour un id donné.
+     *
      * @param id l'id de la machine.
      * @return la machine.
      */
@@ -37,6 +39,7 @@ public class MachineService {
 
     /**
      * Crée une {@link MachineDTO}.
+     *
      * @param machineDTO la machine à créer.
      * @return la machine créée.
      */
@@ -49,6 +52,7 @@ public class MachineService {
 
     /**
      * Met à jour une {@link MachineDTO}.
+     *
      * @param machineDTO la machine à mettre à jour.
      * @return la machine mise à jour.
      */
@@ -63,9 +67,10 @@ public class MachineService {
 
     /**
      * Supprime une {@link MachineDTO} pour un id donné.
+     *
      * @param id l'id de la machine à supprimer.
      */
-    public void deleteMachine(long id)  throws NoSuchMachineException {
+    public void deleteMachine(long id) throws NoSuchMachineException {
         Machine machine = machineRepository
                 .findById(id)
                 .orElseThrow(() -> new NoSuchMachineException(id));
