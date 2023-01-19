@@ -1,26 +1,36 @@
 package fr.univlyon1.m2tiw.is.catalogue.service;
 
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
 import fr.univlyon1.m2tiw.is.catalogue.model.Option;
 import fr.univlyon1.m2tiw.is.catalogue.repository.OptionRepository;
 import fr.univlyon1.m2tiw.is.catalogue.service.dto.OptionDTO;
 import fr.univlyon1.m2tiw.is.catalogue.utils.OptionDTOMockBuilder;
 import fr.univlyon1.m2tiw.is.catalogue.utils.OptionMockBuilder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collection;
-import java.util.Optional;
-
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
+@ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.Silent.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class OptionServiceTest {
 
     @InjectMocks
@@ -78,13 +88,13 @@ public class OptionServiceTest {
                 .containsOnly("nom 1", "Description 1");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void shouldThrowNPE_whenGetOption_withOptionIntrouvable() throws NoSuchOptionException {
         // Given
         when(optionRepository.findById("nom 0")).thenReturn(null);
 
         // When
-        optionService.getOption("nom 0");
+        assertThrows(NullPointerException.class, () -> optionService.getOption("nom 0"));
     }
 
     @Test
@@ -140,8 +150,8 @@ public class OptionServiceTest {
                 .containsOnly("nom 1", "Description update");
     }
 
-    @Test(expected = NoSuchOptionException.class)
-    public void shouldThrowNoSuchMachineException_whenUpdateMachine_withPasDeMachine() throws NoSuchOptionException {
+    @Test()
+    public void shouldThrowNoSuchMachineException_whenUpdateMachine_withPasDeMachine() {
         // Given
         OptionDTO optionDTO1Update = new OptionDTOMockBuilder()
                 .setNom("nom 1")
@@ -151,7 +161,7 @@ public class OptionServiceTest {
         when(optionRepository.findById("nom 0")).thenReturn(null);
 
         // Then
-        optionService.updateOption(optionDTO1Update);
+        assertThrows(NoSuchOptionException.class, () -> optionService.updateOption(optionDTO1Update));
     }
 
     @Test
@@ -171,13 +181,13 @@ public class OptionServiceTest {
         verify(optionRepository, times(1)).delete(any(Option.class));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowNPE_whendeleteOption_withMauvaisId() throws NoSuchOptionException {
+    @Test
+    public void shouldThrowNPE_whendeleteOption_withMauvaisId() {
         // Given
         when(optionRepository.findById("nom 1")).thenReturn(null);
 
         // Then
-        optionService.deleteOption("nom 1");
+        assertThrows(NullPointerException.class, () -> optionService.deleteOption("nom 1"));
     }
 
 }

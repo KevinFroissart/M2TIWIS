@@ -1,27 +1,36 @@
 package fr.univlyon1.m2tiw.is.catalogue.service;
 
+import static java.util.Arrays.asList;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.tuple;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Collection;
+import java.util.Optional;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
+
 import fr.univlyon1.m2tiw.is.catalogue.model.Machine;
 import fr.univlyon1.m2tiw.is.catalogue.repository.MachineRepository;
 import fr.univlyon1.m2tiw.is.catalogue.service.dto.MachineDTO;
 import fr.univlyon1.m2tiw.is.catalogue.utils.MachineDTOMockBuilder;
 import fr.univlyon1.m2tiw.is.catalogue.utils.MachineMockBuilder;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
 
-import java.util.Collection;
-import java.util.Optional;
-
-import static java.util.Arrays.asList;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.tuple;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-
-
+@ExtendWith(MockitoExtension.class)
 @RunWith(MockitoJUnitRunner.Silent.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class MachineServiceTest {
 
     @InjectMocks
@@ -79,13 +88,13 @@ public class MachineServiceTest {
                 .containsOnly(1L, "Modele 1");
     }
 
-    @Test(expected = NullPointerException.class)
+    @Test
     public void shouldThrowNPE_whenGetMachine_withMachineIntrouvable() throws NoSuchMachineException {
         // Given
         when(machineRepository.findById(0L)).thenReturn(null);
 
         // When
-        machineService.getMachine(0L);
+        assertThrows(NullPointerException.class, () -> machineService.getMachine(0L));
     }
 
     @Test
@@ -139,7 +148,7 @@ public class MachineServiceTest {
                 .containsOnly(1L, "Modele update");
     }
 
-    @Test(expected = NoSuchMachineException.class)
+    @Test
     public void shouldThrowNoSuchMachineException_whenUpdateMachine_withPasDeMachine() throws NoSuchMachineException {
         // Given
         MachineDTO machineDTOUpdate = new MachineDTOMockBuilder()
@@ -150,7 +159,7 @@ public class MachineServiceTest {
         when(machineRepository.findById(0L)).thenReturn(null);
 
         // Then
-        machineService.updateMachine(machineDTOUpdate);
+        assertThrows(NoSuchMachineException.class, () -> machineService.updateMachine(machineDTOUpdate));
     }
 
     @Test
@@ -170,12 +179,12 @@ public class MachineServiceTest {
         verify(machineRepository, times(1)).delete(any(Machine.class));
     }
 
-    @Test(expected = NullPointerException.class)
-    public void shouldThrowNPE_whenDeleteMachine_withMauvaisId() throws NoSuchMachineException {
+    @Test
+    public void shouldThrowNPE_whenDeleteMachine_withMauvaisId()  {
         // Given
         when(machineRepository.findById(1L)).thenReturn(null);
 
         // Then
-        machineService.deleteMachine(1L);
+        assertThrows(NullPointerException.class, () -> machineService.deleteMachine(1L));
     }
 }
