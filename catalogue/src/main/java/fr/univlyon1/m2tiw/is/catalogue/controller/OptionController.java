@@ -30,9 +30,10 @@ public class OptionController {
 
     /**
      * Retourne une collection de {@link OptionDTO}.
+     *
      * @return les options.
      */
-    @GetMapping()
+    @GetMapping
     public Collection<OptionDTO> getOptions() {
         return optionService.getOptions();
     }
@@ -40,6 +41,7 @@ public class OptionController {
 
     /**
      * Retourne une {@link OptionDTO} pour un nom donné.
+     *
      * @param nom le nom de l'option.
      * @return l'option.
      */
@@ -54,10 +56,11 @@ public class OptionController {
 
     /**
      * Crée une {@link OptionDTO}.
+     *
      * @param optionDTO l'option à créer.
      * @return l'option créée.
      */
-    @PostMapping()
+    @PostMapping
     public ResponseEntity<OptionDTO> createOption(@RequestBody OptionDTO optionDTO) {
         log.info("Creating option with {}", optionDTO);
         return new ResponseEntity<>(optionService.createOption(optionDTO), HttpStatus.CREATED);
@@ -65,6 +68,7 @@ public class OptionController {
 
     /**
      * Met à jour une {@link OptionDTO}.
+     *
      * @param optionDTO l'option à mettre à jour.
      * @return l'option mise à jour.
      */
@@ -81,10 +85,11 @@ public class OptionController {
 
     /**
      * Supprime une {@link OptionDTO} pour un nom donné.
+     *
      * @param nom le nom de l'option à supprimer.
      * @return 204 si l'option est supprimée ou 404 si aucune option n'est trouvée pour le nom donné.
      */
-    @DeleteMapping
+    @DeleteMapping("/{nom}")
     public ResponseEntity<OptionDTO> deleteOption(@PathVariable("nom") String nom) {
         try {
             log.info("Deleting option with nom {}", nom);
