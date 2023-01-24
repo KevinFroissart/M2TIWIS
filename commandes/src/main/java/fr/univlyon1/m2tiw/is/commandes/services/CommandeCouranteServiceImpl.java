@@ -11,13 +11,10 @@ import java.util.Collection;
 
 public class CommandeCouranteServiceImpl implements CommandeCouranteService {
     private Commande commandeCourante;
-    private final CommandeDAO commandeDAO;
-    private final VoitureService voitureService;
+    private CommandeDAO commandeDAO;
+    private VoitureService voitureService;
 
-    public CommandeCouranteServiceImpl() throws SQLException {
-        voitureService = new VoitureServiceImpl(); // TODO: Inject
-        commandeDAO = new CommandeDAOImpl(); // TODO: Inject
-        commandeDAO.init();
+    public CommandeCouranteServiceImpl() {
     }
 
     @Override
@@ -56,5 +53,13 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
             voitureService.sauverVoiture(voiture.getId(), commandeCourante);
         }
         creerCommandeCourante(); // On repart avec un nouveau panier vide
+    }
+
+    public void setCommandeDAO(CommandeDAO commandeDAO) {
+        this.commandeDAO = commandeDAO;
+    }
+
+    public void setVoitureService(VoitureService voitureService) {
+        this.voitureService = voitureService;
     }
 }

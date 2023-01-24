@@ -8,17 +8,12 @@ import java.util.Collection;
 
 public class GestionCommandeServiceImpl implements GestionCommandeService {
 
-    private final OptionService optionService;
-    private final VoitureService voitureService;
-    private final CommandeCouranteService commandeCouranteService;
-    private final CommandeDAO commandeDAO;
+    private OptionService optionService;
+    private VoitureService voitureService;
+    private CommandeCouranteService commandeCouranteService;
+    private CommandeDAO commandeDAO;
 
-    public GestionCommandeServiceImpl() throws SQLException {
-        commandeCouranteService = new CommandeCouranteServiceImpl(); // TODO: Inject
-        optionService= new OptionServiceImpl(); // TODO: Inject
-        voitureService = new VoitureServiceImpl(); // TODO: Inject
-        commandeDAO = new CommandeDAOImpl(); // TODO: Inject
-        commandeDAO.init();
+    public GestionCommandeServiceImpl() {
     }
 
     @Override
@@ -36,5 +31,21 @@ public class GestionCommandeServiceImpl implements GestionCommandeService {
     @Override
     public Commande getCommandeCourante() {
         return commandeCouranteService.getCommandeCourante();
+    }
+
+    public void setOptionService(OptionService optionService) {
+        this.optionService = optionService;
+    }
+
+    public void setVoitureService(VoitureService voitureService) {
+        this.voitureService = voitureService;
+    }
+
+    public void setCommandeCouranteService(CommandeCouranteService commandeCouranteService) {
+        this.commandeCouranteService = commandeCouranteService;
+    }
+
+    public void setCommandeDAO(CommandeDAO commandeDAO) {
+        this.commandeDAO = commandeDAO;
     }
 }
