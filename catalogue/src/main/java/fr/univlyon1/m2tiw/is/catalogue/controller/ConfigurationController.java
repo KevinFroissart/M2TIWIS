@@ -45,7 +45,7 @@ public class ConfigurationController {
      * @param machineOptionKey l'id de la configuration.
      * @return la configuration.
      */
-    @GetMapping
+    @GetMapping("/get")
     public ResponseEntity<ConfigurationDTO> getConfiguration(@RequestBody MachineOptionKey machineOptionKey) {
         try {
             return new ResponseEntity<>(configurationService.getConfiguration(machineOptionKey), HttpStatus.OK);
