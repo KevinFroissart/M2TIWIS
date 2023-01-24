@@ -71,7 +71,7 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 
     @Override
     public void deleteCommande(long commandeId) throws SQLException {
-        deleteStatement.setLong(1,commandeId);
+        deleteStatement.setLong(1, commandeId);
         deleteStatement.executeUpdate();
     }
 

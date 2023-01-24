@@ -28,6 +28,15 @@ public interface VoitureDAO {
     Voiture saveVoiture(Voiture voiture, long commandeId) throws SQLException;
 
     /**
+     * Saves a new voiture in base, without a command
+     *
+     * @param voiture the voiture to save
+     * @return either the provided voiture or a copy with an updated id.
+     * @throws SQLException if there is a persistence problem
+     */
+    Voiture saveVoiture(Voiture voiture) throws SQLException;
+
+    /**
      * Retreive a voiture using its id.
      *
      * @param id the id of the article

@@ -34,7 +34,7 @@ public class DBAccess {
      * JDBC connection. Initialized the first time a connection is required.
      * Reinitialized if the current connection if closed.
      */
-    private Connection connection = null;
+    private static Connection connection = null; // static car sinon trop de connections ouvertes à l'exécution des tests
 
     /**
      * Check the status of the connection and reestablish a connection is needed.

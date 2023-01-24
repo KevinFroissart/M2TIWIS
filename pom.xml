@@ -22,6 +22,7 @@
 
     <modules>
         <module>catalogue</module>
+	<module>commandes</module>
     </modules>
 
     <dependencyManagement>
