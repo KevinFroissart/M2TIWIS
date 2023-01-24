@@ -16,17 +16,17 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
     @Override
     protected void initStatements(Connection connection) throws SQLException {
-        getOptionStatement = connection.prepareStatement("SELECT valeur FROM option WHERE voiture = ? AND  nom = ?");
-        getAllOptionsStatement = connection.prepareStatement("SELECT DISTINCT nom, valeur FROM option");
-        getOptionsForVoitureStatement = connection.prepareStatement("SELECT nom, valeur FROM option WHERE voiture = ?");
-        deleteOptionForVoitureStatement = connection.prepareStatement("DELETE FROM option WHERE voiture = ? AND nom = ?");
-        addOptionForVoitureStatement = connection.prepareStatement("INSERT INTO option(voiture,nom,valeur) VALUES( ?,?,?)");
+        getOptionStatement = connection.prepareStatement("SELECT valeur FROM option2 WHERE voiture = ? AND  nom = ?");
+        getAllOptionsStatement = connection.prepareStatement("SELECT DISTINCT nom, valeur FROM option2");
+        getOptionsForVoitureStatement = connection.prepareStatement("SELECT nom, valeur FROM option2 WHERE voiture = ?");
+        deleteOptionForVoitureStatement = connection.prepareStatement("DELETE FROM option2 WHERE voiture = ? AND nom = ?");
+        addOptionForVoitureStatement = connection.prepareStatement("INSERT INTO option2(voiture,nom,valeur) VALUES( ?,?,?)");
     }
 
     @Override
     protected void setupTable(Connection connection) throws SQLException {
         Statement stat = connection.createStatement();
-        stat.execute("CREATE TABLE IF NOT EXISTS option(" +
+        stat.execute("CREATE TABLE IF NOT EXISTS option2(" +
                 "voiture integer references voiture(id), " +
                 "nom varchar(100), " +
                 "valeur varchar(100) NOT NULL," +
@@ -81,5 +81,6 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
     public void deleteOptionVoiture(Long voitureId, String nom) throws SQLException {
         deleteOptionForVoitureStatement.setLong(1, voitureId);
         deleteOptionForVoitureStatement.setString(2, nom);
+        deleteOptionForVoitureStatement.executeUpdate();
     }
 }

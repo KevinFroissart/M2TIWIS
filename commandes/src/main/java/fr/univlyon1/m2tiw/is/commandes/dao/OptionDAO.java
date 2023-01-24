@@ -21,7 +21,7 @@ public interface OptionDAO {
      * Get an option from persistence support
      *
      * @param voitureId the voiture in which this options is searched for
-     * @param nom the name of the option
+     * @param nom       the name of the option
      * @return the option
      * @throws NotFoundException if the option was not in the persistence support.
      * @throw SQLException
@@ -30,12 +30,14 @@ public interface OptionDAO {
 
     /**
      * Get all options
+     *
      * @return a collection containing all known options
      */
     Collection<Option> getAllOptions() throws SQLException;
 
     /**
      * Get options for a voiture
+     *
      * @param voitureId id of the voiture
      * @return a collection of options set for this voiture
      * @throws SQLException
@@ -44,6 +46,7 @@ public interface OptionDAO {
 
     /**
      * Place une option sur une voiture
+     *
      * @param voitureId
      * @param option
      */
@@ -51,6 +54,7 @@ public interface OptionDAO {
 
     /**
      * Supprime une option d'une voiture
+     *
      * @param voitureId
      * @param nom
      */

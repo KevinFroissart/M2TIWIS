@@ -9,6 +9,8 @@ import java.util.Collection;
 
 public interface GestionCommandeService {
     public Collection<Option> getAllOptions() throws SQLException;
+
     public Commande getCommande(Long id) throws SQLException, NotFoundException;
+
     public Commande getCommandeCourante();
 }

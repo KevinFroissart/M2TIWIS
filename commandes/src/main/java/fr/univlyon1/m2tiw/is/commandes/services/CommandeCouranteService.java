@@ -9,9 +9,14 @@ import java.util.Collection;
 
 public interface CommandeCouranteService {
     public Commande creerCommandeCourante();
+
     public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException;
+
     public void supprimerVoiture(Long voitureId) throws NotFoundException, SQLException;
+
     public Collection<Voiture> getAllVoitures();
+
     public Commande getCommandeCourante();
-    public void validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException;
+
+    public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException;
 }

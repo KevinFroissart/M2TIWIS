@@ -8,12 +8,16 @@ import java.util.Objects;
 public class Voiture {
     private Long id;
     private String modele;
-    private Map <String, Option> options;
+    private Map<String, Option> options;
 
     public Voiture(Long id, String modele) {
         this.id = id;
         this.modele = modele;
         this.options = new HashMap<>();
+    }
+
+    public Voiture(String modele) {
+        this.modele = modele;
     }
 
     @Override
@@ -59,5 +63,10 @@ public class Voiture {
 
     public Collection<Option> getOptions() {
         return options.values();
+    }
+
+    @Override
+    public String toString() {
+        return "Voiture id=" + getId();
     }
 }

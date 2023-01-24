@@ -3,6 +3,7 @@ version: "3.7"
 services:
   sonarqube:
     image: sonarqube:lts
+    platform: linux/amd64
     ports:
       - "9000:9000"
     volumes:
@@ -13,9 +14,11 @@ services:
     depends_on:
       - postgres
     environment:
-      - sonar.jdbc.username=sonar
-      - sonar.jdbc.password=sonar
-      - sonar.jdbc.url=jdbc:postgresql://postgres/sonarqube
+      SONAR_SEARCH_JAVAADDITIONALOPTS: -Dbootstrap.system_call_filter=false
+      sonar.jdbc.username: sonar
+      sonar.jdbc.password: sonar
+      sonar.jdbc.url: jdbc:postgresql://postgres/sonarqube
+#      - SONAR_SEARCH_JAVAADDITIONALOPTS="-Dbootstrap.system_call_filter=false"
 
 
   postgres:
