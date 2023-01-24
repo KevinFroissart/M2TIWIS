@@ -10,12 +10,10 @@ import java.util.Collection;
 
 public class VoitureServiceImpl implements VoitureService {
     private static Long currentId = 0L;
-    private final VoitureDAO voitureDAO = new VoitureDAOImpl(); // TODO: Inject
-    private final OptionDAO optionDAO = new OptionDAOImpl(); // TODO: inject
+    private VoitureDAO voitureDAO;
+    private OptionDAO optionDAO;
 
-    public VoitureServiceImpl() throws SQLException {
-        voitureDAO.init();
-        optionDAO.init();
+    public VoitureServiceImpl() {
     }
 
     @Override
@@ -67,5 +65,13 @@ public class VoitureServiceImpl implements VoitureService {
             }
         }
         return voitures;
+    }
+
+    public void setVoitureDAO(VoitureDAO voitureDAO) {
+        this.voitureDAO = voitureDAO;
+    }
+
+    public void setOptionDAO(OptionDAO optionDAO) {
+        this.optionDAO = optionDAO;
     }
 }

@@ -13,7 +13,7 @@ import java.sql.SQLException;
 public abstract class AbstractSQLDAO {
     private static final Logger LOG = LoggerFactory.getLogger(AbstractSQLDAO.class);
 
-    private final DBAccess dbAccess = new DBAccess(); // TODO: inject
+    private DBAccess dbAccess = null;
     private Connection currentConnection = null;
 
     /**
@@ -47,4 +47,8 @@ public abstract class AbstractSQLDAO {
      * @throws SQLException if there is an error while creating tables
      */
     protected abstract void setupTable(Connection connection) throws SQLException;
+
+    public void setDbAccess(DBAccess dbAccess) {
+        this.dbAccess = dbAccess;
+    }
 }
