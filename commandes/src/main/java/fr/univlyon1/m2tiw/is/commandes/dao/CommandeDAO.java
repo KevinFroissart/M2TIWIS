@@ -21,7 +21,7 @@ public interface CommandeDAO {
 	 *
 	 * @param commande the commande to save
 	 * @return the commande or an updated copy
-	 * @throws SQLException if the is a problem in DB
+	 * @throws SQLException if there is a problem in DB
 	 */
 	Commande saveCommande(Commande commande) throws SQLException;
 

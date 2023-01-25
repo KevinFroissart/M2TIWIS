@@ -13,15 +13,16 @@ public class OptionServiceImpl implements OptionService {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OptionServiceImpl.class);
 
-	private final OptionDAO dao;
+	private final OptionDAO optionDAO;
 
-	public OptionServiceImpl(OptionDAO dao) {
-		this.dao = dao;
+	public OptionServiceImpl(OptionDAO dao) throws SQLException {
+		this.optionDAO = dao;
+		this.optionDAO.init();
 	}
 
 	@Override
 	public Collection<Option> getAllOptions() throws SQLException {
-		return dao.getAllOptions();
+		return optionDAO.getAllOptions();
 	}
 
 }

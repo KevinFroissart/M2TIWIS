@@ -15,11 +15,12 @@ public class GestionCommandeServiceImpl implements GestionCommandeService {
 	private final CommandeCouranteService commandeCouranteService;
 	private final CommandeDAO commandeDAO;
 
-	public GestionCommandeServiceImpl(OptionService optionService, VoitureService voitureService, CommandeCouranteService commandeCouranteService, CommandeDAO commandeDAO) {
+	public GestionCommandeServiceImpl(OptionService optionService, VoitureService voitureService, CommandeCouranteService commandeCouranteService, CommandeDAO commandeDAO) throws SQLException {
 		this.optionService = optionService;
 		this.voitureService = voitureService;
 		this.commandeCouranteService = commandeCouranteService;
 		this.commandeDAO = commandeDAO;
+		this.commandeDAO.init();
 	}
 
 	@Override
