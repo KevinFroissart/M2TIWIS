@@ -15,9 +15,11 @@ public class VoitureServiceImpl implements VoitureService {
 	private final VoitureDAO voitureDAO;
 	private final OptionDAO optionDAO;
 
-	public VoitureServiceImpl(VoitureDAO voitureDAO, OptionDAO optionDAO) {
+	public VoitureServiceImpl(VoitureDAO voitureDAO, OptionDAO optionDAO) throws SQLException {
 		this.voitureDAO = voitureDAO;
 		this.optionDAO = optionDAO;
+		this.voitureDAO.init();
+		this.optionDAO.init();
 	}
 
 	@Override

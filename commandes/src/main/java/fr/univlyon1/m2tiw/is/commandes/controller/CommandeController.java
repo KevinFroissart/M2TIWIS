@@ -1,8 +1,5 @@
 package fr.univlyon1.m2tiw.is.commandes.controller;
 
-import java.sql.SQLException;
-import java.util.Collection;
-
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
@@ -10,48 +7,66 @@ import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.GestionCommandeService;
+import org.picocontainer.Startable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class CommandeController {
+import java.sql.SQLException;
+import java.util.Collection;
 
-	private final CommandeCouranteService commandeCouranteService;
+public class CommandeController implements Startable {
 
-	private final GestionCommandeService gestionCommandeService;
+    private static final Logger LOG = LoggerFactory.getLogger(CommandeController.class);
 
-	public CommandeController(CommandeCouranteService commandeCouranteService, GestionCommandeService gestionCommandeService) {
-		this.commandeCouranteService = commandeCouranteService;
-		this.gestionCommandeService = gestionCommandeService;
-	}
+    private final CommandeCouranteService commandeCouranteService;
 
-	public Commande creerCommandeCourante() {
-		return commandeCouranteService.creerCommandeCourante();
-	}
+    private final GestionCommandeService gestionCommandeService;
 
-	public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
-		commandeCouranteService.ajouterVoiture(voitureId);
-	}
+    public CommandeController(CommandeCouranteService commandeCouranteService, GestionCommandeService gestionCommandeService) {
+        this.commandeCouranteService = commandeCouranteService;
+        this.gestionCommandeService = gestionCommandeService;
+    }
 
-	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-		commandeCouranteService.supprimerVoiture(voitureId);
-	}
+    @Override
+    public void start() {
+        LOG.info("Composant Controleur démarré : %s".formatted(this.toString()));
+    }
 
-	public Collection<Voiture> getAllVoitures() {
-		return commandeCouranteService.getAllVoitures();
-	}
+    @Override
+    public void stop() {
+        LOG.info("Composant Controleur arrêté : %s".formatted(this.toString()));
+    }
 
-	public Commande getCommandeCourante() {
-		return commandeCouranteService.getCommandeCourante();
-	}
+    public Commande creerCommandeCourante() {
+        return commandeCouranteService.creerCommandeCourante();
+    }
 
-	public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
-		return commandeCouranteService.validerCommandeCourante();
-	}
+    public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
+        commandeCouranteService.ajouterVoiture(voitureId);
+    }
 
-	public Collection<Option> getAllOptions() throws SQLException {
-		return gestionCommandeService.getAllOptions();
-	}
+    public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
+        commandeCouranteService.supprimerVoiture(voitureId);
+    }
 
-	public Commande getCommande(Long id) throws SQLException, NotFoundException {
-		return gestionCommandeService.getCommande(id);
-	}
+    public Collection<Voiture> getAllVoitures() {
+        return commandeCouranteService.getAllVoitures();
+    }
+
+    public Commande getCommandeCourante() {
+        return commandeCouranteService.getCommandeCourante();
+    }
+
+    public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
+        return commandeCouranteService.validerCommandeCourante();
+    }
+
+    public Collection<Option> getAllOptions() throws SQLException {
+        return gestionCommandeService.getAllOptions();
+    }
+
+    public Commande getCommande(Long id) throws SQLException, NotFoundException {
+        return gestionCommandeService.getCommande(id);
+    }
 
 }

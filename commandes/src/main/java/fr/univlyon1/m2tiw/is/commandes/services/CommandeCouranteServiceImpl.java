@@ -14,9 +14,10 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 	private final CommandeDAO commandeDAO;
 	private final VoitureService voitureService;
 
-	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureService voitureService) {
+	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureService voitureService) throws SQLException {
 		this.commandeDAO = commandeDAO;
 		this.voitureService = voitureService;
+		this.commandeDAO.init();
 	}
 
 	@Override

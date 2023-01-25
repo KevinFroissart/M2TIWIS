@@ -1,12 +1,5 @@
 package fr.univlyon1.m2tiw.is.commandes.serveur;
 
-import java.sql.SQLException;
-import java.util.Collection;
-
-import org.picocontainer.DefaultPicoContainer;
-import org.picocontainer.MutablePicoContainer;
-import org.picocontainer.PicoContainer;
-
 import fr.univlyon1.m2tiw.is.commandes.controller.CommandeController;
 import fr.univlyon1.m2tiw.is.commandes.controller.OptionController;
 import fr.univlyon1.m2tiw.is.commandes.controller.VoitureController;
@@ -21,89 +14,95 @@ import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
+import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteServiceImpl;
 import fr.univlyon1.m2tiw.is.commandes.services.DBAccess;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.GestionCommandeService;
+import fr.univlyon1.m2tiw.is.commandes.services.GestionCommandeServiceImpl;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 import fr.univlyon1.m2tiw.is.commandes.services.OptionService;
+import fr.univlyon1.m2tiw.is.commandes.services.OptionServiceImpl;
 import fr.univlyon1.m2tiw.is.commandes.services.VoitureService;
+import fr.univlyon1.m2tiw.is.commandes.services.VoitureServiceImpl;
+import org.picocontainer.DefaultPicoContainer;
+import org.picocontainer.MutablePicoContainer;
+import org.picocontainer.behaviors.Caching;
+import org.picocontainer.parameters.ComponentParameter;
+
+import java.sql.SQLException;
+import java.util.Collection;
 
 public class Serveur {
 
-	private final DBAccess dbAccess;
-	private final CommandeDAO commandeDAO;
-	private final OptionDAO optionDAO;
-	private final VoitureDAO voitureDAO;
+    private final VoitureController voitureController;
+    private final OptionController optionController;
+    private final CommandeController commandeController;
 
-	private static MutablePicoContainer pico;
 
-	public Serveur() throws SQLException {
-		dbAccess = new DBAccess();
+    public Serveur() {
+        MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
+        pico.addComponent(CommandeDAO.class, CommandeDAOImpl.class);
+        pico.addComponent(OptionDAO.class, OptionDAOImpl.class);
+        pico.addComponent(VoitureDAO.class, VoitureDAOImpl.class);
 
-		CommandeDAOImpl commandeDaoImpl = new CommandeDAOImpl();
-		commandeDaoImpl.setDbAccess(dbAccess);
-		commandeDaoImpl.init();
-		commandeDAO = commandeDaoImpl;
+        pico.addComponent(VoitureService.class, VoitureServiceImpl.class,
+                new ComponentParameter(VoitureDAO.class),
+                new ComponentParameter(OptionDAO.class)
+        );
+        pico.addComponent(OptionService.class, OptionServiceImpl.class,
+                new ComponentParameter(OptionDAO.class)
+        );
+        pico.addComponent(GestionCommandeService.class, GestionCommandeServiceImpl.class,
+                new ComponentParameter(OptionService.class),
+                new ComponentParameter(VoitureService.class),
+                new ComponentParameter(CommandeCouranteService.class),
+                new ComponentParameter(CommandeDAO.class));
+        pico.addComponent(CommandeCouranteService.class, CommandeCouranteServiceImpl.class,
+                new ComponentParameter(VoitureService.class),
+                new ComponentParameter(CommandeDAO.class));
+        pico.addComponent(DBAccess.class);
 
-		OptionDAOImpl optionDaoImpl = new OptionDAOImpl();
-		optionDaoImpl.setDbAccess(dbAccess);
-		optionDaoImpl.init();
-		optionDAO = optionDaoImpl;
+        pico.addComponent(VoitureController.class, new ComponentParameter(VoitureService.class));
+        pico.addComponent(OptionController.class, new ComponentParameter(OptionService.class));
+        pico.addComponent(CommandeController.class,
+                new ComponentParameter(GestionCommandeService.class),
+                new ComponentParameter(CommandeCouranteService.class)
+        );
 
-		VoitureDAOImpl voitureDaoImpl = new VoitureDAOImpl();
-		voitureDaoImpl.setDbAccess(dbAccess);
-		voitureDaoImpl.init();
-		voitureDAO = voitureDaoImpl;
-	}
+        voitureController = pico.getComponent(VoitureController.class);
+        optionController = pico.getComponent(OptionController.class);
+        commandeController = pico.getComponent(CommandeController.class);
+    }
 
-	public static PicoContainer context() {
-		if (pico == null) initialize();
-		return pico;
-	}
+    public Collection<Option> getAllOptions() throws SQLException {
+        return optionController.getAllOptions();
+    }
 
-	private static void initialize() {
-		pico = new DefaultPicoContainer();
-		pico.addComponent(VoitureDAO.class);
-		pico.addComponent(OptionDAO.class);
-		pico.addComponent(CommandeDAO.class);
-		pico.addComponent(VoitureService.class);
-		pico.addComponent(OptionService.class);
-		pico.addComponent(GestionCommandeService.class);
-		pico.addComponent(CommandeCouranteService.class);
-		pico.addComponent(VoitureController.class);
-		pico.addComponent(OptionController.class);
-		pico.addComponent(CommandeController.class);
-	}
+    public Voiture creerVoiture(String modele) throws SQLException {
+        return voitureController.creerVoiture(modele);
+    }
 
-	public Collection<Option> getAllOptions() throws SQLException {
-		return optionService.getAllOptions();
-	}
+    public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
+        voitureController.ajouterConfiguration(voitureId, option);
+    }
 
-	public Voiture creerVoiture(String modele) throws SQLException {
-		return voitureService.creerVoiture(modele);
-	}
+    public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException, InvalidConfigurationException {
+        voitureController.supprimerConfiguration(voitureId, option);
+    }
 
-	public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
-		voitureService.ajouterConfiguration(voitureId, option);
-	}
+    public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
+        commandeController.ajouterVoiture(voitureId);
+    }
 
-	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException, InvalidConfigurationException {
-		voitureService.supprimerConfiguration(voitureId, option);
-	}
+    public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
+        commandeController.supprimerVoiture(voitureId);
+    }
 
-	public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
-		commandeCouranteService.ajouterVoiture(voitureId);
-	}
+    public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
+        return commandeController.validerCommandeCourante();
+    }
 
-	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-		commandeCouranteService.supprimerVoiture(voitureId);
-	}
-
-	public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
-		return commandeCouranteService.validerCommandeCourante();
-	}
-
-	public Commande getCommande(Long id) throws SQLException, NotFoundException {
-		return gestionCommandeService.getCommande(id);
-	}
+    public Commande getCommande(Long id) throws SQLException, NotFoundException {
+        return commandeController.getCommande(id);
+    }
 }
