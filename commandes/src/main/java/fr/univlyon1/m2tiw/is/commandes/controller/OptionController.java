@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
 
 public class OptionController implements Startable {
 
@@ -18,18 +19,28 @@ public class OptionController implements Startable {
         this.optionService = optionService;
     }
 
+    public Object process(String commande, Map<String, Object> parametres) throws SQLException {
+        switch (commande) {
+            case "getalloptions":
+                return getAllOptions();
+            default:
+                return null;
+        }
+    }
+
+    public Collection<Option> getAllOptions() throws SQLException {
+        LOG.info("Méthode appelée: getAllOptions");
+        return optionService.getAllOptions();
+    }
+
     @Override
     public void start() {
-        LOG.info("Composant Controleur démarré : %s".formatted(this.toString()));
+        LOG.info("Composant Controleur démarré: {}", this);
     }
 
     @Override
     public void stop() {
-        LOG.info("Composant Controleur arrêté : %s".formatted(this.toString()));
-    }
-
-    public Collection<Option> getAllOptions() throws SQLException {
-        return optionService.getAllOptions();
+        LOG.info("Composant Controleur arrêté: {}", this);
     }
 
 }

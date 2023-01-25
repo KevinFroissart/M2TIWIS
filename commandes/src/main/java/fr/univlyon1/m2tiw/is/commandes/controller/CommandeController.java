@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Map;
 
 public class CommandeController implements Startable {
 
@@ -27,46 +28,79 @@ public class CommandeController implements Startable {
         this.gestionCommandeService = gestionCommandeService;
     }
 
+    public Object process(String commande, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException {
+        switch (commande) {
+            case "creercommandecourante":
+                return creerCommandeCourante();
+            case "ajoutervoiture":
+                ajouterVoiture((Long) parametres.get("voitureId"));
+                return null;
+            case "supprimervoiture":
+                supprimerVoiture((Long) parametres.get("voitureId"));
+                return null;
+            case "getallvoitures":
+                return getAllVoitures();
+            case "getcommandecourante":
+                return getCommandeCourante();
+            case "validercommandecourante":
+                return validerCommandeCourante();
+            case "getalloptions":
+                return getAllOptions();
+            case "getcommande":
+                return getCommande((Long) parametres.get("id"));
+            default:
+                return null;
+        }
+    }
+
+    public Commande creerCommandeCourante() {
+        LOG.info("Méthode appelée: creerCommandeCourante");
+        return commandeCouranteService.creerCommandeCourante();
+    }
+
+    private void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
+        LOG.info("Méthode appelée: ajouterVoiture, avec paramètre: {}", voitureId);
+        commandeCouranteService.ajouterVoiture(voitureId);
+    }
+
+    private void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
+        LOG.info("Méthode appelée: supprimerVoiture, avec paramètre: {}", voitureId);
+        commandeCouranteService.supprimerVoiture(voitureId);
+    }
+
+    private Collection<Voiture> getAllVoitures() {
+        LOG.info("Méthode appelée: getAllVoitures");
+        return commandeCouranteService.getAllVoitures();
+    }
+
+    private Commande getCommandeCourante() {
+        LOG.info("Méthode appelée: getCommandeCourante");
+        return commandeCouranteService.getCommandeCourante();
+    }
+
+    private long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
+        LOG.info("Méthode appelée: validerCommandeCourante");
+        return commandeCouranteService.validerCommandeCourante();
+    }
+
+    private Collection<Option> getAllOptions() throws SQLException {
+        LOG.info("Méthode appelée: getAllOptions");
+        return gestionCommandeService.getAllOptions();
+    }
+
+    private Commande getCommande(Long id) throws SQLException, NotFoundException {
+        LOG.info("Méthode appelée: getCommande, avec paramètre: {}", id);
+        return gestionCommandeService.getCommande(id);
+    }
+
     @Override
     public void start() {
-        LOG.info("Composant Controleur démarré : %s".formatted(this.toString()));
+        LOG.info("Composant Controleur démarré: {}", this);
     }
 
     @Override
     public void stop() {
-        LOG.info("Composant Controleur arrêté : %s".formatted(this.toString()));
-    }
-
-    public Commande creerCommandeCourante() {
-        return commandeCouranteService.creerCommandeCourante();
-    }
-
-    public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
-        commandeCouranteService.ajouterVoiture(voitureId);
-    }
-
-    public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-        commandeCouranteService.supprimerVoiture(voitureId);
-    }
-
-    public Collection<Voiture> getAllVoitures() {
-        return commandeCouranteService.getAllVoitures();
-    }
-
-    public Commande getCommandeCourante() {
-        return commandeCouranteService.getCommandeCourante();
-    }
-
-    public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
-        return commandeCouranteService.validerCommandeCourante();
-    }
-
-    public Collection<Option> getAllOptions() throws SQLException {
-        return gestionCommandeService.getAllOptions();
-    }
-
-    public Commande getCommande(Long id) throws SQLException, NotFoundException {
-        return gestionCommandeService.getCommande(id);
+        LOG.info("Composant Controleur arrêté: {}", this);
     }
 
 }
