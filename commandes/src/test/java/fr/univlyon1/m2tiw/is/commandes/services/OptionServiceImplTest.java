@@ -18,13 +18,14 @@ class OptionServiceImplTest {
 
     @Test
     void getAllOptions() throws SQLException, NotFoundException {
-        var optionService = new OptionServiceImpl();
-        var commandeDAO = new CommandeDAOImpl();
-        commandeDAO.init();
-        var voitureDAO = new VoitureDAOImpl();
-        voitureDAO.init();
         var optionDAO = new OptionDAOImpl();
+        var commandeDAO = new CommandeDAOImpl();
+        var voitureDAO = new VoitureDAOImpl();
         optionDAO.init();
+        commandeDAO.init();
+        voitureDAO.init();
+        var optionService = new OptionServiceImpl(optionDAO);
+
         Commande c = commandeDAO.saveCommande(new Commande(false));
         Voiture v = voitureDAO.saveVoiture(new Voiture("modele"), c.getId());
         Option o = new Option("opt", "val");
