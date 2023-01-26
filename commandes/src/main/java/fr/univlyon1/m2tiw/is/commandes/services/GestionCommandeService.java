@@ -9,9 +9,14 @@ import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
 public interface GestionCommandeService {
 
-	public Collection<Option> getAllOptions() throws SQLException;
+	Collection<Option> getAllOptions() throws SQLException;
 
-	public Commande getCommande(Long id) throws SQLException, NotFoundException;
+	Commande getCommande(Long id) throws SQLException, NotFoundException;
 
-	public Commande getCommandeCourante();
+	Commande saveCommande(Commande commande) throws SQLException;
+
+	void deleteCommande(long commandeId) throws SQLException;
+
+	Commande getCommandeCourante();
+
 }

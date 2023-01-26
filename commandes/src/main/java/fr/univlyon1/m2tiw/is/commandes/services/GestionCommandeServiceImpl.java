@@ -36,6 +36,16 @@ public class GestionCommandeServiceImpl implements GestionCommandeService {
 	}
 
 	@Override
+	public Commande saveCommande(Commande commande) throws SQLException {
+		return commandeDAO.saveCommande(commande);
+	}
+
+	@Override
+	public void deleteCommande(long commandeId) throws SQLException {
+		commandeDAO.deleteCommande(commandeId);
+	}
+
+	@Override
 	public Commande getCommandeCourante() {
 		return commandeCouranteService.getCommandeCourante();
 	}

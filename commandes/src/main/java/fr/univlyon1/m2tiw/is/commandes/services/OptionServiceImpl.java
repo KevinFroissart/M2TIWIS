@@ -25,4 +25,14 @@ public class OptionServiceImpl implements OptionService {
 		return optionDAO.getAllOptions();
 	}
 
-}
+	@Override
+	public void setOptionVoiture(Long voitureId, Option option) throws SQLException {
+		optionDAO.setOptionVoiture(voitureId, option);
+	}
+
+	@Override
+	public void deleteOptionVoiture(Long voitureId, String nom) throws SQLException {
+		optionDAO.deleteOptionVoiture(voitureId, nom);
+	}
+
+	}

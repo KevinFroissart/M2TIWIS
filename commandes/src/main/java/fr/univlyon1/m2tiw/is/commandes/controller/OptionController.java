@@ -23,6 +23,12 @@ public class OptionController implements Startable {
         switch (commande) {
             case "getalloptions":
                 return getAllOptions();
+            case "setoptionvoiture":
+                setOptionVoiture((Long) parametres.get("voitureId"), (Option) parametres.get("option"));
+                return null;
+            case "deleteoptionvoiture":
+                deleteOptionVoiture((Long) parametres.get("voitureId"), (String) parametres.get("option"));
+                return null;
             default:
                 return null;
         }
@@ -31,6 +37,17 @@ public class OptionController implements Startable {
     public Collection<Option> getAllOptions() throws SQLException {
         LOG.info("Méthode appelée: getAllOptions");
         return optionService.getAllOptions();
+    }
+
+    public void setOptionVoiture(Long voitureId, Option option) throws SQLException {
+        LOG.info("Méthode appelée: setOptionVoiture, avec comme paramètres(s): {}, {}", voitureId, option);
+        optionService.setOptionVoiture(voitureId, option);
+
+    }
+
+    public void deleteOptionVoiture(Long voitureId, String nom) throws SQLException {
+        LOG.info("Méthode appelée: deleteOptionVoiture, avec comme paramètres(s): {}, {}", voitureId, nom);
+        optionService.deleteOptionVoiture(voitureId, nom);
     }
 
     @Override
