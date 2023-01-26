@@ -2,6 +2,8 @@ package fr.univlyon1.m2tiw.is.commandes.services;
 
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
+import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
+import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
@@ -24,12 +26,15 @@ class VoitureServiceImplTest {
 
     @BeforeEach
     void setUp() throws SQLException {
-        commandeCouranteService = new CommandeCouranteServiceImpl();
-        voitureDAO = new VoitureDAOImpl();
-        voitureDAO.init();
-        voitureService = new VoitureServiceImpl();
+        OptionDAO optionDAO = new OptionDAOImpl();
         commandeDAO = new CommandeDAOImpl();
+        voitureDAO = new VoitureDAOImpl();
+        optionDAO.init();
         commandeDAO.init();
+        voitureDAO.init();
+
+        voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
+        commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureService);
     }
 
     @Test

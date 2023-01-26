@@ -15,7 +15,7 @@ public abstract class AbstractSQLDAO {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractSQLDAO.class);
 
-	private DBAccess dbAccess = null;
+	private DBAccess dbAccess = new DBAccess();
 	private Connection currentConnection = null;
 
 	/**
