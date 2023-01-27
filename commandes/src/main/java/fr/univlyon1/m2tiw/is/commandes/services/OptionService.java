@@ -8,9 +8,4 @@ import fr.univlyon1.m2tiw.is.commandes.model.Option;
 public interface OptionService {
 
 	Collection<Option> getAllOptions() throws SQLException;
-
-	void setOptionVoiture(Long voitureId, Option option) throws SQLException;
-
-	void deleteOptionVoiture(Long voitureId, String nom) throws SQLException;
-
 }

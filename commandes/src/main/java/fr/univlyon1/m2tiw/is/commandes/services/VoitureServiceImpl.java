@@ -63,11 +63,6 @@ public class VoitureServiceImpl implements VoitureService {
 	}
 
 	@Override
-	public Voiture saveVoiture(Voiture voiture, long commandeId) throws SQLException {
-		return voitureDAO.saveVoiture(voiture, commandeId);
-	}
-
-	@Override
 	public Collection<Voiture> getVoituresByCommande(Long id) throws SQLException, NotFoundException {
 		Collection<Voiture> voitures = voitureDAO.getVoituresByCommande(id);
 		for (Voiture voiture : voitures) {
@@ -81,11 +76,6 @@ public class VoitureServiceImpl implements VoitureService {
 	@Override
 	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
 		voitureDAO.deleteVoiture(voitureDAO.getVoitureById(voitureId));
-	}
-
-	@Override
-	public void deleteVoiture(Voiture voiture) throws SQLException, NotFoundException {
-		voitureDAO.deleteVoiture(voiture);
 	}
 
 }
