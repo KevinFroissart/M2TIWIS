@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
+import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,8 +21,11 @@ public class VoitureController extends AbstractController {
 
 	private final VoitureService voitureService;
 
-	public VoitureController(VoitureService voitureService) {
+	private final VoitureResource voitureResource;
+
+	public VoitureController(VoitureService voitureService, VoitureResource voitureResource) {
 		this.voitureService = voitureService;
+		this.voitureResource = voitureResource;
 	}
 
 	public Object process(String commande, Map<String, Object> parametres) throws SQLException, NotFoundException, InvalidConfigurationException {
@@ -53,7 +57,7 @@ public class VoitureController extends AbstractController {
 
 	public Voiture creerVoiture(String modele) throws SQLException {
 		LOG.info("Méthode appelée: creerVoiture, avec comme paramètre(s): {}", modele);
-		return voitureService.creerVoiture(modele);
+		return voitureResource.creerVoiture(modele);
 	}
 
 	public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
@@ -73,12 +77,12 @@ public class VoitureController extends AbstractController {
 
 	public Voiture getVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: getVoiture, avec comme paramètre(s): {}", voitureId);
-		return voitureService.getVoiture(voitureId);
+		return voitureResource.getVoiture(voitureId);
 	}
 
 	public void sauverVoiture(Long voitureId, Commande commande) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: sauverVoiture, avec comme paramètres(s): {}, {}", voitureId, commande);
-		voitureService.sauverVoiture(voitureId, commande);
+		voitureResource.sauverVoiture(voitureId, commande);
 	}
 
 	public Collection<Voiture> getVoituresByCommande(Long id) throws SQLException, NotFoundException {
@@ -88,7 +92,7 @@ public class VoitureController extends AbstractController {
 
 	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: supprimerVoiture, avec comme paramètre(s): {}", voitureId);
-		voitureService.supprimerVoiture(voitureId);
+		voitureResource.supprimerVoiture(voitureId);
 	}
 
 }
