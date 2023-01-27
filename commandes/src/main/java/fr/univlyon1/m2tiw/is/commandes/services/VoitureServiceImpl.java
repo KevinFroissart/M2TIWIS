@@ -23,11 +23,6 @@ public class VoitureServiceImpl implements VoitureService {
 	}
 
 	@Override
-	public Voiture creerVoiture(String modele) throws SQLException {
-		return voitureDAO.saveVoiture(new Voiture(modele));
-	}
-
-	@Override
 	public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
 		Voiture voiture = voitureDAO.getVoitureById(voitureId);
 		voiture.addOption(option);
@@ -49,20 +44,6 @@ public class VoitureServiceImpl implements VoitureService {
 	}
 
 	@Override
-	public Voiture getVoiture(Long voitureId) throws SQLException, NotFoundException {
-		Voiture voiture = voitureDAO.getVoitureById(voitureId);
-		for (Option option : optionDAO.getOptionsForVoiture(voitureId)) {
-			voiture.addOption(option);
-		}
-		return voiture;
-	}
-
-	@Override
-	public void sauverVoiture(Long voitureId, Commande commande) throws SQLException, NotFoundException {
-		voitureDAO.updateVoitureCommande(voitureId, commande.getId());
-	}
-
-	@Override
 	public Collection<Voiture> getVoituresByCommande(Long id) throws SQLException, NotFoundException {
 		Collection<Voiture> voitures = voitureDAO.getVoituresByCommande(id);
 		for (Voiture voiture : voitures) {
@@ -71,11 +52,6 @@ public class VoitureServiceImpl implements VoitureService {
 			}
 		}
 		return voitures;
-	}
-
-	@Override
-	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-		voitureDAO.deleteVoiture(voitureDAO.getVoitureById(voitureId));
 	}
 
 }

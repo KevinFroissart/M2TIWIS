@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
 
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +22,10 @@ class GestionCommandeServiceImplTest {
 
 	private GestionCommandeServiceImpl gestionCommandeService;
 	private CommandeCouranteServiceImpl commandeCouranteService;
+	private CommandeArchiveeResource commandeArchiveeResource;
 	private VoitureServiceImpl voitureService;
+	private VoitureResource voitureResource;
+
 
 	CommandeDAOImpl commandeDAO;
 	VoitureDAOImpl voitureDAO;
@@ -36,8 +41,10 @@ class GestionCommandeServiceImplTest {
 		commandeDAO.init();
 		OptionService optionService = new OptionServiceImpl(optionDAO);
 		voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
-		commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureService);
-		gestionCommandeService = new GestionCommandeServiceImpl(optionService, voitureService, commandeCouranteService, commandeDAO);
+		voitureResource = new VoitureResource(voitureDAO, optionDAO);
+		commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
+		gestionCommandeService = new GestionCommandeServiceImpl(optionService, commandeCouranteService, commandeDAO);
+		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService);
 	}
 
 	@Test
@@ -56,10 +63,10 @@ class GestionCommandeServiceImplTest {
 	@Test
 	void getCommande() throws SQLException, NotFoundException, EmptyCommandeException {
 		Commande c = commandeCouranteService.creerCommandeCourante();
-		Voiture v = voitureService.creerVoiture("modele");
+		Voiture v = voitureResource.creerVoiture("modele");
 		commandeCouranteService.ajouterVoiture(v.getId());
 		long id = commandeCouranteService.validerCommandeCourante();
-		Commande c2 = gestionCommandeService.getCommande(id);
+		Commande c2 = commandeArchiveeResource.getCommande(id);
 		assertNotNull(c2);
 	}
 

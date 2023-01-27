@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +24,14 @@ public class CommandeController extends AbstractController {
 
 	private final GestionCommandeService gestionCommandeService;
 
-	public CommandeController(CommandeCouranteService commandeCouranteService, GestionCommandeService gestionCommandeService) {
+	private final CommandeArchiveeResource commandeArchiveeResource;
+
+	public CommandeController(CommandeCouranteService commandeCouranteService,
+							  GestionCommandeService gestionCommandeService,
+							  CommandeArchiveeResource commandeArchiveeResource) {
 		this.commandeCouranteService = commandeCouranteService;
 		this.gestionCommandeService = gestionCommandeService;
+		this.commandeArchiveeResource = commandeArchiveeResource;
 	}
 
 	public Object process(String commande, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException {
@@ -90,7 +96,7 @@ public class CommandeController extends AbstractController {
 
 	private Commande getCommande(Long id) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: getCommande, avec paramètre: {}", id);
-		return gestionCommandeService.getCommande(id);
+		return commandeArchiveeResource.getCommande(id);
 	}
 
 }

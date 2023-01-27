@@ -7,16 +7,18 @@ import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 
 public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 
 	private Commande commandeCourante;
 	private final CommandeDAO commandeDAO;
-	private final VoitureService voitureService;
+	private final VoitureResource voitureResource;
 
-	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureService voitureService) throws SQLException {
+
+	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureResource voitureResource) throws SQLException {
 		this.commandeDAO = commandeDAO;
-		this.voitureService = voitureService;
+		this.voitureResource = voitureResource;
 		this.commandeDAO.init();
 	}
 
@@ -28,13 +30,13 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 
 	@Override
 	public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
-		this.commandeCourante.addVoiture(voitureService.getVoiture(voitureId));
+		this.commandeCourante.addVoiture(voitureResource.getVoiture(voitureId));
 	}
 
 	@Override
 	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-		this.commandeCourante.removeVoiture(voitureService.getVoiture(voitureId));
-		this.voitureService.supprimerVoiture(voitureId);
+		this.commandeCourante.removeVoiture(voitureResource.getVoiture(voitureId));
+		this.voitureResource.supprimerVoiture(voitureId);
 	}
 
 	@Override
@@ -58,7 +60,7 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 		commandeCourante.setFerme(true);
 		commandeCourante = commandeDAO.saveCommande(commandeCourante);
 		for (Voiture voiture : commandeCourante.getVoitures()) {
-			voitureService.sauverVoiture(voiture.getId(), commandeCourante);
+			voitureResource.sauverVoiture(voiture.getId(), commandeCourante);
 		}
 		long id = commandeCourante.getId();
 		creerCommandeCourante(); // On repart avec un nouveau panier vide

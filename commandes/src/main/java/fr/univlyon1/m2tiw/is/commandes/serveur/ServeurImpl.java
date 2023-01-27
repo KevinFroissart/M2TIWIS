@@ -3,6 +3,8 @@ package fr.univlyon1.m2tiw.is.commandes.serveur;
 import java.sql.SQLException;
 import java.util.Map;
 
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
@@ -43,20 +45,29 @@ public class ServeurImpl implements Serveur {
 		pico.addComponent(OptionDAO.class, OptionDAOImpl.class);
 		pico.addComponent(VoitureDAO.class, VoitureDAOImpl.class);
 
+		pico.addComponent(VoitureResource.class,
+				new ComponentParameter(VoitureDAO.class),
+				new ComponentParameter(OptionDAO.class)
+		);
 		pico.addComponent(VoitureService.class, VoitureServiceImpl.class,
 				new ComponentParameter(VoitureDAO.class),
 				new ComponentParameter(OptionDAO.class)
 		);
+
 		pico.addComponent(OptionService.class, OptionServiceImpl.class,
 				new ComponentParameter(OptionDAO.class)
 		);
+
 		pico.addComponent(GestionCommandeService.class, GestionCommandeServiceImpl.class,
 				new ComponentParameter(OptionService.class),
-				new ComponentParameter(VoitureService.class),
 				new ComponentParameter(CommandeCouranteService.class),
 				new ComponentParameter(CommandeDAO.class)
 		);
 		pico.addComponent(CommandeCouranteService.class, CommandeCouranteServiceImpl.class,
+				new ComponentParameter(CommandeDAO.class),
+				new ComponentParameter(VoitureResource.class)
+		);
+		pico.addComponent(CommandeArchiveeResource.class,
 				new ComponentParameter(CommandeDAO.class),
 				new ComponentParameter(VoitureService.class)
 		);
