@@ -92,21 +92,6 @@ public class ServeurImpl implements Serveur {
 		}
 	}
 
-	// Provisoire
-	public VoitureController getVoitureController() {
-		return voitureController;
-	}
-
-	// Provisoire
-	public OptionController getOptionController() {
-		return optionController;
-	}
-
-	// Provisoire
-	public CommandeController getCommandeController() {
-		return commandeController;
-	}
-
 	public static void main(String[] args) throws SQLException {
 		new ServeurImpl();
 	}
