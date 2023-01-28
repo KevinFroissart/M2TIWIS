@@ -6,7 +6,6 @@ import java.util.Collection;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
-import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 
@@ -18,8 +17,6 @@ public class VoitureServiceImpl implements VoitureService {
 	public VoitureServiceImpl(VoitureDAO voitureDAO, OptionDAO optionDAO) throws SQLException {
 		this.voitureDAO = voitureDAO;
 		this.optionDAO = optionDAO;
-		this.voitureDAO.init();
-		this.optionDAO.init();
 	}
 
 	@Override

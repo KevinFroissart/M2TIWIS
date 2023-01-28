@@ -9,6 +9,6 @@ import java.util.Map;
 
 public interface Serveur {
 
-    Object processRequest(String commande, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException;
+    Object processRequest(String commande, String methode, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException;
 
 }

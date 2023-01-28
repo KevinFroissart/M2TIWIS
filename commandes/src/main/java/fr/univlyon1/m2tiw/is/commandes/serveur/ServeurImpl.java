@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
 import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
@@ -59,9 +60,7 @@ public class ServeurImpl implements Serveur {
 		);
 
 		pico.addComponent(GestionCommandeService.class, GestionCommandeServiceImpl.class,
-				new ComponentParameter(OptionService.class),
-				new ComponentParameter(CommandeCouranteService.class),
-				new ComponentParameter(CommandeDAO.class)
+				new ComponentParameter(OptionService.class)
 		);
 		pico.addComponent(CommandeCouranteService.class, CommandeCouranteServiceImpl.class,
 				new ComponentParameter(CommandeDAO.class),
@@ -69,7 +68,12 @@ public class ServeurImpl implements Serveur {
 		);
 		pico.addComponent(CommandeArchiveeResource.class,
 				new ComponentParameter(CommandeDAO.class),
-				new ComponentParameter(VoitureService.class)
+				new ComponentParameter(VoitureService.class),
+				new ComponentParameter(CommandeCouranteService.class)
+		);
+		pico.addComponent(CommandeCouranteResource.class,
+				new ComponentParameter(CommandeCouranteService.class),
+				new ComponentParameter(VoitureResource.class)
 		);
 
 		pico.addComponent(VoitureController.class);
@@ -84,20 +88,17 @@ public class ServeurImpl implements Serveur {
 		pico.getComponent(OptionDAO.class).init();
 		pico.getComponent(VoitureDAO.class).init();
 
-		voitureController.start();
-		optionController.start();
-		commandeController.start();
+		pico.start();
 	}
 
-	public Object processRequest(String commande, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
-		String[] commandes = commande.toLowerCase().split("\\.");
-		switch (commandes[0]) {
+	public Object processRequest(String commande, String methode, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+		switch (commande) {
 			case "commandecontroller":
-				return commandeController.process(commandes[1], parametres);
+				return commandeController.process(methode, parametres);
 			case "optioncontroller":
-				return optionController.process(commandes[1], parametres);
+				return optionController.process(methode, parametres);
 			case "voiturecontroller":
-				return voitureController.process(commandes[1], parametres);
+				return voitureController.process(methode, parametres);
 			default:
 				return null;
 		}

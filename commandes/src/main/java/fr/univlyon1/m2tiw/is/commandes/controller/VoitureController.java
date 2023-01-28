@@ -28,8 +28,8 @@ public class VoitureController extends AbstractController {
 		this.voitureResource = voitureResource;
 	}
 
-	public Object process(String commande, Map<String, Object> parametres) throws SQLException, NotFoundException, InvalidConfigurationException {
-		switch (commande) {
+	public Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, InvalidConfigurationException {
+		switch (methode) {
 			case "creervoiture":
 				return creerVoiture((String) parametres.get("modele"));
 			case "ajouterconfiguration":
