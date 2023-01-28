@@ -4,8 +4,8 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,7 +15,7 @@ import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
-import fr.univlyon1.m2tiw.is.commandes.services.GestionCommandeService;
+import fr.univlyon1.m2tiw.is.commandes.services.CommandeArchiveeService;
 
 public class CommandeController extends AbstractController {
 
@@ -23,14 +23,14 @@ public class CommandeController extends AbstractController {
 
 	private final CommandeCouranteService commandeCouranteService;
 
-	private final GestionCommandeService gestionCommandeService;
+	private final CommandeArchiveeService gestionCommandeService;
 
 	private final CommandeArchiveeResource commandeArchiveeResource;
 
 	private final CommandeCouranteResource commandeCouranteResource;
 
 	public CommandeController(CommandeCouranteService commandeCouranteService,
-							  GestionCommandeService gestionCommandeService,
+							  CommandeArchiveeService gestionCommandeService,
 
 							  CommandeArchiveeResource commandeArchiveeResource,
 							  CommandeCouranteResource commandeCouranteResource

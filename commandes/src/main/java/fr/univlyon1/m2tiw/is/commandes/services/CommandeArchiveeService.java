@@ -5,7 +5,7 @@ import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
-public interface GestionCommandeService {
+public interface CommandeArchiveeService {
 
 	Collection<Option> getAllOptions() throws SQLException;
 

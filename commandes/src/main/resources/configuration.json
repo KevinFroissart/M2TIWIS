@@ -1,0 +1,40 @@
+{
+  "application-config": {
+    "name": "Gestion commandes voitures",
+    "business-components": [
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource"}
+    ],
+    "service-components": [
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.CommandeArchiveeService"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.VoitureService"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.OptionService"}
+    ],
+    "persistence-components": [
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO"},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.dao.DBAccess",
+        "params": [{
+          "name": "url",
+          "value": "jdbc:postgresql://localhost/mdldb"
+        },
+          {
+            "name": "user",
+            "value": "mdl"
+          },
+          {
+            "name": "password",
+            "value": "mdlpwd"
+          }]
+      }
+    ],
+    "controller-components": [
+      {"class-name":  "fr.univlyon1.m2tiw.is.commandes.controller.CommandeController"},
+      {"class-name":  "fr.univlyon1.m2tiw.is.commandes.controller.VoitureController"},
+      {"class-name":  "fr.univlyon1.m2tiw.is.commandes.controller.OptionController"}
+    ]
+  }
+}

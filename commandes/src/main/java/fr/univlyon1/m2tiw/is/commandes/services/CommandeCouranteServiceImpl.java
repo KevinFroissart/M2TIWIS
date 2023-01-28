@@ -6,7 +6,7 @@ import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 
 public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 
