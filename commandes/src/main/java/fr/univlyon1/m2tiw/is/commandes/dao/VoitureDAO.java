@@ -73,7 +73,7 @@ public interface VoitureDAO {
 	 * @throws NotFoundException if the voiture is not found in the persistence support
 	 * @throws SQLException if there is a problem in the underlying queries
 	 */
-	public void updateVoitureCommande(long voitureId, long newCommandeId) throws SQLException, NotFoundException;
+	void updateVoitureCommande(long voitureId, long newCommandeId) throws SQLException, NotFoundException;
 
 	/**
 	 * Deletes a voiture.

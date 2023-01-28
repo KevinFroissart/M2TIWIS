@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.sql.SQLException;
 
 import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
 import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,13 +24,11 @@ class GestionCommandeServiceImplTest {
 	private GestionCommandeServiceImpl gestionCommandeService;
 	private CommandeCouranteServiceImpl commandeCouranteService;
 	private CommandeArchiveeResource commandeArchiveeResource;
-	private VoitureServiceImpl voitureService;
+	private CommandeCouranteResource commandeCouranteResource;
 	private VoitureResource voitureResource;
-
-
-	CommandeDAOImpl commandeDAO;
-	VoitureDAOImpl voitureDAO;
-	OptionDAOImpl optionDAO;
+	private CommandeDAOImpl commandeDAO;
+	private VoitureDAOImpl voitureDAO;
+	private OptionDAOImpl optionDAO;
 
 	@BeforeEach
 	void setUp() throws SQLException {
@@ -40,11 +39,12 @@ class GestionCommandeServiceImplTest {
 		voitureDAO.init();
 		commandeDAO.init();
 		OptionService optionService = new OptionServiceImpl(optionDAO);
-		voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
+		VoitureServiceImpl voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
 		voitureResource = new VoitureResource(voitureDAO, optionDAO);
 		commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
-		gestionCommandeService = new GestionCommandeServiceImpl(optionService, commandeCouranteService, commandeDAO);
-		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService);
+		gestionCommandeService = new GestionCommandeServiceImpl(optionService);
+		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteService);
+		commandeCouranteResource = new CommandeCouranteResource(commandeCouranteService, voitureResource);
 	}
 
 	@Test
@@ -64,7 +64,7 @@ class GestionCommandeServiceImplTest {
 	void getCommande() throws SQLException, NotFoundException, EmptyCommandeException {
 		Commande c = commandeCouranteService.creerCommandeCourante();
 		Voiture v = voitureResource.creerVoiture("modele");
-		commandeCouranteService.ajouterVoiture(v.getId());
+		commandeCouranteResource.ajouterVoiture(v.getId());
 		long id = commandeCouranteService.validerCommandeCourante();
 		Commande c2 = commandeArchiveeResource.getCommande(id);
 		assertNotNull(c2);
@@ -72,6 +72,6 @@ class GestionCommandeServiceImplTest {
 
 	@Test
 	void getCommandeCourante() {
-		assertNotNull(gestionCommandeService.getCommandeCourante());
+		assertNotNull(commandeArchiveeResource.getCommandeCourante());
 	}
 }

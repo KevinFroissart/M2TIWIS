@@ -8,6 +8,7 @@ import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
 import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,8 +22,9 @@ class VoitureServiceImplTest {
 
     private static int counter;
     private VoitureServiceImpl voitureService;
-    private VoitureResource voitureResource;
     private CommandeCouranteServiceImpl commandeCouranteService;
+    private VoitureResource voitureResource;
+    private CommandeCouranteResource commandeCouranteResource;
     private VoitureDAOImpl voitureDAO;
     private CommandeDAOImpl commandeDAO;
 
@@ -38,6 +40,7 @@ class VoitureServiceImplTest {
         voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
         voitureResource = new VoitureResource(voitureDAO, optionDAO);
         commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
+        commandeCouranteResource = new CommandeCouranteResource(commandeCouranteService, voitureResource);
     }
 
     @Test
@@ -99,7 +102,7 @@ class VoitureServiceImplTest {
     void sauverVoiture() throws SQLException, NotFoundException {
         Commande c = commandeCouranteService.creerCommandeCourante();
         Voiture v = voitureResource.creerVoiture("modele" + counter++);
-        commandeCouranteService.ajouterVoiture(v.getId());
+        commandeCouranteResource.ajouterVoiture(v.getId());
         c = commandeDAO.saveCommande(c); // sinon c n'a pas d'id
         voitureResource.sauverVoiture(v.getId(), c);
         var voitures = voitureDAO.getVoituresByCommande(c.getId());
@@ -112,7 +115,7 @@ class VoitureServiceImplTest {
     void getVoituresByCommande() throws SQLException, NotFoundException {
         Commande c = commandeCouranteService.creerCommandeCourante();
         Voiture v = voitureResource.creerVoiture("modele" + counter++);
-        commandeCouranteService.ajouterVoiture(v.getId());
+        commandeCouranteResource.ajouterVoiture(v.getId());
         c = commandeDAO.saveCommande(c); // sinon c n'a pas d'id
         voitureResource.sauverVoiture(v.getId(), c);
         var voitures = voitureService.getVoituresByCommande(c.getId());

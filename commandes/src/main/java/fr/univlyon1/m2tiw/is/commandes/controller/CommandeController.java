@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -26,16 +27,23 @@ public class CommandeController extends AbstractController {
 
 	private final CommandeArchiveeResource commandeArchiveeResource;
 
+	private final CommandeCouranteResource commandeCouranteResource;
+
 	public CommandeController(CommandeCouranteService commandeCouranteService,
 							  GestionCommandeService gestionCommandeService,
-							  CommandeArchiveeResource commandeArchiveeResource) {
+
+							  CommandeArchiveeResource commandeArchiveeResource,
+							  CommandeCouranteResource commandeCouranteResource
+							  ) {
 		this.commandeCouranteService = commandeCouranteService;
 		this.gestionCommandeService = gestionCommandeService;
+
 		this.commandeArchiveeResource = commandeArchiveeResource;
+		this.commandeCouranteResource = commandeCouranteResource;
 	}
 
-	public Object process(String commande, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException {
-		switch (commande) {
+	public Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException {
+		switch (methode) {
 			case "creercommandecourante":
 				return creerCommandeCourante();
 			case "ajoutervoiture":
@@ -66,17 +74,17 @@ public class CommandeController extends AbstractController {
 
 	private void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: ajouterVoiture, avec paramètre: {}", voitureId);
-		commandeCouranteService.ajouterVoiture(voitureId);
+		commandeCouranteResource.ajouterVoiture(voitureId);
 	}
 
 	private void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: supprimerVoiture, avec paramètre: {}", voitureId);
-		commandeCouranteService.supprimerVoiture(voitureId);
+		commandeCouranteResource.supprimerVoiture(voitureId);
 	}
 
 	private Collection<Voiture> getAllVoitures() {
 		LOG.info("Méthode appelée: getAllVoitures");
-		return commandeCouranteService.getAllVoitures();
+		return commandeCouranteResource.getAllVoitures();
 	}
 
 	private Commande getCommandeCourante() {

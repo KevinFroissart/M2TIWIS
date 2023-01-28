@@ -1,7 +1,6 @@
 package fr.univlyon1.m2tiw.is.commandes.services;
 
 import java.sql.SQLException;
-import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
@@ -19,29 +18,12 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureResource voitureResource) throws SQLException {
 		this.commandeDAO = commandeDAO;
 		this.voitureResource = voitureResource;
-		this.commandeDAO.init();
 	}
 
 	@Override
 	public Commande creerCommandeCourante() {
 		this.commandeCourante = new Commande(false);
 		return commandeCourante;
-	}
-
-	@Override
-	public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
-		this.commandeCourante.addVoiture(voitureResource.getVoiture(voitureId));
-	}
-
-	@Override
-	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-		this.commandeCourante.removeVoiture(voitureResource.getVoiture(voitureId));
-		this.voitureResource.supprimerVoiture(voitureId);
-	}
-
-	@Override
-	public Collection<Voiture> getAllVoitures() {
-		return commandeCourante.getVoitures();
 	}
 
 	@Override

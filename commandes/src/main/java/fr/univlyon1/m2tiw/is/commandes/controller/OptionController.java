@@ -19,8 +19,8 @@ public class OptionController extends AbstractController {
 		this.optionService = optionService;
 	}
 
-	public Object process(String commande, Map<String, Object> parametres) throws SQLException {
-		switch (commande) {
+	public Object process(String methode, Map<String, Object> parametres) throws SQLException {
+		switch (methode) {
 			case "getalloptions":
 				return getAllOptions();
 			default:

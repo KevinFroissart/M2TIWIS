@@ -35,18 +35,18 @@ class CommandeCouranteServiceImplTest {
 	@BeforeEach
 	public void before() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
 		serveur = new ServeurImpl();
-		serveur.processRequest(COMMANDECONTROLLER.concat(".creerCommandeCourante"), null);
+		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 	}
 
 	private Voiture createVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
 		Map<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele" + counter++);
-		return (Voiture) serveur.processRequest(VOITURECONTROLLER.concat(".creerVoiture"), parametres);
+		return (Voiture) serveur.processRequest(VOITURECONTROLLER, "creerVoiture", parametres);
 	}
 
 	@Test
 	void creerCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
-		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER.concat(".creerCommandeCourante"), null);
+		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 		assertNotNull(c);
 		assertFalse(c.isFerme());
 	}
@@ -56,8 +56,8 @@ class CommandeCouranteServiceImplTest {
 		Voiture v = createVoiture();
 		Map<String, Object> parametres = new HashMap<>();
 		parametres.put("voitureId", v.getId());
-		serveur.processRequest(COMMANDECONTROLLER.concat(".ajouterVoiture"), parametres);
-		assertEquals(1, ((Commande) serveur.processRequest(COMMANDECONTROLLER.concat(".getCommandeCourante"), null)).getVoitures().size());
+		serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", parametres);
+		assertEquals(1, ((Commande) serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null)).getVoitures().size());
 	}
 
 	@Test
@@ -65,10 +65,10 @@ class CommandeCouranteServiceImplTest {
 		Voiture v = createVoiture();
 		Map<String, Object> parametres = new HashMap<>();
 		parametres.put("voitureId", v.getId());
-		serveur.processRequest(COMMANDECONTROLLER.concat(".ajouterVoiture"), parametres);
-		serveur.processRequest(COMMANDECONTROLLER.concat(".supprimerVoiture"), parametres);
-		assertEquals(0, ((Commande) serveur.processRequest(COMMANDECONTROLLER.concat(".getCommandeCourante"), null)).getVoitures().size());
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER.concat(".getVoiture"), parametres));
+		serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", parametres);
+		serveur.processRequest(COMMANDECONTROLLER, "supprimerVoiture", parametres);
+		assertEquals(0, ((Commande) serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null)).getVoitures().size());
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "getVoiture", parametres));
 	}
 
 	@Test
@@ -76,30 +76,30 @@ class CommandeCouranteServiceImplTest {
 		Voiture v = createVoiture();
 		Map<String, Object> parametres = new HashMap<>();
 		parametres.put("voitureId", v.getId());
-		serveur.processRequest(COMMANDECONTROLLER.concat(".ajouterVoiture"), parametres);
-		Collection<Voiture> voitures = (Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER.concat(".getAllVoitures"), null);
+		serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", parametres);
+		Collection<Voiture> voitures = (Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null);
 		assertTrue(1 >= voitures.size());
 		log.debug("Voitures: {}", voitures);
 		log.debug("v: {}", v);
 		assertTrue(voitures.stream().anyMatch(v2 -> (v2.getId().equals(v.getId()))));
-		serveur.processRequest(COMMANDECONTROLLER.concat(".supprimerVoiture"), parametres);
+		serveur.processRequest(COMMANDECONTROLLER, "supprimerVoiture", parametres);
 	}
 
 	@Test
 	void getCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
-		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER.concat(".creerCommandeCourante"), null);
-		assertEquals(c, serveur.processRequest(COMMANDECONTROLLER.concat(".getCommandeCourante"), null));
+		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
+		assertEquals(c, serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null));
 	}
 
 	@Test
 	void validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException, InvalidConfigurationException {
-		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER.concat(".creerCommandeCourante"), null);
+		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 		Voiture v = createVoiture();
 		Map<String, Object> parametres = new HashMap<>();
 		parametres.put("voitureId", v.getId());
-		serveur.processRequest(COMMANDECONTROLLER.concat(".ajouterVoiture"), parametres);
-		serveur.processRequest(COMMANDECONTROLLER.concat(".validerCommandeCourante"), null);
-		Commande c2 = (Commande) serveur.processRequest(COMMANDECONTROLLER.concat(".getCommandeCourante"), null);
+		serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", parametres);
+		serveur.processRequest(COMMANDECONTROLLER, "validerCommandeCourante", null);
+		Commande c2 = (Commande) serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null);
 		assertNotEquals(c, c2);
 	}
 }
