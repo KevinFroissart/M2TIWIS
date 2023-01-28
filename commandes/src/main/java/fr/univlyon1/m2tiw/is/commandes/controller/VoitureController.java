@@ -4,7 +4,7 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Map;
 
-import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

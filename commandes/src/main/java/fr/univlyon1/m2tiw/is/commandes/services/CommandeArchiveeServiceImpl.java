@@ -5,11 +5,11 @@ import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
-public class GestionCommandeServiceImpl implements GestionCommandeService {
+public class CommandeArchiveeServiceImpl implements CommandeArchiveeService {
 
 	private final OptionService optionService;
 
-	public GestionCommandeServiceImpl(OptionService optionService) throws SQLException {
+	public CommandeArchiveeServiceImpl(OptionService optionService) throws SQLException {
 		this.optionService = optionService;
 	}
 

@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.sql.SQLException;
 
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
-import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +21,7 @@ import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 
 class GestionCommandeServiceImplTest {
 
-	private GestionCommandeServiceImpl gestionCommandeService;
+	private CommandeArchiveeServiceImpl gestionCommandeService;
 	private CommandeCouranteServiceImpl commandeCouranteService;
 	private CommandeArchiveeResource commandeArchiveeResource;
 	private CommandeCouranteResource commandeCouranteResource;
@@ -42,7 +42,7 @@ class GestionCommandeServiceImplTest {
 		VoitureServiceImpl voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
 		voitureResource = new VoitureResource(voitureDAO, optionDAO);
 		commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
-		gestionCommandeService = new GestionCommandeServiceImpl(optionService);
+		gestionCommandeService = new CommandeArchiveeServiceImpl(optionService);
 		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteService);
 		commandeCouranteResource = new CommandeCouranteResource(commandeCouranteService, voitureResource);
 	}

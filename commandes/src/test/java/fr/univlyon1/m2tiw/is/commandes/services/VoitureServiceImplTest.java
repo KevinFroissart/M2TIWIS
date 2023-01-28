@@ -8,8 +8,8 @@ import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
-import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

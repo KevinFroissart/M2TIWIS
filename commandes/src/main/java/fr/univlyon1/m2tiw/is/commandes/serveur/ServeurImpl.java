@@ -1,11 +1,13 @@
 package fr.univlyon1.m2tiw.is.commandes.serveur;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Map;
+import java.util.Objects;
 
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeArchiveeResource;
-import fr.univlyon1.m2tiw.is.commandes.resource.CommandeCouranteResource;
-import fr.univlyon1.m2tiw.is.commandes.resource.VoitureResource;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.univlyon1.m2tiw.is.commandes.config.ApplicationConfiguration;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
@@ -15,23 +17,11 @@ import fr.univlyon1.m2tiw.is.commandes.controller.CommandeController;
 import fr.univlyon1.m2tiw.is.commandes.controller.OptionController;
 import fr.univlyon1.m2tiw.is.commandes.controller.VoitureController;
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
-import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
-import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
-import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
-import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
-import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteServiceImpl;
-import fr.univlyon1.m2tiw.is.commandes.services.DBAccess;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
-import fr.univlyon1.m2tiw.is.commandes.services.GestionCommandeService;
-import fr.univlyon1.m2tiw.is.commandes.services.GestionCommandeServiceImpl;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
-import fr.univlyon1.m2tiw.is.commandes.services.OptionService;
-import fr.univlyon1.m2tiw.is.commandes.services.OptionServiceImpl;
-import fr.univlyon1.m2tiw.is.commandes.services.VoitureService;
-import fr.univlyon1.m2tiw.is.commandes.services.VoitureServiceImpl;
 
 public class ServeurImpl implements Serveur {
 
@@ -39,46 +29,29 @@ public class ServeurImpl implements Serveur {
 	private final OptionController optionController;
 	private final CommandeController commandeController;
 
-	public ServeurImpl() throws SQLException {
+	public ServeurImpl() throws SQLException, IOException, ClassNotFoundException {
 		MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
-		pico.addComponent(DBAccess.class);
-		pico.addComponent(CommandeDAO.class, CommandeDAOImpl.class);
-		pico.addComponent(OptionDAO.class, OptionDAOImpl.class);
-		pico.addComponent(VoitureDAO.class, VoitureDAOImpl.class);
 
-		pico.addComponent(VoitureResource.class,
-				new ComponentParameter(VoitureDAO.class),
-				new ComponentParameter(OptionDAO.class)
-		);
-		pico.addComponent(VoitureService.class, VoitureServiceImpl.class,
-				new ComponentParameter(VoitureDAO.class),
-				new ComponentParameter(OptionDAO.class)
-		);
+		ObjectMapper mapper = new ObjectMapper();
+		ApplicationConfiguration configuration = mapper.readValue(new File(
+				Objects.requireNonNull(ServeurImpl.class.getResource("/configuration.json"))
+				.getPath()), ApplicationConfiguration.class);
 
-		pico.addComponent(OptionService.class, OptionServiceImpl.class,
-				new ComponentParameter(OptionDAO.class)
-		);
-
-		pico.addComponent(GestionCommandeService.class, GestionCommandeServiceImpl.class,
-				new ComponentParameter(OptionService.class)
-		);
-		pico.addComponent(CommandeCouranteService.class, CommandeCouranteServiceImpl.class,
-				new ComponentParameter(CommandeDAO.class),
-				new ComponentParameter(VoitureResource.class)
-		);
-		pico.addComponent(CommandeArchiveeResource.class,
-				new ComponentParameter(CommandeDAO.class),
-				new ComponentParameter(VoitureService.class),
-				new ComponentParameter(CommandeCouranteService.class)
-		);
-		pico.addComponent(CommandeCouranteResource.class,
-				new ComponentParameter(CommandeCouranteService.class),
-				new ComponentParameter(VoitureResource.class)
-		);
-
-		pico.addComponent(VoitureController.class);
-		pico.addComponent(OptionController.class);
-		pico.addComponent(CommandeController.class);
+		for (ApplicationConfiguration.Configuration.Component component : configuration.getConfiguration().getAllComponents()) {
+			Class<?> componentClass = Class.forName(component.getClassName());
+			if (!component.getParameters().isEmpty()) {
+				Map<String, String> params = component.getParameters();
+				pico.addComponent(componentClass, componentClass,
+						new ComponentParameter(params.get("url")),
+						new ComponentParameter(params.get("user")),
+						new ComponentParameter(params.get("password")));
+			} else if (component.getClassName().contains("Service") || component.getClassName().contains("DAO")) {
+				Class<?> componentImplClass = Class.forName(component.getClassName().concat("Impl"));
+				pico.addComponent(componentClass, componentImplClass);
+			} else {
+				pico.addComponent(componentClass);
+			}
+		}
 
 		voitureController = pico.getComponent(VoitureController.class);
 		optionController = pico.getComponent(OptionController.class);
@@ -104,9 +77,8 @@ public class ServeurImpl implements Serveur {
 		}
 	}
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
 		new ServeurImpl();
 	}
 
 }
-
