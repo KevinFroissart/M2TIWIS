@@ -19,6 +19,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
     private PreparedStatement updateCommandeStatement = null;
     private PreparedStatement insertStatementNoCmd;
 
+    public VoitureDAOImpl(DBAccess dbAccess) {
+        super(dbAccess);
+    }
+
     @Override
     protected void setupTable(Connection connection) throws SQLException {
         Statement stat = connection.createStatement();

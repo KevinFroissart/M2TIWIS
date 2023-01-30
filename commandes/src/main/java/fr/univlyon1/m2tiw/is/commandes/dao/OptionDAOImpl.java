@@ -18,6 +18,10 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 	private PreparedStatement deleteOptionForVoitureStatement;
 	private PreparedStatement addOptionForVoitureStatement;
 
+	public OptionDAOImpl(DBAccess dbAccess) {
+		super(dbAccess);
+	}
+
 	@Override
 	protected void initStatements(Connection connection) throws SQLException {
 		getOptionStatement = connection.prepareStatement("SELECT valeur FROM option2 WHERE voiture = ? AND  nom = ?");

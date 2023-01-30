@@ -10,7 +10,7 @@ public class OptionServiceImpl implements OptionService {
 
 	private final OptionDAO optionDAO;
 
-	public OptionServiceImpl(OptionDAO dao) throws SQLException {
+	public OptionServiceImpl(OptionDAO dao) {
 		this.optionDAO = dao;
 	}
 

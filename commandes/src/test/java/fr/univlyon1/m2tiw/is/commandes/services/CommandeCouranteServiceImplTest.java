@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,7 +34,7 @@ class CommandeCouranteServiceImplTest {
 	private Serveur serveur;
 
 	@BeforeEach
-	public void before() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	public void before() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException, IOException, ClassNotFoundException {
 		serveur = new ServeurImpl();
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 	}

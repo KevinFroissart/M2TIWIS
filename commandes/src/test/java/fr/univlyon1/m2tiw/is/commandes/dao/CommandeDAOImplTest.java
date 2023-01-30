@@ -4,20 +4,25 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
+import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
+import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
 class CommandeDAOImplTest {
 
 	private CommandeDAOImpl commandeDAO;
 
 	@BeforeEach
-	public void setup() throws SQLException {
-		commandeDAO = new CommandeDAOImpl();
+	public void setup() throws SQLException, IOException, ClassNotFoundException {
+		Serveur serveur = new ServeurImpl();
+		DBAccess dbAccess = serveur.getConnection();
+		commandeDAO = new CommandeDAOImpl(dbAccess);
 		commandeDAO.init();
 	}
 

@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 
@@ -13,21 +14,26 @@ import org.junit.jupiter.api.Test;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
+import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
 class VoitureDAOImplTest {
 
 	private static CommandeDAOImpl commandeDAO;
 	private VoitureDAOImpl voitureDAO;
+	private static DBAccess dbAccess;
 
 	@BeforeAll
-	public static void beforeAll() throws SQLException {
-		commandeDAO = new CommandeDAOImpl();
+	public static void beforeAll() throws SQLException, IOException, ClassNotFoundException {
+		Serveur serveur = new ServeurImpl();
+		dbAccess = serveur.getConnection();
+		commandeDAO = new CommandeDAOImpl(dbAccess);
 		commandeDAO.init();
 	}
 
 	@BeforeEach
 	public void before() throws SQLException {
-		voitureDAO = new VoitureDAOImpl();
+		voitureDAO = new VoitureDAOImpl(dbAccess);
 		voitureDAO.init();
 	}
 
