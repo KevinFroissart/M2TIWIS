@@ -16,8 +16,6 @@ public abstract class AbstractController implements Controller, Startable {
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractController.class);
 
 	@Override
-	public abstract Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException;
-	@Override
 	public void start() {
 		LOG.info("Composant Controleur démarré: {}", this);
 	}

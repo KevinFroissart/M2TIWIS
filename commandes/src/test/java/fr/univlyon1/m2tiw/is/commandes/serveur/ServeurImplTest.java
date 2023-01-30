@@ -255,7 +255,7 @@ public class ServeurImplTest {
 
 	@Test
 	void shouldThrowNotFoundException_whenAjouterConfiguration_withVoitureIdIntrouvable() {
-		/// Given
+		// Given
 		Option option = new Option("test", "test");
 
 		HashMap<String, Object> parametres = new HashMap<>();
@@ -435,16 +435,16 @@ public class ServeurImplTest {
 		HashMap<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele1");
 
-		int sizeBefore = ((Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null)).size();
-
 		Voiture voiture = (Voiture) serveur.processRequest(VOITURECONTROLLER, "creerVoiture", parametres);
 		parametres.put("voitureId", voiture.getId());
+
+		int sizeBefore = ((Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null)).size();
 
 		// When
 		serveur.processRequest(VOITURECONTROLLER, "supprimerVoiture", parametres);
 
 		// Then
-		assertEquals(sizeBefore, ((Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null)).size());
+		assertEquals(sizeBefore - 1, ((Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null)).size());
 
 	}
 
