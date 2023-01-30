@@ -5,7 +5,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>fr.univlyon1.m2tiw.tiw1</groupId>
-	<artifactId>base-processor</artifactId>
+	<artifactId>web-framework</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<name>pico base-processor</name>
 
