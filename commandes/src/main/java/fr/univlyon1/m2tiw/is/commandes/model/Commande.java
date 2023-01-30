@@ -13,10 +13,6 @@ public class Commande {
         this.ferme = ferme;
     }
 
-    /*public Commande(Long id) {
-        this.id = id;
-    }*/
-
     public Commande(Long id, boolean ferme, Collection<Voiture> voitures) {
         this.id = id;
         this.ferme = ferme;
