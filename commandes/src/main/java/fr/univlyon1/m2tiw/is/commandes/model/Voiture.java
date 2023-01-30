@@ -24,7 +24,7 @@ public class Voiture {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Voiture voiture = (Voiture) o;
+        var voiture = (Voiture) o;
         return Objects.equals(id, voiture.id);
     }
 

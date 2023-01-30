@@ -11,7 +11,7 @@ import java.sql.SQLException;
  * Encapsulate DB connections setup, management
  */
 public class DBAccess {
-    private final Logger LOG = LoggerFactory.getLogger(DBAccess.class);
+    private static final Logger LOG = LoggerFactory.getLogger(DBAccess.class);
 
     /**
      * Database URL.

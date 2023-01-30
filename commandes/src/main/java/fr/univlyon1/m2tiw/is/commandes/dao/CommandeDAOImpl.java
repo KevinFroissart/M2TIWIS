@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
 import org.slf4j.Logger;
@@ -14,7 +13,7 @@ import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 
 public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 
-	private final static Logger LOG = LoggerFactory.getLogger(CommandeDAOImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(CommandeDAOImpl.class);
 
 	private PreparedStatement insertStatement;
 	private PreparedStatement getStatement;
@@ -39,7 +38,7 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 
 	@Override
 	protected void setupTable(Connection connection) throws SQLException {
-		Statement stat = connection.createStatement();
+		var stat = connection.createStatement();
 		stat.execute("CREATE TABLE IF NOT EXISTS commande(" +
 				"id SERIAL PRIMARY KEY," +
 				"ferme BOOLEAN) ");

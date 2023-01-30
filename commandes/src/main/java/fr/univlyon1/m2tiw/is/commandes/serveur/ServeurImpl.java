@@ -35,7 +35,7 @@ public class ServeurImpl implements Serveur {
 	public ServeurImpl() throws SQLException, IOException, ClassNotFoundException {
 		MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
 
-		ObjectMapper mapper = new ObjectMapper();
+		var mapper = new ObjectMapper();
 		ApplicationConfiguration configuration = mapper.readValue(new File(
 				Objects.requireNonNull(ServeurImpl.class.getResource("/configuration.json"))
 				.getPath()), ApplicationConfiguration.class);

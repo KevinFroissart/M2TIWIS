@@ -15,7 +15,7 @@ import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 /**
  * Test suite for DBAccess
  */
-public class DBAccessTests {
+class DBAccessTests {
 
 	private DBAccess dbAccess;
 
@@ -26,12 +26,12 @@ public class DBAccessTests {
 	}
 
 	@Test
-	public void testCanConnect() throws SQLException {
+	void testCanConnect() throws SQLException {
 		assertNotNull(dbAccess.getConnection());
 	}
 
 	@Test
-	public void sameConnection() throws SQLException {
+	void sameConnection() throws SQLException {
 		var conn1 = dbAccess.getConnection();
 		var conn2 = dbAccess.getConnection();
 		assertEquals(conn1, conn2);

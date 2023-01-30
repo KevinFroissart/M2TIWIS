@@ -9,7 +9,7 @@ public class CommandeArchiveeServiceImpl implements CommandeArchiveeService {
 
 	private final OptionService optionService;
 
-	public CommandeArchiveeServiceImpl(OptionService optionService) throws SQLException {
+	public CommandeArchiveeServiceImpl(OptionService optionService) {
 		this.optionService = optionService;
 	}
 

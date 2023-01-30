@@ -14,21 +14,21 @@ public class VoitureServiceImpl implements VoitureService {
 	private final VoitureDAO voitureDAO;
 	private final OptionDAO optionDAO;
 
-	public VoitureServiceImpl(VoitureDAO voitureDAO, OptionDAO optionDAO) throws SQLException {
+	public VoitureServiceImpl(VoitureDAO voitureDAO, OptionDAO optionDAO) {
 		this.voitureDAO = voitureDAO;
 		this.optionDAO = optionDAO;
 	}
 
 	@Override
 	public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
-		Voiture voiture = voitureDAO.getVoitureById(voitureId);
+		var voiture = voitureDAO.getVoitureById(voitureId);
 		voiture.addOption(option);
 		optionDAO.setOptionVoiture(voitureId, option);
 	}
 
 	@Override
 	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
-		Voiture voiture = voitureDAO.getVoitureById(voitureId);
+		var voiture = voitureDAO.getVoitureById(voitureId);
 		if (voiture.hasOption(option)) {
 			voiture.deleteOption(option);
 		}
@@ -36,7 +36,7 @@ public class VoitureServiceImpl implements VoitureService {
 	}
 
 	@Override
-	public Collection<Option> getOptionsForVoiture(Long voitureId) throws SQLException, NotFoundException {
+	public Collection<Option> getOptionsForVoiture(Long voitureId) throws SQLException {
 		return optionDAO.getOptionsForVoiture(voitureId);
 	}
 

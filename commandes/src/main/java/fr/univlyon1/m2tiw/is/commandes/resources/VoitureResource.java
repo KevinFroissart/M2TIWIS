@@ -25,7 +25,7 @@ public class VoitureResource {
     }
 
     public Voiture getVoiture(Long voitureId) throws SQLException, NotFoundException {
-        Voiture voiture = voitureDAO.getVoitureById(voitureId);
+        var voiture = voitureDAO.getVoitureById(voitureId);
         for (Option option : optionDAO.getOptionsForVoiture(voitureId)) {
             voiture.addOption(option);
         }

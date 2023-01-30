@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
 
-    private static Logger LOG = LoggerFactory.getLogger(VoitureDAOImpl.class);
+    private static final Logger LOG = LoggerFactory.getLogger(VoitureDAOImpl.class);
     private PreparedStatement insertStatement = null;
     private PreparedStatement getByIdStatement = null;
     private PreparedStatement updateStatement = null;
@@ -25,7 +25,7 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
 
     @Override
     protected void setupTable(Connection connection) throws SQLException {
-        Statement stat = connection.createStatement();
+        var stat = connection.createStatement();
         stat.execute("CREATE TABLE IF NOT EXISTS voiture(" +
                 "id SERIAL PRIMARY KEY, " +
                 "modele VARCHAR(100) NOT NULL, " +

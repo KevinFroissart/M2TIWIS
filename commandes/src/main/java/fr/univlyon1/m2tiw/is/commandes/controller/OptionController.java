@@ -33,12 +33,10 @@ public class OptionController extends AbstractController {
 	 * @throws EmptyCommandeException
 	 */
 	public Object process(String methode, Map<String, Object> parametres) throws SQLException {
-		switch (methode) {
-			case "getalloptions":
-				return getAllOptions();
-			default:
-				return null;
+		if (methode.equals("getalloptions")) {
+			return getAllOptions();
 		}
+		return null;
 	}
 
 	/**
