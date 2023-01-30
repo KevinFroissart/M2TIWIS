@@ -15,7 +15,7 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 	private final VoitureResource voitureResource;
 
 
-	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureResource voitureResource) throws SQLException {
+	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureResource voitureResource) {
 		this.commandeDAO = commandeDAO;
 		this.voitureResource = voitureResource;
 	}

@@ -22,7 +22,7 @@ import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 
-public class ServeurImplTest {
+class ServeurImplTest {
 
 	Serveur serveur;
 

@@ -23,7 +23,7 @@ public class CommandeArchiveeResource {
     }
 
     public Commande getCommande(Long id) throws SQLException, NotFoundException {
-        Commande commande = commandeDAO.getCommande(id);
+        var commande = commandeDAO.getCommande(id);
         commande.getVoitures().addAll(voitureService.getVoituresByCommande(id));
         return commande;
     }

@@ -1,8 +1,5 @@
 package fr.univlyon1.m2tiw.is.commandes.model;
 
-import java.io.Serializable;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class Option {
@@ -19,7 +16,7 @@ public class Option {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Option option = (Option) o;
+        var option = (Option) o;
         return Objects.equals(nom, option.nom) && Objects.equals(valeur, option.valeur);
     }
 

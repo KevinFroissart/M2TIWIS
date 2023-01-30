@@ -16,7 +16,7 @@ public abstract class AbstractSQLDAO {
 	private DBAccess dbAccess;
 	private Connection currentConnection = null;
 
-	public AbstractSQLDAO(DBAccess dbAccess) {
+	protected AbstractSQLDAO(DBAccess dbAccess) {
 		this.dbAccess = dbAccess;
 	}
 
@@ -26,7 +26,7 @@ public abstract class AbstractSQLDAO {
 	 * @throws SQLException If there is an error while creating statements or tables.
 	 */
 	public void init() throws SQLException {
-		Connection connection = dbAccess.getConnection();
+		var connection = dbAccess.getConnection();
 		if (currentConnection != connection) {
 			LOG.debug("Initializing table and statements");
 			setupTable(connection);

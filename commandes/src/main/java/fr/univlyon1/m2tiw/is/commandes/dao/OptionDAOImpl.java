@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -33,7 +32,7 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
 	@Override
 	protected void setupTable(Connection connection) throws SQLException {
-		Statement stat = connection.createStatement();
+		var stat = connection.createStatement();
 		stat.execute("CREATE TABLE IF NOT EXISTS option2(" +
 				"voiture integer references voiture(id), " +
 				"nom varchar(100), " +
@@ -47,8 +46,7 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		getOptionStatement.setString(2, nom);
 		ResultSet rs = getOptionStatement.executeQuery();
 		if (rs.next()) {
-			Option option = new Option(nom, rs.getString(1));
-			return option;
+			return new Option(nom, rs.getString(1));
 		}
 		else {
 			throw new NotFoundException("Option " + nom + " pour voiture " + voitureId + " nom trouvée");

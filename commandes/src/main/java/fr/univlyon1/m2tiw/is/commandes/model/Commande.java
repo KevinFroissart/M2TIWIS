@@ -23,7 +23,7 @@ public class Commande {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Commande commande = (Commande) o;
+        var commande = (Commande) o;
         return Objects.equals(id, commande.id);
     }
 
