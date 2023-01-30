@@ -11,12 +11,13 @@ import fr.univlyon1.m2tiw.is.commandes.config.ApplicationConfiguration;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
-import org.picocontainer.parameters.ComponentParameter;
+import org.picocontainer.parameters.ConstantParameter;
 
 import fr.univlyon1.m2tiw.is.commandes.controller.CommandeController;
 import fr.univlyon1.m2tiw.is.commandes.controller.OptionController;
 import fr.univlyon1.m2tiw.is.commandes.controller.VoitureController;
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
+import fr.univlyon1.m2tiw.is.commandes.dao.DBAccess;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
@@ -28,6 +29,8 @@ public class ServeurImpl implements Serveur {
 	private final VoitureController voitureController;
 	private final OptionController optionController;
 	private final CommandeController commandeController;
+
+	private final DBAccess dbAccess;
 
 	public ServeurImpl() throws SQLException, IOException, ClassNotFoundException {
 		MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
@@ -42,9 +45,10 @@ public class ServeurImpl implements Serveur {
 			if (!component.getParameters().isEmpty()) {
 				Map<String, String> params = component.getParameters();
 				pico.addComponent(componentClass, componentClass,
-						new ComponentParameter(params.get("url")),
-						new ComponentParameter(params.get("user")),
-						new ComponentParameter(params.get("password")));
+						new ConstantParameter(params.get("url")),
+						new ConstantParameter(params.get("user")),
+						new ConstantParameter(params.get("password"))
+				);
 			} else if (component.getClassName().contains("Service") || component.getClassName().contains("DAO")) {
 				Class<?> componentImplClass = Class.forName(component.getClassName().concat("Impl"));
 				pico.addComponent(componentClass, componentImplClass);
@@ -56,6 +60,7 @@ public class ServeurImpl implements Serveur {
 		voitureController = pico.getComponent(VoitureController.class);
 		optionController = pico.getComponent(OptionController.class);
 		commandeController = pico.getComponent(CommandeController.class);
+		dbAccess = pico.getComponent(DBAccess.class);
 
 		pico.getComponent(CommandeDAO.class).init();
 		pico.getComponent(OptionDAO.class).init();
@@ -65,16 +70,20 @@ public class ServeurImpl implements Serveur {
 	}
 
 	public Object processRequest(String commande, String methode, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
-		switch (commande) {
+		switch (commande.toLowerCase()) {
 			case "commandecontroller":
-				return commandeController.process(methode, parametres);
+				return commandeController.process(methode.toLowerCase(), parametres);
 			case "optioncontroller":
-				return optionController.process(methode, parametres);
+				return optionController.process(methode.toLowerCase(), parametres);
 			case "voiturecontroller":
-				return voitureController.process(methode, parametres);
+				return voitureController.process(methode.toLowerCase(), parametres);
 			default:
 				return null;
 		}
+	}
+
+	public DBAccess getConnection() {
+		return dbAccess;
 	}
 
 	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {

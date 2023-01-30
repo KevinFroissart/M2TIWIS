@@ -3,10 +3,14 @@ package fr.univlyon1.m2tiw.is.commandes.dao;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
+import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
 /**
  * Test suite for DBAccess
@@ -16,8 +20,9 @@ public class DBAccessTests {
 	private DBAccess dbAccess;
 
 	@BeforeEach
-	public void setup() {
-		dbAccess = new DBAccess();
+	public void setup() throws SQLException, IOException, ClassNotFoundException {
+		Serveur serveur = new ServeurImpl();
+		dbAccess = serveur.getConnection();
 	}
 
 	@Test

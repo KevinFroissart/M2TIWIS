@@ -31,10 +31,12 @@ public class CommandeCouranteResource {
     }
 
     public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
+        getCommandeCourante();
         this.commandeCourante.addVoiture(voitureResource.getVoiture(voitureId));
     }
 
     public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
+        getCommandeCourante();
         this.commandeCourante.removeVoiture(voitureResource.getVoiture(voitureId));
         this.voitureResource.supprimerVoiture(voitureId);
     }

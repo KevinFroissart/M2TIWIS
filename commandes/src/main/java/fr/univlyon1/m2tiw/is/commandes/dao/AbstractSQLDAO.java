@@ -13,8 +13,12 @@ public abstract class AbstractSQLDAO {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractSQLDAO.class);
 
-	private DBAccess dbAccess = new DBAccess();
+	private DBAccess dbAccess;
 	private Connection currentConnection = null;
+
+	public AbstractSQLDAO(DBAccess dbAccess) {
+		this.dbAccess = dbAccess;
+	}
 
 	/**
 	 * Initialize table and statements.

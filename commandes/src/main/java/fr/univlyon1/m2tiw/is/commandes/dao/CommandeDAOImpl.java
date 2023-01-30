@@ -21,6 +21,10 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 	private PreparedStatement updateStatement;
 	private PreparedStatement deleteStatement;
 
+	public CommandeDAOImpl(DBAccess dbAccess) {
+		super(dbAccess);
+	}
+
 	@Override
 	protected void initStatements(Connection connection) throws SQLException {
 		insertStatement = connection.prepareStatement(

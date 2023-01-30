@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 import org.junit.jupiter.api.AfterEach;
@@ -14,6 +15,8 @@ import org.junit.jupiter.api.Test;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
+import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
 class OptionDAOImplTest {
 
@@ -22,20 +25,23 @@ class OptionDAOImplTest {
 	private OptionDAOImpl optionDAO;
 	private Commande commande;
 	private Voiture voiture;
+	private static DBAccess dbAccess;
 
 	private static int counter = 0;
 
 	@BeforeAll
-	public static void before() throws SQLException {
-		commandeDAO = new CommandeDAOImpl();
+	public static void before() throws SQLException, IOException, ClassNotFoundException {
+		Serveur serveur = new ServeurImpl();
+		dbAccess = serveur.getConnection();
+		commandeDAO = new CommandeDAOImpl(dbAccess);
 		commandeDAO.init();
-		voitureDAO = new VoitureDAOImpl();
+		voitureDAO = new VoitureDAOImpl(dbAccess);
 		voitureDAO.init();
 	}
 
 	@BeforeEach
 	public void beforeEach() throws SQLException {
-		optionDAO = new OptionDAOImpl();
+		optionDAO = new OptionDAOImpl(dbAccess);
 		optionDAO.init();
 		commande = commandeDAO.saveCommande(new Commande(false));
 		voiture = voitureDAO.saveVoiture(new Voiture("modele3"), commande.getId());

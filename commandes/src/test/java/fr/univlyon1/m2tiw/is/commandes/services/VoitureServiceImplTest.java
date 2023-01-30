@@ -1,6 +1,7 @@
 package fr.univlyon1.m2tiw.is.commandes.services;
 
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAOImpl;
+import fr.univlyon1.m2tiw.is.commandes.dao.DBAccess;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAOImpl;
@@ -10,9 +11,13 @@ import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
+import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
+import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 
@@ -29,10 +34,13 @@ class VoitureServiceImplTest {
     private CommandeDAOImpl commandeDAO;
 
     @BeforeEach
-    void setUp() throws SQLException {
-        OptionDAO optionDAO = new OptionDAOImpl();
-        commandeDAO = new CommandeDAOImpl();
-        voitureDAO = new VoitureDAOImpl();
+    void setUp() throws SQLException, IOException, ClassNotFoundException {
+        Serveur serveur = new ServeurImpl();
+        DBAccess dbAccess = serveur.getConnection();
+        OptionDAO optionDAO = new OptionDAOImpl(dbAccess);
+        voitureDAO = new VoitureDAOImpl(dbAccess);
+        commandeDAO = new CommandeDAOImpl(dbAccess);
+
         optionDAO.init();
         commandeDAO.init();
         voitureDAO.init();
