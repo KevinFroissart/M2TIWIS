@@ -4,6 +4,7 @@ import static fr.univlyon1.m2tiw.is.commandes.util.Strings.COMMANDECONTROLLER;
 import static fr.univlyon1.m2tiw.is.commandes.util.Strings.VOITURECONTROLLER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
@@ -438,14 +439,11 @@ class ServeurImplTest {
 		Voiture voiture = (Voiture) serveur.processRequest(VOITURECONTROLLER, "creerVoiture", parametres);
 		parametres.put("voitureId", voiture.getId());
 
-		int sizeBefore = ((Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null)).size();
-
 		// When
 		serveur.processRequest(VOITURECONTROLLER, "supprimerVoiture", parametres);
 
 		// Then
-		assertEquals(sizeBefore - 1, ((Collection<Voiture>) serveur.processRequest(COMMANDECONTROLLER, "getAllVoitures", null)).size());
-
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "getVoiture", parametres));
 	}
 
 	@Test
