@@ -9,6 +9,9 @@ import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 
+/**
+ * Implémentation de {@link VoitureService}.
+ */
 public class VoitureServiceImpl implements VoitureService {
 
 	private final VoitureDAO voitureDAO;
@@ -19,6 +22,10 @@ public class VoitureServiceImpl implements VoitureService {
 		this.optionDAO = optionDAO;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see VoitureService#ajouterConfiguration(Long, Option)
+	 */
 	@Override
 	public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
 		var voiture = voitureDAO.getVoitureById(voitureId);
@@ -26,6 +33,10 @@ public class VoitureServiceImpl implements VoitureService {
 		optionDAO.setOptionVoiture(voitureId, option);
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see VoitureService#supprimerConfiguration(Long, Option)
+	 */
 	@Override
 	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
 		var voiture = voitureDAO.getVoitureById(voitureId);
@@ -35,11 +46,19 @@ public class VoitureServiceImpl implements VoitureService {
 		optionDAO.deleteOptionVoiture(voitureId, option.getNom());
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see VoitureService#getOptionsForVoiture(Long)
+	 */
 	@Override
 	public Collection<Option> getOptionsForVoiture(Long voitureId) throws SQLException {
 		return optionDAO.getOptionsForVoiture(voitureId);
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see VoitureService#getVoituresByCommande(Long)
+	 */
 	@Override
 	public Collection<Voiture> getVoituresByCommande(Long id) throws SQLException, NotFoundException {
 		Collection<Voiture> voitures = voitureDAO.getVoituresByCommande(id);

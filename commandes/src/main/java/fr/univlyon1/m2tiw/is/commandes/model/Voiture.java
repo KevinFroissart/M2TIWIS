@@ -5,17 +5,31 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Modèle d'une voiture.
+ */
 public class Voiture {
     private Long id;
     private String modele;
     private Map<String, Option> options;
 
+    /**
+     * Constructeur d'une voiture.
+     *
+     * @param id l'id de la voiture.
+     * @param modele le modèle de la voiture.
+     */
     public Voiture(Long id, String modele) {
         this.id = id;
         this.modele = modele;
         this.options = new HashMap<>();
     }
 
+    /**
+     * Constructeur d'une voiture.
+     *
+     * @param modele le modèle de la voiture.
+     */
     public Voiture(String modele) {
         this.modele = modele;
     }

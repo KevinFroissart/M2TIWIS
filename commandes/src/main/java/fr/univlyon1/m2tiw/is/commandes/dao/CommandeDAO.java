@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 
 /**
- * Manages persistence of panier
+ * Manages persistence of commande.
  */
 public interface CommandeDAO {
 

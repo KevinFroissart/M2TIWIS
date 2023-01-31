@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 
+/**
+ * Implémente les méthodes de {@link CommandeDAO}.
+ */
 public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CommandeDAOImpl.class);
@@ -24,6 +27,12 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 		super(dbAccess);
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see AbstractSQLDAO#initStatements(Connection)
+	 *
+	 * Prépare les requêtes SQL pour les commandes.
+	 */
 	@Override
 	protected void initStatements(Connection connection) throws SQLException {
 		insertStatement = connection.prepareStatement(
@@ -36,6 +45,12 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 		LOG.debug("Statements prepared");
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see AbstractSQLDAO#setupTable(Connection)
+	 *
+	 * Crée la table commande.
+	 */
 	@Override
 	protected void setupTable(Connection connection) throws SQLException {
 		var stat = connection.createStatement();
@@ -44,6 +59,10 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 				"ferme BOOLEAN) ");
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see CommandeDAO#saveCommande(Commande)
+	 */
 	@Override
 	public Commande saveCommande(Commande commande) throws SQLException {
 		insertStatement.setBoolean(1, commande.isFerme());
@@ -57,6 +76,10 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 		}
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see CommandeDAO#getCommande(long)
+	 */
 	@Override
 	public Commande getCommande(long commandeId) throws SQLException, NotFoundException {
 		getStatement.setLong(1, commandeId);
@@ -69,6 +92,10 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 		}
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see CommandeDAO#updateCommande(Commande)
+	 */
 	@Override
 	public void updateCommande(Commande commande) throws SQLException, NotFoundException {
 		updateStatement.setBoolean(1, commande.isFerme());
@@ -79,6 +106,10 @@ public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 		}
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see CommandeDAO#deleteCommande(long)
+	 */
 	@Override
 	public void deleteCommande(long commandeId) throws SQLException {
 		deleteStatement.setLong(1, commandeId);

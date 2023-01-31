@@ -7,11 +7,12 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
-import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.OptionService;
 
+/**
+ * Classe de contrôle des options.
+ */
 public class OptionController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OptionController.class);
@@ -22,15 +23,8 @@ public class OptionController extends AbstractController {
 	}
 
 	/**
-	 * Reçoit une méthode et ses paramètres et le délègue à la méthode associée.
-	 *
-	 * @param methode la méthode envoyée par le serveur.
-	 * @param parametres les paramètres associés à la méthode.
-	 *
-	 * @return un {@link Object} remonté par les services/resources.
-	 * @throws SQLException
-	 * @throws NotFoundException
-	 * @throws EmptyCommandeException
+	 * @inheritDoc
+	 * @see AbstractController#process(String, Map)
 	 */
 	public Object process(String methode, Map<String, Object> parametres) throws SQLException {
 		if (methode.equals("getalloptions")) {
@@ -40,10 +34,8 @@ public class OptionController extends AbstractController {
 	}
 
 	/**
-	 * Retourne toutes les options.
-	 *
-	 * @return une {@link Collection<Option>}.
-	 * @throws SQLException
+	 * @inheritDoc
+	 * @see OptionService#getAllOptions()
 	 */
 	public Collection<Option> getAllOptions() throws SQLException {
 		LOG.info("Méthode appelée: getAllOptions");

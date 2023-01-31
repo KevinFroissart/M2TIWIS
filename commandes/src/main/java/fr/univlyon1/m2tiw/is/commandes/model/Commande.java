@@ -4,15 +4,30 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
 
+/**
+ * Modèle d'une commande.
+ */
 public class Commande {
     private Long id;
     private boolean ferme;
     private Collection<Voiture> voitures = new ArrayList<>();
 
+    /**
+     * Constructeur d'une commande.
+     *
+     * @param ferme l'état de la commande.
+     */
     public Commande(boolean ferme) {
         this.ferme = ferme;
     }
 
+    /**
+     * Constructeur d'une commande.
+     *
+     * @param id l'id de la commande.
+     * @param ferme l'état de la commande.
+     * @param voitures la liste des voitures de la commande.
+     */
     public Commande(Long id, boolean ferme, Collection<Voiture> voitures) {
         this.id = id;
         this.ferme = ferme;

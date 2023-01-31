@@ -9,6 +9,9 @@ import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
+/**
+ * Implémente les méthodes de {@link OptionDAO}.
+ */
 public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
 	private PreparedStatement getOptionStatement = null;
@@ -21,6 +24,12 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		super(dbAccess);
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see AbstractSQLDAO#initStatements(Connection)
+	 *
+	 * Prépare les requêtes SQL pour les options.
+	 */
 	@Override
 	protected void initStatements(Connection connection) throws SQLException {
 		getOptionStatement = connection.prepareStatement("SELECT valeur FROM option2 WHERE voiture = ? AND  nom = ?");
@@ -30,6 +39,12 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		addOptionForVoitureStatement = connection.prepareStatement("INSERT INTO option2(voiture,nom,valeur) VALUES( ?,?,?)");
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see AbstractSQLDAO#setupTable(Connection)
+	 *
+	 * Crée la table option.
+	 */
 	@Override
 	protected void setupTable(Connection connection) throws SQLException {
 		var stat = connection.createStatement();
@@ -40,6 +55,10 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 				"primary key (voiture, nom)) ");
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see OptionDAO#getOption(long, String)
+	 */
 	@Override
 	public Option getOption(long voitureId, String nom) throws SQLException, NotFoundException {
 		getOptionStatement.setLong(1, voitureId);
@@ -53,6 +72,10 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		}
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see OptionDAO#getAllOptions()
+	 */
 	@Override
 	public Collection<Option> getAllOptions() throws SQLException {
 		ResultSet rs = getAllOptionsStatement.executeQuery();
@@ -63,6 +86,10 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		return options;
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see OptionDAO#getOptionsForVoiture(long)
+	 */
 	@Override
 	public Collection<Option> getOptionsForVoiture(long voitureId) throws SQLException {
 		getOptionsForVoitureStatement.setLong(1, voitureId);
@@ -74,6 +101,10 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		return options;
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see OptionDAO#setOptionVoiture(Long, Option) 
+	 */
 	@Override
 	public void setOptionVoiture(Long voitureId, Option option) throws SQLException {
 		deleteOptionVoiture(voitureId, option.getNom());
@@ -83,6 +114,10 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		addOptionForVoitureStatement.executeUpdate();
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see OptionDAO#deleteOptionVoiture(Long, String)
+	 */
 	@Override
 	public void deleteOptionVoiture(Long voitureId, String nom) throws SQLException {
 		deleteOptionForVoitureStatement.setLong(1, voitureId);

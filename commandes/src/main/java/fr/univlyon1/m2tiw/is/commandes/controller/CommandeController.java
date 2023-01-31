@@ -17,6 +17,9 @@ import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.CommandeArchiveeService;
 
+/**
+ * Classe de contrôle des commandes.
+ */
 public class CommandeController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CommandeController.class);
@@ -43,15 +46,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Reçoit une méthode et ses paramètres et le délègue à la méthode associée.
-	 *
-	 * @param methode la méthode envoyée par le serveur.
-	 * @param parametres les paramètres associés à la méthode.
-	 *
-	 * @return un {@link Object} remonté par les services/resources.
-	 * @throws SQLException
-	 * @throws NotFoundException
-	 * @throws EmptyCommandeException
+	 * @inheritDoc
+	 * @see AbstractController#process(String, Map)
 	 */
 	public Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException {
 		switch (methode) {
@@ -79,9 +75,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Crée une commande courante.
-	 *
-	 * @return la {@link Commande} courante.
+	 * @inheritDoc
+	 * @see CommandeCouranteService#creerCommandeCourante()
 	 */
 	public Commande creerCommandeCourante() {
 		LOG.info("Méthode appelée: creerCommandeCourante");
@@ -89,11 +84,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Ajoute une voiture à la commande courante.
-	 *
-	 * @param voitureId l'id de la {@link Voiture}.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see CommandeCouranteResource#ajouterVoiture(Long)
 	 */
 	private void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: ajouterVoiture, avec paramètre: {}", voitureId);
@@ -101,11 +93,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Supprime une voiture à la commande courante.
-	 *
-	 * @param voitureId l'id de la {@link Voiture}.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see CommandeCouranteResource#supprimerVoiture(Long)
 	 */
 	private void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: supprimerVoiture, avec paramètre: {}", voitureId);
@@ -113,9 +102,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Retourne les voitures de la commande courante.
-	 *
-	 * @return une {@link Collection<Voiture>}.
+	 * @inheritDoc
+	 * @see CommandeCouranteResource#getAllVoitures()
 	 */
 	private Collection<Voiture> getAllVoitures() {
 		LOG.info("Méthode appelée: getAllVoitures");
@@ -123,9 +111,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Retourne la commande courante.
-	 *
-	 * @return la {@link Commande} courante.
+	 * @inheritDoc
+	 * @see CommandeCouranteService#getCommandeCourante()
 	 */
 	private Commande getCommandeCourante() {
 		LOG.info("Méthode appelée: getCommandeCourante");
@@ -133,12 +120,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Valide la commande courante.
-	 *
-	 * @return un l'id de la commande validée.
-	 * @throws EmptyCommandeException
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see CommandeCouranteService#validerCommandeCourante()
 	 */
 	private long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
 		LOG.info("Méthode appelée: validerCommandeCourante");
@@ -146,10 +129,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Retourne les options de la commande courante.
-	 *
-	 * @return une {@link Collection<Option>} d'options.
-	 * @throws SQLException
+	 * @inheritDoc
+	 * @see CommandeArchiveeService#getAllOptions()
 	 */
 	private Collection<Option> getAllOptions() throws SQLException {
 		LOG.info("Méthode appelée: getAllOptions");
@@ -157,12 +138,8 @@ public class CommandeController extends AbstractController {
 	}
 
 	/**
-	 * Retourne une commande pour un id donné.
-	 *
-	 * @param id l'id de la commande.
-	 * @return la {@link Commande}
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see CommandeArchiveeResource#getCommande(Long)
 	 */
 	private Commande getCommande(Long id) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: getCommande, avec paramètre: {}", id);

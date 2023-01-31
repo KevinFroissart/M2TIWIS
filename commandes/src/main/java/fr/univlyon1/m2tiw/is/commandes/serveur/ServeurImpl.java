@@ -24,6 +24,9 @@ import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 
+/**
+ * Implémentation de {@link Serveur}.
+ */
 public class ServeurImpl implements Serveur {
 
 	private final VoitureController voitureController;
@@ -32,6 +35,13 @@ public class ServeurImpl implements Serveur {
 
 	private final DBAccess dbAccess;
 
+	/**
+	 * Contain"rise et démarre les composants de l'application.
+	 *
+	 * @throws SQLException pour une exception SQL.
+	 * @throws IOException pour une exception d'entrée/sortie.
+	 * @throws ClassNotFoundException pour une classe non trouvée.
+	 */
 	public ServeurImpl() throws SQLException, IOException, ClassNotFoundException {
 		MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
 
@@ -69,6 +79,10 @@ public class ServeurImpl implements Serveur {
 		pico.start();
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see Serveur#processRequest(String, String, Map)
+	 */
 	public Object processRequest(String commande, String methode, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
 		switch (commande.toLowerCase()) {
 			case "commandecontroller":
@@ -82,6 +96,10 @@ public class ServeurImpl implements Serveur {
 		}
 	}
 
+	/**
+	 * @InheritDoc
+	 * @see Serveur#getConnection()
+	 */
 	public DBAccess getConnection() {
 		return dbAccess;
 	}

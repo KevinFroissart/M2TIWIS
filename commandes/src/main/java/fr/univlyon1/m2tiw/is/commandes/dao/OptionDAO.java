@@ -6,7 +6,7 @@ import java.util.Collection;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
 /**
- * Manages persistence of modele3d.
+ * Manages persistence of option.
  */
 public interface OptionDAO {
 

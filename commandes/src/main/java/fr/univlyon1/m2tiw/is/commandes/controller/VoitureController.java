@@ -12,10 +12,12 @@ import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 import fr.univlyon1.m2tiw.is.commandes.services.VoitureService;
 
+/**
+ * Classe de contrôle des voitures.
+ */
 public class VoitureController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(VoitureController.class);
@@ -30,15 +32,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Reçoit une méthode et ses paramètres et le délègue à la méthode associée.
-	 *
-	 * @param methode la méthode envoyée par le serveur.
-	 * @param parametres les paramètres associés à la méthode.
-	 *
-	 * @return un {@link Object} remonté par les services/resources.
-	 * @throws SQLException
-	 * @throws NotFoundException
-	 * @throws EmptyCommandeException
+	 * @inheritDoc
+	 * @see AbstractController#process(String, Map)
 	 */
 	public Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, InvalidConfigurationException {
 		switch (methode) {
@@ -68,11 +63,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Crée une voiture.
-	 *
-	 * @param modele le modèle de la voiture.
-	 * @return la {@link Voiture} créée.
-	 * @throws SQLException
+	 * @inheritDoc
+	 * @see VoitureResource#creerVoiture(String)
 	 */
 	public Voiture creerVoiture(String modele) throws SQLException {
 		LOG.info("Méthode appelée: creerVoiture, avec comme paramètre(s): {}", modele);
@@ -80,12 +72,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Ajoute une configuration à une voiture donnée.
-	 *
-	 * @param voitureId l'id de la voiture.
-	 * @param option l'option à ajouter.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see VoitureService#ajouterConfiguration(Long, Option)
 	 */
 	public void ajouterConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: ajouterConfiguration, avec comme paramètres(s): {}, {}", voitureId, option);
@@ -93,13 +81,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Supprime la configuration d'une voiture.
-	 *
-	 * @param voitureId l'id de la voiture dont on supprime la configuration.
-	 * @param option l'option à supprimer;
-	 * @throws SQLException
-	 * @throws NotFoundException
-	 * @throws InvalidConfigurationException
+	 * @inheritDoc
+	 * @see VoitureService#supprimerConfiguration(Long, Option)
 	 */
 	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException, InvalidConfigurationException {
 		LOG.info("Méthode appelée: supprimerConfiguration, avec comme paramètres(s): {}, {}", voitureId, option);
@@ -107,12 +90,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Retourne les options d'une voiture donnée.
-	 *
-	 * @param voitureId l'id de la voiture dont on récupère les options.
-	 * @return la {@link Collection<Option>} de la voiture.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see VoitureService#getOptionsForVoiture(Long)
 	 */
 	public Collection<Option> getOptionsForVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: getOptionsForVoiture, avec comme paramètre(s): {}", voitureId);
@@ -120,12 +99,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Retourne une voiture pour un id donné.
-	 *
-	 * @param voitureId l'id de la voiture.
-	 * @return la {@link Voiture} pour l'id donné.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see VoitureResource#getVoiture(Long)
 	 */
 	public Voiture getVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: getVoiture, avec comme paramètre(s): {}", voitureId);
@@ -133,11 +108,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Remplace la commande associée à une voiture.
-	 * @param voitureId l'id de la voiture à modifier.
-	 * @param commande la commande à remplacer.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see VoitureResource#sauverVoiture(Long, Commande)
 	 */
 	public void sauverVoiture(Long voitureId, Commande commande) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: sauverVoiture, avec comme paramètres(s): {}, {}", voitureId, commande);
@@ -145,12 +117,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Retourne les voitures d'une commande.
-	 *
-	 * @param id l'id de la commande.
-	 * @return la {@link Collection<Voiture>} pour la commande donnée.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see VoitureService#getVoituresByCommande(Long)
 	 */
 	public Collection<Voiture> getVoituresByCommande(Long id) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: getVoituresByCommande, avec comme paramètre(s): {}", id);
@@ -158,11 +126,8 @@ public class VoitureController extends AbstractController {
 	}
 
 	/**
-	 * Supprime une voiture.
-	 *
-	 * @param voitureId l'id de la voiture à supprimer.
-	 * @throws SQLException
-	 * @throws NotFoundException
+	 * @inheritDoc
+	 * @see VoitureResource#supprimerVoiture(Long)
 	 */
 	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: supprimerVoiture, avec comme paramètre(s): {}", voitureId);
