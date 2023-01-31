@@ -16,10 +16,10 @@ public interface Controller {
 	 * @param parametres les paramètres associés à la méthode.
 	 *
 	 * @return un {@link Object} remonté par les services/resources.
-	 * @throws SQLException
-	 * @throws NotFoundException
-	 * @throws EmptyCommandeException
-	 * @throws InvalidConfigurationException
+	 * @throws SQLException pour une exception SQL.
+	 * @throws NotFoundException pour une entité non trouvée.
+	 * @throws EmptyCommandeException pour une commande vide.
+	 * @throws InvalidConfigurationException pour une configuration invalide.
 	 */
 	Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException;
 

@@ -4,6 +4,10 @@ import org.picocontainer.Startable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Classe abstraite des controleurs.
+ * Implémente {@link Startable} pour pouvoir être démarré et arrêté par PicoContainer.
+ */
 public abstract class AbstractController implements Controller, Startable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractController.class);

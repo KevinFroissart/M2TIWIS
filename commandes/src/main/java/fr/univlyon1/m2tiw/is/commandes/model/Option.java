@@ -2,11 +2,20 @@ package fr.univlyon1.m2tiw.is.commandes.model;
 
 import java.util.Objects;
 
+/**
+ * Modèle d'une option.
+ */
 public class Option {
 
     private String nom;
     private String valeur;
 
+    /**
+     * Constructeur d'une option.
+     *
+     * @param nom le nom de l'option.
+     * @param valeur la valeur de l'option.
+     */
     public Option(String nom, String valeur) {
         this.nom = nom;
         this.valeur = valeur;

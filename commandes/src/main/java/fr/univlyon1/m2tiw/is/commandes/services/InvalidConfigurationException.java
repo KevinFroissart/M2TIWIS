@@ -1,5 +1,8 @@
 package fr.univlyon1.m2tiw.is.commandes.services;
 
+/**
+ * Exception levée lorsqu'une configuration est invalide.
+ */
 public class InvalidConfigurationException extends Exception {
     public InvalidConfigurationException() {
         super();

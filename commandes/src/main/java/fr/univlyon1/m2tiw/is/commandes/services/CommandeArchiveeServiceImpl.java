@@ -5,6 +5,9 @@ import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
+/**
+ * Implémentation de {@link CommandeArchiveeService}.
+ */
 public class CommandeArchiveeServiceImpl implements CommandeArchiveeService {
 
 	private final OptionService optionService;
@@ -13,6 +16,10 @@ public class CommandeArchiveeServiceImpl implements CommandeArchiveeService {
 		this.optionService = optionService;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see OptionService#getAllOptions()
+	 */
 	@Override
 	public Collection<Option> getAllOptions() throws SQLException {
 		return this.optionService.getAllOptions();

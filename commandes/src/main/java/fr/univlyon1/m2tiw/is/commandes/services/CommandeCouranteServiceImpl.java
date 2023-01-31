@@ -8,24 +8,34 @@ import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 
+/**
+ * Implémentation de {@link CommandeCouranteService}.
+ */
 public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 
 	private Commande commandeCourante;
 	private final CommandeDAO commandeDAO;
 	private final VoitureResource voitureResource;
 
-
 	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureResource voitureResource) {
 		this.commandeDAO = commandeDAO;
 		this.voitureResource = voitureResource;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see CommandeCouranteService#creerCommandeCourante()
+	 */
 	@Override
 	public Commande creerCommandeCourante() {
 		this.commandeCourante = new Commande(false);
 		return commandeCourante;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see CommandeCouranteService#getCommandeCourante()
+	 */
 	@Override
 	public Commande getCommandeCourante() {
 		if (commandeCourante == null) {
@@ -34,6 +44,10 @@ public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 		return commandeCourante;
 	}
 
+	/**
+	 * @inheritDoc
+	 * @see CommandeCouranteService#validerCommandeCourante()
+	 */
 	@Override
 	public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
 		if (commandeCourante.getVoitures().isEmpty()) {

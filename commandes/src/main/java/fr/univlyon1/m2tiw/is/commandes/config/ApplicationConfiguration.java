@@ -9,6 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * Modèle de configuration de l'application.
+ */
 public class ApplicationConfiguration {
 
     @JsonProperty("application-config")

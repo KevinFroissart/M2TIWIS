@@ -8,6 +8,9 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Implémente les méthodes de {@link VoitureDAO}.
+ */
 public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(VoitureDAOImpl.class);
@@ -23,6 +26,12 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         super(dbAccess);
     }
 
+    /**
+     * @InheritDoc
+     * @see AbstractSQLDAO#setupTable(Connection)
+     *
+     * Crée la table voiture.
+     */
     @Override
     protected void setupTable(Connection connection) throws SQLException {
         var stat = connection.createStatement();
@@ -32,6 +41,12 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
                 "commande INTEGER NULL REFERENCES commande(id)) ");
     }
 
+    /**
+     * @InheritDoc
+     * @see AbstractSQLDAO#initStatements(Connection)
+     *
+     * Prépare les requêtes SQL pour les voitures.
+     */
     @Override
     protected void initStatements(Connection connection) throws SQLException {
         insertStatement = connection.prepareStatement("INSERT INTO voiture(modele, commande) VALUES (?,?) returning id");
@@ -44,6 +59,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         LOG.debug("Prepared statements");
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#saveVoiture(Voiture)
+     */
     @Override
     public Voiture saveVoiture(Voiture voiture) throws SQLException {
         insertStatementNoCmd.setString(1, voiture.getModele());
@@ -56,6 +75,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         }
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#saveVoiture(Voiture, long)
+     */
     @Override
     public Voiture saveVoiture(Voiture voiture, long commandeId) throws SQLException {
         insertStatement.setString(1, voiture.getModele());
@@ -69,6 +92,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         }
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#getVoitureById(long)
+     */
     @Override
     public Voiture getVoitureById(long id) throws NotFoundException, SQLException {
         getByIdStatement.setLong(1, id);
@@ -80,6 +107,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         }
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#getVoituresByCommande(long)
+     */
     @Override
     public Collection<Voiture> getVoituresByCommande(long commandeId) throws SQLException, NotFoundException {
         Collection<Voiture> result = new ArrayList<>();
@@ -91,6 +122,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         return result;
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#updateVoiture(Voiture)
+     */
     @Override
     public Voiture updateVoiture(Voiture voiture) throws NotFoundException, SQLException {
         // On ne met pas à jour la commande ici
@@ -105,6 +140,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         return voiture;
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#updateVoitureCommande(long, long)
+     */
     public void updateVoitureCommande(long voitureId, long newCommandeId) throws SQLException, NotFoundException {
         updateCommandeStatement.setLong(2, voitureId);
         updateCommandeStatement.setLong(1, newCommandeId);
@@ -116,6 +155,10 @@ public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
         }
     }
 
+    /**
+     * @InheritDoc
+     * @see VoitureDAO#deleteVoiture(Voiture)
+     */
     @Override
     public void deleteVoiture(Voiture voiture) throws SQLException, NotFoundException {
         deleteStatement.setLong(1, voiture.getId());
