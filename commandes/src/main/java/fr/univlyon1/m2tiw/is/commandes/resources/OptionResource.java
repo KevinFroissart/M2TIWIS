@@ -1,4 +1,4 @@
-package fr.univlyon1.m2tiw.is.commandes.services;
+package fr.univlyon1.m2tiw.is.commandes.resources;
 
 import java.sql.SQLException;
 import java.util.Collection;
@@ -7,21 +7,22 @@ import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 
 /**
- * Implémentation de {@link OptionService}.
+ * Resource pour les options.
  */
-public class OptionServiceImpl implements OptionService {
+public class OptionResource {
 
 	private final OptionDAO optionDAO;
 
-	public OptionServiceImpl(OptionDAO dao) {
+	public OptionResource(OptionDAO dao) {
 		this.optionDAO = dao;
 	}
 
 	/**
-	 * @inheritDoc
-	 * @see OptionService#getAllOptions()
+	 * Retourne toutes les options.
+	 *
+	 * @return une {@link Collection<Option>}.
+	 * @throws SQLException pour une exception SQL.
 	 */
-	@Override
 	public Collection<Option> getAllOptions() throws SQLException {
 		return optionDAO.getAllOptions();
 	}

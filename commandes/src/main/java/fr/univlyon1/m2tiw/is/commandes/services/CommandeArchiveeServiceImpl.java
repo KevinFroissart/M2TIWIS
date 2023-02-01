@@ -4,25 +4,26 @@ import java.sql.SQLException;
 import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
+import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
 
 /**
  * Implémentation de {@link CommandeArchiveeService}.
  */
 public class CommandeArchiveeServiceImpl implements CommandeArchiveeService {
 
-	private final OptionService optionService;
+	private final OptionResource optionResource;
 
-	public CommandeArchiveeServiceImpl(OptionService optionService) {
-		this.optionService = optionService;
+	public CommandeArchiveeServiceImpl(OptionResource optionResource) {
+		this.optionResource = optionResource;
 	}
 
 	/**
 	 * @inheritDoc
-	 * @see OptionService#getAllOptions()
+	 * @see OptionResource#getAllOptions()
 	 */
 	@Override
 	public Collection<Option> getAllOptions() throws SQLException {
-		return this.optionService.getAllOptions();
+		return this.optionResource.getAllOptions();
 	}
 
 }
