@@ -46,7 +46,7 @@ public class ServeurImpl implements Serveur {
 		MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
 
 		var mapper = new ObjectMapper();
-		ApplicationConfiguration.Configuration configuration = mapper.readValue(new File(
+		var configuration = mapper.readValue(new File(
 				Objects.requireNonNull(ServeurImpl.class.getResource("/configuration.json"))
 				.getPath()), ApplicationConfiguration.class).getConfiguration();
 
@@ -54,12 +54,11 @@ public class ServeurImpl implements Serveur {
 			Class<?> componentClass = Class.forName(component.getClassName());
 			Map<String, String> params = component.getParameters();
 			if (!params.isEmpty()) {
-				MutablePicoContainer componentContainer = pico.makeChildContainer();
-				for (Map.Entry<String, String> entry : params.entrySet()) {
-					componentContainer.addComponent(componentClass, componentClass, new ConstantParameter(entry.getValue()));
-				}
-				// TODO: tester sans le start
-				componentContainer.start();
+				pico.addComponent(componentClass, componentClass,
+						new ConstantParameter(params.get("url")),
+						new ConstantParameter(params.get("user")),
+						new ConstantParameter(params.get("password"))
+				);
 			} else {
 				pico.addComponent(componentClass, component.hasImplementation() ? Class.forName(component.getClassName().concat("Impl")) : componentClass);
 			}

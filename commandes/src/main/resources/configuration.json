@@ -4,13 +4,13 @@
     "controller-components": [
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.CommandeController", "hasImplementation": false},
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.VoitureController", "hasImplementation": false},
-      {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.OptionController", "hasImplementation": false},
-      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.OptionResource", "hasImplementation": true}
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.OptionController", "hasImplementation": false}
     ],
     "business-components": [
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource", "hasImplementation": false},
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource", "hasImplementation": false},
-      {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource", "hasImplementation": false}
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource", "hasImplementation": false},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.OptionResource", "hasImplementation": false}
     ],
     "service-components": [
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService", "hasImplementation": true},

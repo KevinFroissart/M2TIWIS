@@ -22,7 +22,8 @@
 
     <modules>
         <module>catalogue</module>
-	<module>commandes</module>
+	    <module>commandes</module>
+        <module>web-framework</module>
     </modules>
 
     <dependencyManagement>

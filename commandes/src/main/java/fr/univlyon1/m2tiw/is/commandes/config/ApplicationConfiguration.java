@@ -38,7 +38,7 @@ public class ApplicationConfiguration {
             @JsonProperty("class-name")
             private String className;
 
-            @JsonProperty("has-implementation")
+            @JsonProperty("hasImplementation")
             private boolean hasImplementation;
 
             @JsonProperty("params")
