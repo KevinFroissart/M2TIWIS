@@ -36,7 +36,7 @@ public class ServeurImpl implements Serveur {
 	private final DBAccess dbAccess;
 
 	/**
-	 * Contain"rise et démarre les composants de l'application.
+	 * Containérise et démarre les composants de l'application.
 	 *
 	 * @throws SQLException pour une exception SQL.
 	 * @throws IOException pour une exception d'entrée/sortie.
@@ -46,24 +46,22 @@ public class ServeurImpl implements Serveur {
 		MutablePicoContainer pico = new DefaultPicoContainer(new Caching());
 
 		var mapper = new ObjectMapper();
-		ApplicationConfiguration configuration = mapper.readValue(new File(
+		ApplicationConfiguration.Configuration configuration = mapper.readValue(new File(
 				Objects.requireNonNull(ServeurImpl.class.getResource("/configuration.json"))
-				.getPath()), ApplicationConfiguration.class);
+				.getPath()), ApplicationConfiguration.class).getConfiguration();
 
-		for (ApplicationConfiguration.Configuration.Component component : configuration.getConfiguration().getAllComponents()) {
+		for (ApplicationConfiguration.Configuration.Component component : configuration.getAllComponents()) {
 			Class<?> componentClass = Class.forName(component.getClassName());
-			if (!component.getParameters().isEmpty()) {
-				Map<String, String> params = component.getParameters();
-				pico.addComponent(componentClass, componentClass,
-						new ConstantParameter(params.get("url")),
-						new ConstantParameter(params.get("user")),
-						new ConstantParameter(params.get("password"))
-				);
-			} else if (component.getClassName().contains("Service") || component.getClassName().contains("DAO")) {
-				Class<?> componentImplClass = Class.forName(component.getClassName().concat("Impl"));
-				pico.addComponent(componentClass, componentImplClass);
+			Map<String, String> params = component.getParameters();
+			if (!params.isEmpty()) {
+				MutablePicoContainer componentContainer = pico.makeChildContainer();
+				for (Map.Entry<String, String> entry : params.entrySet()) {
+					componentContainer.addComponent(componentClass, componentClass, new ConstantParameter(entry.getValue()));
+				}
+				// TODO: tester sans le start
+				componentContainer.start();
 			} else {
-				pico.addComponent(componentClass);
+				pico.addComponent(componentClass, component.hasImplementation() ? Class.forName(component.getClassName().concat("Impl")) : componentClass);
 			}
 		}
 
