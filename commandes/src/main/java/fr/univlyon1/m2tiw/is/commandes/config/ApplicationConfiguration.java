@@ -38,11 +38,18 @@ public class ApplicationConfiguration {
             @JsonProperty("class-name")
             private String className;
 
+            @JsonProperty("has-implementation")
+            private boolean hasImplementation;
+
             @JsonProperty("params")
             private List<Parameter> parameters;
 
             public String getClassName() {
                 return className;
+            }
+
+            public boolean hasImplementation() {
+                return hasImplementation;
             }
 
             public Map<String, String> getParameters() {
@@ -67,6 +74,7 @@ public class ApplicationConfiguration {
                 return value;
             }
         }
+
         public List<Component> getAllComponents() {
             List<Component> allComponents = new ArrayList<>();
             allComponents.addAll(businessComponents);
