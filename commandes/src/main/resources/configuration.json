@@ -2,9 +2,10 @@
   "application-config": {
     "name": "Gestion commandes voitures",
     "controller-components": [
-      {"class-name":  "fr.univlyon1.m2tiw.is.commandes.controller.CommandeController", "hasImplementation": false},
-      {"class-name":  "fr.univlyon1.m2tiw.is.commandes.controller.VoitureController", "hasImplementation": false},
-      {"class-name":  "fr.univlyon1.m2tiw.is.commandes.controller.OptionController", "hasImplementation": false}
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.CommandeController", "hasImplementation": false},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.VoitureController", "hasImplementation": false},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.controller.OptionController", "hasImplementation": false},
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.OptionResource", "hasImplementation": true}
     ],
     "business-components": [
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource", "hasImplementation": false},
@@ -14,8 +15,7 @@
     "service-components": [
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService", "hasImplementation": true},
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.CommandeArchiveeService", "hasImplementation": true},
-      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.VoitureService", "hasImplementation": true},
-      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.OptionService", "hasImplementation": true}
+      {"class-name": "fr.univlyon1.m2tiw.is.commandes.services.VoitureService", "hasImplementation": true}
     ],
     "persistence-components": [
       {"class-name": "fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO", "hasImplementation": true},

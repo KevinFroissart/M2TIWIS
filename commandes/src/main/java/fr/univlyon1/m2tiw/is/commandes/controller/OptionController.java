@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
-import fr.univlyon1.m2tiw.is.commandes.services.OptionService;
+import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
 
 /**
  * Classe de contrôle des options.
@@ -16,10 +16,10 @@ import fr.univlyon1.m2tiw.is.commandes.services.OptionService;
 public class OptionController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OptionController.class);
-	private final OptionService optionService;
+	private final OptionResource optionResource;
 
-	public OptionController(OptionService optionService) {
-		this.optionService = optionService;
+	public OptionController(OptionResource optionResource) {
+		this.optionResource = optionResource;
 	}
 
 	/**
@@ -35,11 +35,11 @@ public class OptionController extends AbstractController {
 
 	/**
 	 * @inheritDoc
-	 * @see OptionService#getAllOptions()
+	 * @see OptionResource#getAllOptions()
 	 */
 	public Collection<Option> getAllOptions() throws SQLException {
 		LOG.info("Méthode appelée: getAllOptions");
-		return optionService.getAllOptions();
+		return optionResource.getAllOptions();
 	}
 
 }

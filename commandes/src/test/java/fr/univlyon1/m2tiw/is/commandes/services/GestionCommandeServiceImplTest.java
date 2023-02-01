@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import fr.univlyon1.m2tiw.is.commandes.dao.DBAccess;
 import fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -44,11 +45,11 @@ class GestionCommandeServiceImplTest {
 		optionDAO.init();
 		voitureDAO.init();
 		commandeDAO.init();
-		OptionService optionService = new OptionServiceImpl(optionDAO);
+		OptionResource optionResource = new OptionResource(optionDAO);
 		VoitureServiceImpl voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
 		voitureResource = new VoitureResource(voitureDAO, optionDAO);
 		commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
-		gestionCommandeService = new CommandeArchiveeServiceImpl(optionService);
+		gestionCommandeService = new CommandeArchiveeServiceImpl(optionResource);
 		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteService);
 		commandeCouranteResource = new CommandeCouranteResource(commandeCouranteService, voitureResource);
 	}

@@ -8,6 +8,7 @@ import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
 import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
 import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
@@ -31,7 +32,7 @@ class OptionServiceImplTest {
         optionDAO.init();
         commandeDAO.init();
         voitureDAO.init();
-        var optionService = new OptionServiceImpl(optionDAO);
+        var optionService = new OptionResource(optionDAO);
 
         Commande c = commandeDAO.saveCommande(new Commande(false));
         Voiture v = voitureDAO.saveVoiture(new Voiture("modele"), c.getId());
