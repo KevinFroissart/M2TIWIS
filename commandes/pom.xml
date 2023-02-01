@@ -44,6 +44,11 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.14.1</version>
         </dependency>
+        <dependency>
+            <groupId>fr.univlyon1.m2tiw.tiw1</groupId>
+            <artifactId>base-processor</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -52,34 +57,34 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <encoding>UTF-8</encoding>
-                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
-                    <annotationProcessors>
-                        <annotationProcessor>
-                            fr.univlyon1.m2tiw.tiw1.annotations.BaseProcessor
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            fr.univlyon1.m2tiw.tiw1.annotations.ServiceProcessor
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            fr.univlyon1.m2tiw.tiw1.annotations.ControllerProcessor
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            fr.univlyon1.m2tiw.tiw1.annotations.PersistenceProcessor
-                        </annotationProcessor>
-                        <annotationProcessor>
-                            fr.univlyon1.m2tiw.tiw1.annotations.ConfigurationProcessor
-                        </annotationProcessor>
-                    </annotationProcessors>
-                </configuration>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-compiler-plugin</artifactId>-->
+<!--                <version>3.8.1</version>-->
+<!--                <configuration>-->
+<!--                    <source>${java.version}</source>-->
+<!--                    <target>${java.version}</target>-->
+<!--                    <encoding>UTF-8</encoding>-->
+<!--                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>-->
+<!--                    <annotationProcessors>-->
+<!--                        <annotationProcessor>-->
+<!--                            fr.univlyon1.m2tiw.tiw1.annotations.BaseProcessor-->
+<!--                        </annotationProcessor>-->
+<!--                        <annotationProcessor>-->
+<!--                            fr.univlyon1.m2tiw.tiw1.annotations.ServiceProcessor-->
+<!--                        </annotationProcessor>-->
+<!--                        <annotationProcessor>-->
+<!--                            fr.univlyon1.m2tiw.tiw1.annotations.ControllerProcessor-->
+<!--                        </annotationProcessor>-->
+<!--                        <annotationProcessor>-->
+<!--                            fr.univlyon1.m2tiw.tiw1.annotations.PersistenceProcessor-->
+<!--                        </annotationProcessor>-->
+<!--                        <annotationProcessor>-->
+<!--                            fr.univlyon1.m2tiw.tiw1.annotations.ConfigurationProcessor-->
+<!--                        </annotationProcessor>-->
+<!--                    </annotationProcessors>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
