@@ -4,7 +4,8 @@ public enum COMPONENT_TYPE {
 	CONTROLLER("controller", 1),
 	BUSINESS("business", 2),
 	SERVICE("service", 3),
-	PERSISTENCE("persistence", 4);
+	PERSISTENCE("persistence", 4),
+	CONFIGURATION("configuration", 5);
 
 	private int value = -1;
 	private String name;
