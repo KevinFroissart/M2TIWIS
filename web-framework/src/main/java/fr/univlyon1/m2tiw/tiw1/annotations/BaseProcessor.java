@@ -1,9 +1,5 @@
 package fr.univlyon1.m2tiw.tiw1.annotations;
 
-import com.squareup.javapoet.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
@@ -16,10 +12,20 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.squareup.javapoet.ClassName;
+import com.squareup.javapoet.FieldSpec;
+import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
+import com.squareup.javapoet.TypeSpec;
+
 @SupportedAnnotationTypes("fr.univlyon1.m2tiw.tiw1.annotations.Component")
 public class BaseProcessor extends AbstractProcessor {
-	private static final Logger logger = LoggerFactory.getLogger(AbstractProcessor.class);
-	MethodSpec startMethod, stopMethod;
+	private static final Logger logger = LoggerFactory.getLogger(BaseProcessor.class);
+	MethodSpec startMethod;
+	MethodSpec stopMethod;
 	FieldSpec loggerField;
 
 	@Override
@@ -46,9 +52,9 @@ public class BaseProcessor extends AbstractProcessor {
 
 	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
 		for (TypeElement annotation : annotations) {
-			logger.info("Annotation : " + annotation.getSimpleName());
+			logger.info("Annotation : {}", annotation.getSimpleName());
 			for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
-				logger.info("Element annote : " + element.toString());
+				logger.info("Element annote : {}", element);
 
 				// Création d'un sous-composant
 				TypeSpec subComponent = TypeSpec

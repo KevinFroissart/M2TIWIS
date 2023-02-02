@@ -8,5 +8,4 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.SOURCE)
 public @interface Controller {
-    COMPONENT_TYPE type() default COMPONENT_TYPE.CONTROLLER;
 }
