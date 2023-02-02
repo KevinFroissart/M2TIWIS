@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <annotationProcessing>
+      <profile name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+      </profile>
+      <profile name="Annotation profile for commandes" enabled="true">
+        <sourceOutputDir name="target/generated-sources" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processor name="fr.univlyon1.m2tiw.tiw1.annotations.BaseProcessor" />
+        <processor name="fr.univlyon1.m2tiw.tiw1.annotations.ControllerProcessor" />
+        <module name="commandes" />
+      </profile>
+    </annotationProcessing>
+  </component>
+</project>

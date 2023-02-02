@@ -1,9 +1,10 @@
 package fr.univlyon1.m2tiw.is.commandes.services;
 
 import java.sql.SQLException;
+import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
-import fr.univlyon1.m2tiw.is.commandes.model.Commande;
+import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 
 /**
  * Service de gestion de la commande courante.
@@ -11,27 +12,28 @@ import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 public interface CommandeCouranteService {
 
 	/**
-	 * Crée une commande courante.
+	 * Retourne les voitures de la commande courante.
 	 *
-	 * @return la {@link Commande} courante.
+	 * @return une {@link Collection <Voiture>}.
 	 */
-	Commande creerCommandeCourante();
+	Collection<Voiture> getAllVoitures();
 
 	/**
-	 * Retourne la commande courante.
+	 * Ajoute une voiture à la commande courante.
 	 *
-	 * @return la {@link Commande} courante.
-	 */
-	Commande getCommandeCourante();
-
-	/**
-	 * Valide la commande courante.
-	 *
-	 * @return un l'id de la commande validée.
-	 * @throws EmptyCommandeException pour une commande vide.
+	 * @param voitureId l'id de la {@link Voiture}.
 	 * @throws SQLException pour une exception SQL.
 	 * @throws NotFoundException pour une voiture non trouvée.
 	 */
-	long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException;
+	void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException;
+
+	/**
+	 * Supprime une voiture à la commande courante.
+	 *
+	 * @param voitureId l'id de la {@link Voiture}.
+	 * @throws SQLException pour une exception SQL.
+	 * @throws NotFoundException pour une voiture non trouvée.
+	 */
+	void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException;
 
 }

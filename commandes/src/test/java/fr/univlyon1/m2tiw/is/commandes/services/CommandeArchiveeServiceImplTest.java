@@ -24,7 +24,7 @@ import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
 import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
-class GestionCommandeServiceImplTest {
+class CommandeArchiveeServiceImplTest {
 
 	private CommandeArchiveeServiceImpl gestionCommandeService;
 	private CommandeCouranteServiceImpl commandeCouranteService;
@@ -48,10 +48,10 @@ class GestionCommandeServiceImplTest {
 		OptionResource optionResource = new OptionResource(optionDAO);
 		VoitureServiceImpl voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
 		voitureResource = new VoitureResource(voitureDAO, optionDAO);
-		commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
+		commandeCouranteResource = new CommandeCouranteResource(commandeDAO, voitureResource);
+		commandeCouranteService = new CommandeCouranteServiceImpl(commandeCouranteResource, voitureResource);
 		gestionCommandeService = new CommandeArchiveeServiceImpl(optionResource);
-		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteService);
-		commandeCouranteResource = new CommandeCouranteResource(commandeCouranteService, voitureResource);
+		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteResource);
 	}
 
 	@Test
@@ -69,10 +69,10 @@ class GestionCommandeServiceImplTest {
 
 	@Test
 	void getCommande() throws SQLException, NotFoundException, EmptyCommandeException {
-		Commande c = commandeCouranteService.creerCommandeCourante();
+		Commande c = commandeCouranteResource.creerCommandeCourante();
 		Voiture v = voitureResource.creerVoiture("modele");
-		commandeCouranteResource.ajouterVoiture(v.getId());
-		long id = commandeCouranteService.validerCommandeCourante();
+		commandeCouranteService.ajouterVoiture(v.getId());
+		long id = commandeCouranteResource.validerCommandeCourante();
 		Commande c2 = commandeArchiveeResource.getCommande(id);
 		assertNotNull(c2);
 	}
