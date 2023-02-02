@@ -76,56 +76,56 @@ public class CommandeController extends AbstractController {
 
 	/**
 	 * @inheritDoc
-	 * @see CommandeCouranteService#creerCommandeCourante()
+	 * @see CommandeCouranteResource#creerCommandeCourante()
 	 */
 	public Commande creerCommandeCourante() {
 		LOG.info("Méthode appelée: creerCommandeCourante");
-		return commandeCouranteService.creerCommandeCourante();
+		return commandeCouranteResource.creerCommandeCourante();
 	}
 
 	/**
 	 * @inheritDoc
-	 * @see CommandeCouranteResource#ajouterVoiture(Long)
+	 * @see CommandeCouranteService#ajouterVoiture(Long)
 	 */
 	private void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: ajouterVoiture, avec paramètre: {}", voitureId);
-		commandeCouranteResource.ajouterVoiture(voitureId);
+		commandeCouranteService.ajouterVoiture(voitureId);
 	}
 
 	/**
 	 * @inheritDoc
-	 * @see CommandeCouranteResource#supprimerVoiture(Long)
+	 * @see CommandeCouranteService#supprimerVoiture(Long)
 	 */
 	private void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
 		LOG.info("Méthode appelée: supprimerVoiture, avec paramètre: {}", voitureId);
-		commandeCouranteResource.supprimerVoiture(voitureId);
+		commandeCouranteService.supprimerVoiture(voitureId);
 	}
 
 	/**
 	 * @inheritDoc
-	 * @see CommandeCouranteResource#getAllVoitures()
+	 * @see CommandeCouranteService#getAllVoitures()
 	 */
 	private Collection<Voiture> getAllVoitures() {
 		LOG.info("Méthode appelée: getAllVoitures");
-		return commandeCouranteResource.getAllVoitures();
+		return commandeCouranteService.getAllVoitures();
 	}
 
 	/**
 	 * @inheritDoc
-	 * @see CommandeCouranteService#getCommandeCourante()
+	 * @see CommandeCouranteResource#getCommandeCourante()
 	 */
 	private Commande getCommandeCourante() {
 		LOG.info("Méthode appelée: getCommandeCourante");
-		return commandeCouranteService.getCommandeCourante();
+		return commandeCouranteResource.getCommandeCourante();
 	}
 
 	/**
 	 * @inheritDoc
-	 * @see CommandeCouranteService#validerCommandeCourante()
+	 * @see CommandeCouranteResource#validerCommandeCourante()
 	 */
 	private long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
 		LOG.info("Méthode appelée: validerCommandeCourante");
-		return commandeCouranteService.validerCommandeCourante();
+		return commandeCouranteResource.validerCommandeCourante();
 	}
 
 	/**

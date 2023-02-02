@@ -3,7 +3,6 @@ package fr.univlyon1.m2tiw.is.commandes.resources;
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
-import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
 import fr.univlyon1.m2tiw.is.commandes.services.VoitureService;
 
 import java.sql.SQLException;
@@ -17,12 +16,12 @@ public class CommandeArchiveeResource {
 
     private final VoitureService voitureService;
 
-    private final CommandeCouranteService commandeCouranteService;
+    private final CommandeCouranteResource commandeCouranteResource;
 
-    public CommandeArchiveeResource(CommandeDAO commandeDAO, VoitureService voitureService, CommandeCouranteService commandeCouranteService) {
+    public CommandeArchiveeResource(CommandeDAO commandeDAO, VoitureService voitureService, CommandeCouranteResource commandeCouranteResource) {
         this.commandeDAO = commandeDAO;
         this.voitureService = voitureService;
-        this.commandeCouranteService = commandeCouranteService;
+        this.commandeCouranteResource = commandeCouranteResource;
     }
 
     /**
@@ -41,10 +40,10 @@ public class CommandeArchiveeResource {
 
     /**
      * @InheritDoc
-     * @see CommandeCouranteService#getCommandeCourante()
+     * @see CommandeCouranteResource#getCommandeCourante()
      */
     public Commande getCommandeCourante() {
-        return commandeCouranteService.getCommandeCourante();
+        return commandeCouranteResource.getCommandeCourante();
     }
 
 }

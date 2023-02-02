@@ -21,9 +21,9 @@
     </properties>
 
     <modules>
-        <module>catalogue</module>
-	    <module>commandes</module>
         <module>web-framework</module>
+        <module>catalogue</module>
+        <module>commandes</module>
     </modules>
 
     <dependencyManagement>

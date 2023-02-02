@@ -47,8 +47,8 @@ class VoitureServiceImplTest {
 
         voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
         voitureResource = new VoitureResource(voitureDAO, optionDAO);
-        commandeCouranteService = new CommandeCouranteServiceImpl(commandeDAO, voitureResource);
-        commandeCouranteResource = new CommandeCouranteResource(commandeCouranteService, voitureResource);
+        commandeCouranteResource = new CommandeCouranteResource(commandeDAO, voitureResource);
+        commandeCouranteService = new CommandeCouranteServiceImpl(commandeCouranteResource, voitureResource);
     }
 
     @Test
@@ -108,9 +108,9 @@ class VoitureServiceImplTest {
 
     @Test
     void sauverVoiture() throws SQLException, NotFoundException {
-        Commande c = commandeCouranteService.creerCommandeCourante();
+        Commande c = commandeCouranteResource.creerCommandeCourante();
         Voiture v = voitureResource.creerVoiture("modele" + counter++);
-        commandeCouranteResource.ajouterVoiture(v.getId());
+        commandeCouranteService.ajouterVoiture(v.getId());
         c = commandeDAO.saveCommande(c); // sinon c n'a pas d'id
         voitureResource.sauverVoiture(v.getId(), c);
         var voitures = voitureDAO.getVoituresByCommande(c.getId());
@@ -121,9 +121,9 @@ class VoitureServiceImplTest {
 
     @Test
     void getVoituresByCommande() throws SQLException, NotFoundException {
-        Commande c = commandeCouranteService.creerCommandeCourante();
+        Commande c = commandeCouranteResource.creerCommandeCourante();
         Voiture v = voitureResource.creerVoiture("modele" + counter++);
-        commandeCouranteResource.ajouterVoiture(v.getId());
+        commandeCouranteService.ajouterVoiture(v.getId());
         c = commandeDAO.saveCommande(c); // sinon c n'a pas d'id
         voitureResource.sauverVoiture(v.getId(), c);
         var voitures = voitureService.getVoituresByCommande(c.getId());

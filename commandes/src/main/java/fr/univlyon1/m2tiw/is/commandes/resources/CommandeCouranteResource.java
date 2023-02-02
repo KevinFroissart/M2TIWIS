@@ -1,12 +1,12 @@
 package fr.univlyon1.m2tiw.is.commandes.resources;
 
+import java.sql.SQLException;
+
+import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
-
-import java.sql.SQLException;
-import java.util.Collection;
+import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 
 /**
  * Ressource pour la commande courante.
@@ -15,52 +15,57 @@ public class CommandeCouranteResource {
 
     private Commande commandeCourante;
 
-    private final CommandeCouranteService commandeCouranteService;
+    private final CommandeDAO commandeDAO;
 
     private final VoitureResource voitureResource;
 
-    public CommandeCouranteResource(CommandeCouranteService commandeCouranteService, VoitureResource voitureResource) {
-        this.commandeCouranteService = commandeCouranteService;
+    public CommandeCouranteResource(CommandeDAO commandeDAO, VoitureResource voitureResource) {
+        this.commandeDAO = commandeDAO;
         this.voitureResource = voitureResource;
     }
 
-    private void getCommandeCourante() {
-        this.commandeCourante = commandeCouranteService.getCommandeCourante();
-    }
-
     /**
-     * Retourne les voitures de la commande courante.
+     * Crée une commande courante.
      *
-     * @return une {@link Collection<Voiture>}.
+     * @return la {@link Commande} courante.
      */
-    public Collection<Voiture> getAllVoitures() {
-        getCommandeCourante();
-        return commandeCourante.getVoitures();
+    public Commande creerCommandeCourante() {
+        this.commandeCourante = new Commande(false);
+        return commandeCourante;
     }
 
     /**
-     * Ajoute une voiture à la commande courante.
+     * Retourne la commande courante.
      *
-     * @param voitureId l'id de la {@link Voiture}.
+     * @return la {@link Commande} courante.
+     */
+    public Commande getCommandeCourante() {
+        if (commandeCourante == null) {
+            creerCommandeCourante();
+        }
+        return commandeCourante;
+    }
+
+    /**
+     * Valide la commande courante.
+     *
+     * @return un l'id de la commande validée.
+     * @throws EmptyCommandeException pour une commande vide.
      * @throws SQLException pour une exception SQL.
      * @throws NotFoundException pour une voiture non trouvée.
      */
-    public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
-        getCommandeCourante();
-        this.commandeCourante.addVoiture(voitureResource.getVoiture(voitureId));
-    }
-
-    /**
-     * Supprime une voiture à la commande courante.
-     *
-     * @param voitureId l'id de la {@link Voiture}.
-     * @throws SQLException pour une exception SQL.
-     * @throws NotFoundException pour une voiture non trouvée.
-     */
-    public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
-        getCommandeCourante();
-        this.commandeCourante.removeVoiture(voitureResource.getVoiture(voitureId));
-        this.voitureResource.supprimerVoiture(voitureId);
+    public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
+        if (commandeCourante.getVoitures().isEmpty()) {
+            throw new EmptyCommandeException("Commande vide");
+        }
+        commandeCourante.setFerme(true);
+        commandeCourante = commandeDAO.saveCommande(commandeCourante);
+        for (Voiture voiture : commandeCourante.getVoitures()) {
+            voitureResource.sauverVoiture(voiture.getId(), commandeCourante);
+        }
+        long id = commandeCourante.getId();
+        creerCommandeCourante(); // On repart avec un nouveau panier vide
+        return id;
     }
 
 }

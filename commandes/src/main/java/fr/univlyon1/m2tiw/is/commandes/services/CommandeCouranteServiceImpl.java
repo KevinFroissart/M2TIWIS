@@ -1,11 +1,12 @@
 package fr.univlyon1.m2tiw.is.commandes.services;
 
 import java.sql.SQLException;
+import java.util.Collection;
 
-import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 
 /**
@@ -14,53 +15,47 @@ import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 
 	private Commande commandeCourante;
-	private final CommandeDAO commandeDAO;
+	private final CommandeCouranteResource commandeCouranteResource;
 	private final VoitureResource voitureResource;
 
-	public CommandeCouranteServiceImpl(CommandeDAO commandeDAO, VoitureResource voitureResource) {
-		this.commandeDAO = commandeDAO;
+	public CommandeCouranteServiceImpl(CommandeCouranteResource commandeCouranteResource, VoitureResource voitureResource) {
+		this.commandeCouranteResource = commandeCouranteResource;
 		this.voitureResource = voitureResource;
 	}
 
-	/**
-	 * @inheritDoc
-	 * @see CommandeCouranteService#creerCommandeCourante()
-	 */
-	@Override
-	public Commande creerCommandeCourante() {
-		this.commandeCourante = new Commande(false);
-		return commandeCourante;
+	private void getCommandeCourante() {
+		this.commandeCourante = commandeCouranteResource.getCommandeCourante();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @see CommandeCouranteService#getCommandeCourante()
+	 * @InheritDoc
+	 * @see CommandeCouranteService#getAllVoitures()
 	 */
 	@Override
-	public Commande getCommandeCourante() {
-		if (commandeCourante == null) {
-			creerCommandeCourante();
-		}
-		return commandeCourante;
+	public Collection<Voiture> getAllVoitures() {
+		getCommandeCourante();
+		return commandeCourante.getVoitures();
 	}
 
 	/**
-	 * @inheritDoc
-	 * @see CommandeCouranteService#validerCommandeCourante()
+	 * @InheritDoc
+	 * @see CommandeCouranteService#ajouterVoiture(Long)
 	 */
 	@Override
-	public long validerCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
-		if (commandeCourante.getVoitures().isEmpty()) {
-			throw new EmptyCommandeException("Commande vide");
-		}
-		commandeCourante.setFerme(true);
-		commandeCourante = commandeDAO.saveCommande(commandeCourante);
-		for (Voiture voiture : commandeCourante.getVoitures()) {
-			voitureResource.sauverVoiture(voiture.getId(), commandeCourante);
-		}
-		long id = commandeCourante.getId();
-		creerCommandeCourante(); // On repart avec un nouveau panier vide
-		return id;
+	public void ajouterVoiture(Long voitureId) throws SQLException, NotFoundException {
+		getCommandeCourante();
+		this.commandeCourante.addVoiture(voitureResource.getVoiture(voitureId));
+	}
+
+	/**
+	 * @InheritDoc
+	 * @see CommandeCouranteService#supprimerVoiture(Long)
+	 */
+	@Override
+	public void supprimerVoiture(Long voitureId) throws SQLException, NotFoundException {
+		getCommandeCourante();
+		this.commandeCourante.removeVoiture(voitureResource.getVoiture(voitureId));
+		this.voitureResource.supprimerVoiture(voitureId);
 	}
 
 }
