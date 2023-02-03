@@ -1,5 +1,6 @@
 package fr.univlyon1.m2tiw.tiw1.annotations;
 
+import javax.annotation.processing.AbstractProcessor;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
@@ -18,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 @SupportedAnnotationTypes("fr.univlyon1.m2tiw.tiw1.annotations.Controller")
@@ -37,12 +39,15 @@ public class ControllerProcessor extends BaseProcessor {
 			for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
 				logger.info("Element annote : {}", element);
 
+
+
 				// Création d'un sous-composant
 				TypeSpec subComponent = TypeSpec
 						.classBuilder(ClassName.bestGuess(element.toString().concat("_" + annotation.getSimpleName().toString())))
 						.superclass(element.asType())
 						.addModifiers(Modifier.PUBLIC)
 						.addSuperinterface(Startable.class)
+						.addMethod(BaseProcessor.buildConstructor(element))
 						.addAnnotation(AnnotationSpec.builder(Component.class)
 								.addMember("type", "$T.$L", COMPONENT_TYPE.class, COMPONENT_TYPE.CONTROLLER.name())
 								.build()

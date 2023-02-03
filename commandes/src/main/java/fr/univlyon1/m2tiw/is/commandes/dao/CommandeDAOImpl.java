@@ -10,10 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
 
 /**
  * Implémente les méthodes de {@link CommandeDAO}.
  */
+//@Persistence
 public class CommandeDAOImpl extends AbstractSQLDAO implements CommandeDAO {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CommandeDAOImpl.class);

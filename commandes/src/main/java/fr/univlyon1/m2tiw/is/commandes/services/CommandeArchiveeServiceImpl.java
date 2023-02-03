@@ -5,10 +5,12 @@ import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Service;
 
 /**
  * Implémentation de {@link CommandeArchiveeService}.
  */
+//@Service
 public class CommandeArchiveeServiceImpl implements CommandeArchiveeService {
 
 	private final OptionResource optionResource;
