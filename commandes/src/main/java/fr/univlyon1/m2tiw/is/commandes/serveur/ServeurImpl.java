@@ -23,10 +23,12 @@ import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Component;
 
 /**
  * Implémentation de {@link Serveur}.
  */
+//@Component
 public class ServeurImpl implements Serveur {
 
 	private final VoitureController voitureController;

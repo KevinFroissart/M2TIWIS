@@ -1,6 +1,7 @@
 package fr.univlyon1.m2tiw.is.commandes.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Configuration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +13,7 @@ import java.util.stream.Collectors;
 /**
  * Modèle de configuration de l'application.
  */
+//@Configuration
 public class ApplicationConfiguration {
 
     @JsonProperty("application-config")

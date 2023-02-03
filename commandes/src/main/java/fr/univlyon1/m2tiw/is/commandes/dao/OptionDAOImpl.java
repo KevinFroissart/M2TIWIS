@@ -8,10 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
 
 /**
  * Implémente les méthodes de {@link OptionDAO}.
  */
+//@Persistence
 public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
 	private PreparedStatement getOptionStatement = null;

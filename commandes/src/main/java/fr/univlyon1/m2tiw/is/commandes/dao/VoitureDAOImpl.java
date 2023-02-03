@@ -1,6 +1,8 @@
 package fr.univlyon1.m2tiw.is.commandes.dao;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +13,7 @@ import java.util.Collection;
 /**
  * Implémente les méthodes de {@link VoitureDAO}.
  */
+//@Persistence
 public class VoitureDAOImpl extends AbstractSQLDAO implements VoitureDAO {
 
     private static final Logger LOG = LoggerFactory.getLogger(VoitureDAOImpl.class);

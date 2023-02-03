@@ -70,18 +70,18 @@
                         <annotationProcessor>
                             fr.univlyon1.m2tiw.tiw1.annotations.BaseProcessor
                         </annotationProcessor>
-<!--                        <annotationProcessor>-->
-<!--                            fr.univlyon1.m2tiw.tiw1.annotations.ServiceProcessor-->
-<!--                        </annotationProcessor>-->
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.ServiceProcessor
+                        </annotationProcessor>
                         <annotationProcessor>
                             fr.univlyon1.m2tiw.tiw1.annotations.ControllerProcessor
                         </annotationProcessor>
-<!--                        <annotationProcessor>-->
-<!--                            fr.univlyon1.m2tiw.tiw1.annotations.PersistenceProcessor-->
-<!--                        </annotationProcessor>-->
-<!--                        <annotationProcessor>-->
-<!--                            fr.univlyon1.m2tiw.tiw1.annotations.ConfigurationProcessor-->
-<!--                        </annotationProcessor>-->
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.PersistenceProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.ConfigurationProcessor
+                        </annotationProcessor>
                     </annotationProcessors>
                 </configuration>
             </plugin>
