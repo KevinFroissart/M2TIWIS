@@ -64,16 +64,18 @@ public class BaseProcessor extends AbstractProcessor {
 				MethodSpec constructor = buildConstructor(element);
 
 				// Création d'un sous-composant
-				TypeSpec subComponent = TypeSpec
-						.classBuilder(ClassName.bestGuess(element + "_Component"))
-						.superclass(ClassName.bestGuess(element.asType().toString()))
-						.addSuperinterface(Startable.class)
-						.addField(this.loggerField)
-						.addModifiers(Modifier.PUBLIC)
-						.addMethod(constructor)
-						.addMethod(this.startMethod)
-						.addMethod(this.stopMethod)
-						.build();
+//				TypeSpec subComponent = TypeSpec
+//						.classBuilder(ClassName.bestGuess(element + "_Component"))
+//						.superclass(ClassName.bestGuess(element.asType().toString()))
+//						.addSuperinterface(Startable.class)
+//						.addField(this.loggerField)
+//						.addModifiers(Modifier.PUBLIC)
+//						.addMethod(constructor)
+//						.addMethod(this.startMethod)
+//						.addMethod(this.stopMethod)
+//						.build();
+
+				TypeSpec subComponent = buildSubComponent(element, annotation);
 
 				String packageName = element.toString();
 				int separator = packageName.lastIndexOf(".");
@@ -81,7 +83,6 @@ public class BaseProcessor extends AbstractProcessor {
 				// Création du fichier source Java
 				JavaFile javaFile = JavaFile
 						.builder(packageName, subComponent)
-						.addStaticImport(ClassName.bestGuess(element.asType().toString()), element.asType().toString())
 						.build();
 				try {
 					// Utilisation de l'interface Filer pour récupérer un PrintWriter
@@ -101,6 +102,28 @@ public class BaseProcessor extends AbstractProcessor {
 		return true;
 	}
 
+	private TypeSpec buildSubComponent(Element element, TypeElement annotation) {
+		TypeSpec.Builder subComponent = TypeSpec
+				.classBuilder(ClassName.bestGuess(element.toString().concat("_" + annotation.getSimpleName().toString())))
+				.addField(this.loggerField)
+				.addModifiers(Modifier.PUBLIC)
+				.addMethod(this.startMethod)
+				.addMethod(this.stopMethod);
+
+		switch (COMPONENT_TYPE.valueOf(annotation.getSimpleName().toString().toUpperCase())) {
+			case CONTROLLER:
+				subComponent.addSuperinterface(Startable.class);
+				subComponent.superclass(ClassName.bestGuess(element.asType().toString()));
+				subComponent.addMethod(buildConstructor(element));
+				break;
+			default:
+				logger.info("Classe : {}", element);
+				break;
+		}
+
+		return subComponent.build();
+	}
+
 	public static MethodSpec buildConstructor(Element element) {
 		MethodSpec.Builder constructor = MethodSpec
 				.constructorBuilder()
@@ -115,6 +138,7 @@ public class BaseProcessor extends AbstractProcessor {
 
 				if (params.length() > 0) {
 					constructor.addStatement("super(" + params.substring(2) + ")");
+					constructor.addStatement("this.start()");
 				}
 			}
 		});
