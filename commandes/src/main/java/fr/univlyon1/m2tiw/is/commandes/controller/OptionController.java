@@ -10,12 +10,11 @@ import org.slf4j.LoggerFactory;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
 import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
-//import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
 
 /**
  * Classe de contrôle des options.
  */
-//@Controller
+@Controller
 public class OptionController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(OptionController.class);

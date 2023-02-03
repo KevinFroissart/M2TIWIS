@@ -14,12 +14,12 @@ import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 import fr.univlyon1.m2tiw.is.commandes.services.VoitureService;
-//import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
+import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
 
 /**
  * Classe de contrôle des voitures.
  */
-//@Controller
+@Controller
 public class VoitureController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(VoitureController.class);
