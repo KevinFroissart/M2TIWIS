@@ -60,29 +60,46 @@ class OptionDAOImplTest {
 	}
 
 	@Test
-	void getOption() throws SQLException, NotFoundException {
+	void shouldGetOption_whenGetOption() throws SQLException, NotFoundException {
+		// Given
 		Option o = createOption();
+		o.setNom(o.getNom());
+		o.setValeur(o.getValeur());
+
+		// When
 		Option o2 = optionDAO.getOption(voiture.getId(), o.getNom());
+
+		// Then
 		assertEquals(o, o2);
 		assertEquals(o.getValeur(), o2.getValeur());
 		optionDAO.deleteOptionVoiture(voiture.getId(), o.getNom());
 	}
 
 	@Test
-	void getAllOptions() throws SQLException {
+	void shouldGetAllOptions_whenGetAllOptions() throws SQLException {
+		// Given
 		Option o = createOption();
 		Option o2 = createOption();
+
+		// When
 		var options = optionDAO.getAllOptions();
+
+		// Then
 		assertTrue(2 <= options.size());
 		optionDAO.deleteOptionVoiture(voiture.getId(), o.getNom());
 		optionDAO.deleteOptionVoiture(voiture.getId(), o2.getNom());
 	}
 
 	@Test
-	void getOptionsForVoiture() throws SQLException {
+	void shouldGetOptionsForVoiture_whenGetOptionsForVoiture() throws SQLException {
+		// Given
 		Option o = createOption();
 		Option o2 = createOption();
+
+		// When
 		var options = optionDAO.getOptionsForVoiture(voiture.getId());
+
+		// Then
 		assertEquals(2, options.size());
 		optionDAO.deleteOptionVoiture(voiture.getId(), o.getNom());
 		optionDAO.deleteOptionVoiture(voiture.getId(), o2.getNom());
@@ -90,18 +107,26 @@ class OptionDAOImplTest {
 	}
 
 	@Test
-	void setOptionVoiture() throws SQLException, NotFoundException {
+	void shouldSetOptionVoiture_whenSetOptionVoiture() throws SQLException, NotFoundException {
+		// Given
 		Option o = createOption();
+
+		// When
 		optionDAO.setOptionVoiture(voiture.getId(), new Option(o.getNom(), "une nouvelle valeur"));
+
+		// Then
 		var o2 = optionDAO.getOption(voiture.getId(), o.getNom());
 		assertEquals("une nouvelle valeur", o2.getValeur());
 		optionDAO.deleteOptionVoiture(voiture.getId(), o.getNom());
 	}
 
 	@Test
-	void deleteOptionVoiture() throws SQLException {
+	void shouldDeleteOptionVoiture_whenDeleteOptionVoiture() throws SQLException {
+		// Given
 		Option o = createOption();
 		optionDAO.deleteOptionVoiture(voiture.getId(), o.getNom());
+
+		// Then
 		assertThrows(NotFoundException.class, () -> optionDAO.getOption(voiture.getId(), o.getNom()));
 	}
 }

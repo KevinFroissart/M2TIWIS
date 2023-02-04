@@ -1,6 +1,7 @@
 package fr.univlyon1.m2tiw.is.commandes.serveur;
 
 import static fr.univlyon1.m2tiw.is.commandes.util.Strings.COMMANDECONTROLLER;
+import static fr.univlyon1.m2tiw.is.commandes.util.Strings.OPTIONCONTROLLER;
 import static fr.univlyon1.m2tiw.is.commandes.util.Strings.VOITURECONTROLLER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -167,11 +169,8 @@ class ServeurImplTest {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
-		HashMap<String, Object> parametres = new HashMap<>();
-		parametres.put("voitureId", 0L);
-
 		// Then
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", parametres));
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", Map.of("voitureId", 0L)));
 	}
 
 	@Test
@@ -200,11 +199,8 @@ class ServeurImplTest {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
-		HashMap<String, Object> parametres = new HashMap<>();
-		parametres.put("voitureId", 0L);
-
 		// Then
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(COMMANDECONTROLLER, "supprimerVoiture", parametres));
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(COMMANDECONTROLLER, "supprimerVoiture", Map.of("voitureId", 0L)));
 	}
 
 	// Tests des appels vers CommandeArchiveeService
@@ -264,7 +260,7 @@ class ServeurImplTest {
 		parametres.put("option", option);
 
 		// Then
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "ajouterConfiguration", parametres));
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "ajouterConfiguration", Map.of("voitureId", 0L, "option", option)));
 	}
 
 	@Test
@@ -294,12 +290,8 @@ class ServeurImplTest {
 		// Given
 		Option option = new Option("test", "test");
 
-		HashMap<String, Object> parametres = new HashMap<>();
-		parametres.put("voitureId", 0L);
-		parametres.put("option", option);
-
 		// When
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "supprimerConfiguration", parametres));
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "supprimerConfiguration", Map.of("voitureId", 0L, "option", option)));
 	}
 
 	@Test
@@ -375,11 +367,8 @@ class ServeurImplTest {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
-		HashMap<String, Object> parametres = new HashMap<>();
-		parametres.put("id", 0L);
-
 		// When
-		Collection<Voiture> resultat = (Collection<Voiture>) serveur.processRequest(VOITURECONTROLLER, "getVoituresByCommande", parametres);
+		Collection<Voiture> resultat = (Collection<Voiture>) serveur.processRequest(VOITURECONTROLLER, "getVoituresByCommande", Map.of("id", 0L));
 
 		// Then
 		assertEquals(0, resultat.size());
@@ -448,11 +437,68 @@ class ServeurImplTest {
 
 	@Test
 	void shouldThrowNotFoundException_whenDeleteVoiture_withVoitureIdIntrouvable() {
+		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "supprimerVoiture", Map.of("voitureId", 0L)));
+	}
+
+	// Tests des appels vers OptionResource
+	@Test
+	void shouldGetAllOptions_whenGetAllOption() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
 		// Given
+		Option option = new Option("test", "test");
+
+		int sizeBefore = ((Collection<Option>) serveur.processRequest(COMMANDECONTROLLER, "getAllOptions", null)).size();
+
 		HashMap<String, Object> parametres = new HashMap<>();
-		parametres.put("voitureId", 0L);
+		parametres.put("modele", "modele1");
+		Voiture voiture1 = (Voiture) serveur.processRequest(VOITURECONTROLLER, "creerVoiture", parametres);
+		parametres.put("voitureId", voiture1.getId());
+		parametres.put("option", option);
+		serveur.processRequest(VOITURECONTROLLER, "ajouterConfiguration", parametres);
+
+		// When
+		int resultat = ((Collection<Option>) serveur.processRequest(OPTIONCONTROLLER, "getAllOptions", null)).size();
 
 		// Then
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "supprimerVoiture", parametres));
+		assertEquals(sizeBefore + 1, resultat);
+		serveur.processRequest(VOITURECONTROLLER, "supprimerConfiguration", parametres);
+		serveur.processRequest(COMMANDECONTROLLER, "supprimerVoiture", parametres);
 	}
+
+	// Tests des appels null vers les controllers
+	@Test
+	void shouldRetournerNull_whenProcessRequest_withCommandeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+		// When
+		var resultat = serveur.processRequest("null", "null", null);
+
+		// Then
+		assertNull(resultat);
+	}
+
+	@Test
+	void shouldRetournerNull_whenProcessCommande_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+		// When
+		var resultat = serveur.processRequest(COMMANDECONTROLLER, "null", null);
+
+		// Then
+		assertNull(resultat);
+	}
+
+	@Test
+	void shouldRetournerNull_whenProcessVoiture_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+		// When
+		var resultat = serveur.processRequest(VOITURECONTROLLER, "null", null);
+
+		// Then
+		assertNull(resultat);
+	}
+
+	@Test
+	void shouldRetournerNull_whenProcessOption_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+		// When
+		var resultat = serveur.processRequest(OPTIONCONTROLLER, "null", null);
+
+		// Then
+		assertNull(resultat);
+	}
+
 }

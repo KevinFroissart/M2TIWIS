@@ -1,10 +1,13 @@
 package fr.univlyon1.m2tiw.is.commandes.services;
 
+import static fr.univlyon1.m2tiw.is.commandes.util.Strings.COMMANDECONTROLLER;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
+import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -17,27 +20,24 @@ import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-import fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
-import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
 import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
 class CommandeArchiveeServiceImplTest {
 
-	private CommandeArchiveeServiceImpl commandeArchiveeService;
 	private CommandeCouranteServiceImpl commandeCouranteService;
-	private CommandeArchiveeResource commandeArchiveeResource;
 	private CommandeCouranteResource commandeCouranteResource;
 	private VoitureResource voitureResource;
 	private CommandeDAOImpl commandeDAO;
 	private VoitureDAOImpl voitureDAO;
 	private OptionDAOImpl optionDAO;
+	private Serveur serveur;
 
 	@BeforeEach
 	void setUp() throws SQLException, IOException, ClassNotFoundException {
-		Serveur serveur = new ServeurImpl();
+		serveur = new ServeurImpl();
 		DBAccess dbAccess = serveur.getConnection();
 		optionDAO = new OptionDAOImpl(dbAccess);
 		voitureDAO = new VoitureDAOImpl(dbAccess);
@@ -45,22 +45,23 @@ class CommandeArchiveeServiceImplTest {
 		optionDAO.init();
 		voitureDAO.init();
 		commandeDAO.init();
-		OptionResource optionResource = new OptionResource(optionDAO);
-		VoitureServiceImpl voitureService = new VoitureServiceImpl(voitureDAO, optionDAO);
 		voitureResource = new VoitureResource(voitureDAO, optionDAO);
 		commandeCouranteResource = new CommandeCouranteResource(commandeDAO, voitureResource);
 		commandeCouranteService = new CommandeCouranteServiceImpl(commandeCouranteResource, voitureResource);
-		commandeArchiveeService = new CommandeArchiveeServiceImpl(optionResource);
-		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteResource);
 	}
 
 	@Test
-	void getAllOptions() throws SQLException, NotFoundException {
+	void shouldGetAllOptions_whenGetAllOptions() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+		// Given
 		Commande c = commandeDAO.saveCommande(new Commande(false));
 		Voiture v = voitureDAO.saveVoiture(new Voiture("modele"), c.getId());
 		Option o = new Option("opt", "val");
 		optionDAO.setOptionVoiture(v.getId(), o);
-		var options = commandeArchiveeService.getAllOptions();
+
+		// When
+		var options = (Collection<Commande>) serveur.processRequest(COMMANDECONTROLLER, "getAllOptions", null);
+
+		// Then
 		assertTrue(1 <= options.size());
 		optionDAO.deleteOptionVoiture(v.getId(), o.getNom());
 		voitureDAO.deleteVoiture(v);
@@ -68,17 +69,21 @@ class CommandeArchiveeServiceImplTest {
 	}
 
 	@Test
-	void getCommande() throws SQLException, NotFoundException, EmptyCommandeException {
-		Commande c = commandeCouranteResource.creerCommandeCourante();
+	void shouldGetCommande_whenGetCommande() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+		// Given
 		Voiture v = voitureResource.creerVoiture("modele");
 		commandeCouranteService.ajouterVoiture(v.getId());
 		long id = commandeCouranteResource.validerCommandeCourante();
-		Commande c2 = commandeArchiveeResource.getCommande(id);
+
+		// When
+		var c2 = (Commande) serveur.processRequest(COMMANDECONTROLLER, "getCommande", Map.of("id", id));
+
+		// Then
 		assertNotNull(c2);
 	}
 
 	@Test
-	void getCommandeCourante() {
-		assertNotNull(commandeArchiveeResource.getCommandeCourante());
+	void shouldGetCommandeCourante_whenGetCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+		assertNotNull(serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null));
 	}
 }

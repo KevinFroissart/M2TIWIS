@@ -52,7 +52,7 @@ public class VoitureController extends AbstractController {
 			case "getvoiture":
 				return getVoiture((Long) parametres.get("voitureId"));
 			case "sauvervoiture":
-				sauverVoiture((Long) parametres.get("voitureId"), (Commande) parametres.get("commade"));
+				sauverVoiture((Long) parametres.get("voitureId"), (Commande) parametres.get("commande"));
 				return null;
 			case "getvoituresbycommande":
 				return getVoituresByCommande((Long) parametres.get("id"));

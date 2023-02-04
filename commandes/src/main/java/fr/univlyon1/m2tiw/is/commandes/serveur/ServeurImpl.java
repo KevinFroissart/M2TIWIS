@@ -104,11 +104,4 @@ public class ServeurImpl implements Serveur {
 		return dbAccess;
 	}
 
-	/**
-	 * Permet de tester le bon fonctionnement du serveur/moteur de containérisation.
-	 */
-	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
-		new ServeurImpl();
-	}
-
 }
