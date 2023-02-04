@@ -13,7 +13,7 @@ public abstract class AbstractSQLDAO {
 
 	private static final Logger LOG = LoggerFactory.getLogger(AbstractSQLDAO.class);
 
-	private DBAccess dbAccess;
+	private final DBAccess dbAccess;
 	private Connection currentConnection = null;
 
 	protected AbstractSQLDAO(DBAccess dbAccess) {
@@ -51,8 +51,4 @@ public abstract class AbstractSQLDAO {
 	 * @throws SQLException if there is an error while creating tables
 	 */
 	protected abstract void setupTable(Connection connection) throws SQLException;
-
-	public void setDbAccess(DBAccess dbAccess) {
-		this.dbAccess = dbAccess;
-	}
 }

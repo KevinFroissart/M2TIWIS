@@ -26,12 +26,12 @@ class DBAccessTests {
 	}
 
 	@Test
-	void testCanConnect() throws SQLException {
+	void shouldGetConnection_whenGetConnection() throws SQLException {
 		assertNotNull(dbAccess.getConnection());
 	}
 
 	@Test
-	void sameConnection() throws SQLException {
+	void shouldGetSameConnection_whenGetConnection_withDeuxConnectionsALaSuite() throws SQLException {
 		var conn1 = dbAccess.getConnection();
 		var conn2 = dbAccess.getConnection();
 		assertEquals(conn1, conn2);
