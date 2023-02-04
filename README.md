@@ -21,8 +21,19 @@
 - La quasi-totalité des méthodes et routes ont été testées, mise-à-part les SQLException qui dans certains cas ne sont pas testables en l'état, et l'aurait été grâce à l'utilisation de Mockito par exemple.
 ![Coverage.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FCoverage.PNG)
 
+#### Un détail supplémentaire concernant les tests...
+La tâche `mvn test` semble créer des problèmes au sein du projet.
+En effet, lors de l'exécution de cette commande, une erreur de compilation apparaît, de plus, après cette opération le projet commande ne semble plus pouvoir fonctionner correctement.
+Les tests peuvent être lancés via l'IDE après avoir exécuté la commande `mvn clean install` qui permet de générer les classes nécessaires à l'exécution des tests.
+Vous pouvez alors exécuter l'ensemble des tests en faisant clic droit sur le dossier `test/java` puis `Run 'All Tests'`.
+Pour vous assurer de la bonne exécution des tests vous pouvez aussi en voir la mention lors de l'exécution de la commande `mvn clean install`.
+Pour ne pas avoir de problèmes de dépendances avec le web-framework, il est nécessaire de lancer les tests depuis la racine du projet.
+
 ## Partie 4
 - Les annotations `@Controller`, `@Service`, `@Persitence` et `@Component` ont été implémentées.
 - DBAccess a été annoté avec `@Persistence` et suit un traitement spécial de manière à injecter les paramètres `dbUrl`, `username` et `password`.
 - Toutes les classes se génèrent avec les constructeurs, paramètres et méthodes requises.
 - Nous ne sommes cependant pas parvenus à utiliser les classes générées dans le serveur, c'est la raison pour laquelle j'ai laisse les `extends` dans les classes injectées par le serveur.
+
+## Lancez le projet
+- Positionnez-vous à la racine du projet et exécutez la commande `mvn clean install`.
