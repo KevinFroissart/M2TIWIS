@@ -7,6 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
 
@@ -26,6 +29,8 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		super(dbAccess);
 	}
 
+	private static final Logger LOG = LoggerFactory.getLogger(OptionDAOImpl.class);
+
 	/**
 	 * @InheritDoc
 	 * @see AbstractSQLDAO#initStatements(Connection)
@@ -39,6 +44,7 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 		getOptionsForVoitureStatement = connection.prepareStatement("SELECT nom, valeur FROM option2 WHERE voiture = ?");
 		deleteOptionForVoitureStatement = connection.prepareStatement("DELETE FROM option2 WHERE voiture = ? AND nom = ?");
 		addOptionForVoitureStatement = connection.prepareStatement("INSERT INTO option2(voiture,nom,valeur) VALUES( ?,?,?)");
+		LOG.debug("Statements prepared");
 	}
 
 	/**
