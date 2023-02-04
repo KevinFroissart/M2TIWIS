@@ -6,27 +6,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import fr.univlyon1.m2tiw.is.commandes.dao.DBAccess;
-import fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource;
-import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
-import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
-import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fr.univlyon1.m2tiw.is.commandes.dao.CommandeDAOImpl;
+import fr.univlyon1.m2tiw.is.commandes.dao.DBAccess;
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAOImpl;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeArchiveeResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.OptionResource;
+import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
 import fr.univlyon1.m2tiw.is.commandes.serveur.Serveur;
 import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 
 class CommandeArchiveeServiceImplTest {
 
-	private CommandeArchiveeServiceImpl gestionCommandeService;
+	private CommandeArchiveeServiceImpl commandeArchiveeService;
 	private CommandeCouranteServiceImpl commandeCouranteService;
 	private CommandeArchiveeResource commandeArchiveeResource;
 	private CommandeCouranteResource commandeCouranteResource;
@@ -50,7 +50,7 @@ class CommandeArchiveeServiceImplTest {
 		voitureResource = new VoitureResource(voitureDAO, optionDAO);
 		commandeCouranteResource = new CommandeCouranteResource(commandeDAO, voitureResource);
 		commandeCouranteService = new CommandeCouranteServiceImpl(commandeCouranteResource, voitureResource);
-		gestionCommandeService = new CommandeArchiveeServiceImpl(optionResource);
+		commandeArchiveeService = new CommandeArchiveeServiceImpl(optionResource);
 		commandeArchiveeResource = new CommandeArchiveeResource(commandeDAO, voitureService, commandeCouranteResource);
 	}
 
@@ -60,7 +60,7 @@ class CommandeArchiveeServiceImplTest {
 		Voiture v = voitureDAO.saveVoiture(new Voiture("modele"), c.getId());
 		Option o = new Option("opt", "val");
 		optionDAO.setOptionVoiture(v.getId(), o);
-		var options = gestionCommandeService.getAllOptions();
+		var options = commandeArchiveeService.getAllOptions();
 		assertTrue(1 <= options.size());
 		optionDAO.deleteOptionVoiture(v.getId(), o.getNom());
 		voitureDAO.deleteVoiture(v);

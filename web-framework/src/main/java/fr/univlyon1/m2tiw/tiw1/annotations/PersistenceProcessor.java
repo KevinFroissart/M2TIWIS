@@ -1,70 +1,64 @@
 package fr.univlyon1.m2tiw.tiw1.annotations;
 
-import javax.annotation.processing.AbstractProcessor;
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.annotation.processing.SupportedAnnotationTypes;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
-import javax.tools.JavaFileObject;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.squareup.javapoet.AnnotationSpec;
 import com.squareup.javapoet.ClassName;
-import com.squareup.javapoet.JavaFile;
+import com.squareup.javapoet.MethodSpec;
 import com.squareup.javapoet.TypeSpec;
 
 @SupportedAnnotationTypes("fr.univlyon1.m2tiw.tiw1.annotations.Persistence")
-public class PersistenceProcessor extends AbstractProcessor {
+public class PersistenceProcessor extends BaseProcessor {
 
-    private static final Logger logger = LoggerFactory.getLogger(PersistenceProcessor.class);
+	private static final Logger LOG = LoggerFactory.getLogger(PersistenceProcessor.class);
 
-    @Override
-    public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        for (TypeElement annotation : annotations) {
-            logger.info("Annotation : {}", annotation.getSimpleName());
-            for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
-                logger.info("Element annote : {}", element);
+	@Override
+	public synchronized void init(ProcessingEnvironment processingEnv) {
+		super.init(processingEnv);
+	}
 
-                // Création d'un sous-composant
-                TypeSpec subComponent = TypeSpec
-                        .classBuilder(ClassName.bestGuess(element.toString().concat("_" + annotation.getSimpleName().toString())))
-                        .superclass(element.asType())
-                        .addModifiers(Modifier.PUBLIC)
-                        .addAnnotation(AnnotationSpec.builder(Component.class)
-                                .addMember("type", "$S", COMPONENT_TYPE.PERSISTENCE)
-                                .build()
-                        ).build();
+	@Override
+	public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
+		for (TypeElement annotation : annotations) {
+			LOG.info("Annotation : {}", annotation.getSimpleName());
+			for (Element element : roundEnv.getElementsAnnotatedWith(annotation)) {
+				LOG.info("Element annote : {}", element);
 
-                String packageName = element.toString();
-                int separator = packageName.lastIndexOf(".");
-                packageName = packageName.substring(0, separator);
-                // Création du fichier source Java
-                JavaFile javaFile = JavaFile
-                        .builder(packageName, subComponent)
-                        .build();
-                try {
-                    // Utilisation de l'interface Filer pour récupérer un PrintWriter
-                    // vers le répertoire GeneratedSources indiqué dans le pom
-                    JavaFileObject builderFile = processingEnv
-                            .getFiler()
-                            .createSourceFile(subComponent.name);
-                    try (PrintWriter out = new PrintWriter(builderFile.openWriter())) {
-                        // Ecriture du fichier
-                        javaFile.writeTo(out);
-                    }
-                }
-                catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return true;
-    }
+				TypeSpec.Builder subComponent = buildSubComponent(element, annotation);
+
+				if (ClassName.bestGuess(element.toString()).simpleName().equals("DBAccess")) {
+					subComponent.addMethod(initConstructorParams(element));
+				}
+				else {
+					subComponent.addMethod(buildConstructor(element));
+				}
+
+				generateClass(element, subComponent.build());
+			}
+		}
+		return true;
+	}
+
+	private MethodSpec initConstructorParams(Element element) {
+		return MethodSpec
+				.constructorBuilder()
+				.addModifiers(Modifier.PUBLIC)
+				.addException(Exception.class)
+				.addStatement("super($S, $S, $S)",
+						element.getAnnotation(Persistence.class).url(),
+						element.getAnnotation(Persistence.class).username(),
+						element.getAnnotation(Persistence.class).password()
+				)
+				.addStatement("this.start()")
+				.build();
+	}
 
 }
