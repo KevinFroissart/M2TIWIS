@@ -1,4 +1,4 @@
-# Rapport d'implémentation
+# Rapport d'implémentation du TP2
 
 ## Dépendances
 - Toutes les dépendances ont été maintenues au minimum, à part une dépendance a web-framework et à Jackson.
@@ -18,7 +18,7 @@
 - La classe ServeurImplTest.java teste chaque route avec un maximum de cas de test, pour vérifier le bon fonctionnement des use cases et des exceptions.
 
 ## Partie 4
-- Une tentative d'implémentation du processeur d'annotations @Controller a été effectuée.
-- Des classes générées à partir des annotations ont pu être générées, mais l'utilisation sans erreurs n'a pas été possible.
-- Après avoir lu la documentation de JavaPoet et essayé plusieurs implémentations, il ne m'a pas été possible de trouver une solution fonctionnelle.
-- Les annotations restent présentes dans le framework web, du moins @Controller, vous pouvez tout de même y voir une esquisse de mes essais.
+- Les annotations `@Controller`, `@Service`, `@Persitence` et `@Component` ont été implémentées.
+- DBAccess a été annoté avec `@Persistence` et suit un traitement spécial de manière à injecter les paramètres `dbUrl`, `username` et `password`.
+- Toutes les classes se génèrent avec les constructeurs, paramètres et méthodes requises.
+- Nous ne sommes cependant pas parvenus à utiliser les classes générées dans le serveur, c'est la raison pour laquelle j'ai laisse les `extends` dans les classes injectées par le serveur.

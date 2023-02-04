@@ -6,13 +6,13 @@ import java.sql.SQLException;
 import java.util.Map;
 import java.util.Objects;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.univlyon1.m2tiw.is.commandes.config.ApplicationConfiguration;
 import org.picocontainer.DefaultPicoContainer;
 import org.picocontainer.MutablePicoContainer;
 import org.picocontainer.behaviors.Caching;
 import org.picocontainer.parameters.ConstantParameter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.univlyon1.m2tiw.is.commandes.config.ApplicationConfiguration;
 import fr.univlyon1.m2tiw.is.commandes.controller.CommandeController;
 import fr.univlyon1.m2tiw.is.commandes.controller.OptionController;
 import fr.univlyon1.m2tiw.is.commandes.controller.VoitureController;
@@ -23,12 +23,12 @@ import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
-//import fr.univlyon1.m2tiw.tiw1.annotations.Component;
+import fr.univlyon1.m2tiw.tiw1.annotations.Component;
 
 /**
  * Implémentation de {@link Serveur}.
  */
-//@Component
+@Component
 public class ServeurImpl implements Serveur {
 
 	private final VoitureController voitureController;
@@ -50,7 +50,7 @@ public class ServeurImpl implements Serveur {
 		var mapper = new ObjectMapper();
 		var configuration = mapper.readValue(new File(
 				Objects.requireNonNull(ServeurImpl.class.getResource("/configuration.json"))
-				.getPath()), ApplicationConfiguration.class).getConfiguration();
+						.getPath()), ApplicationConfiguration.class).getConfiguration();
 
 		for (ApplicationConfiguration.Configuration.Component component : configuration.getAllComponents()) {
 			Class<?> componentClass = Class.forName(component.getClassName());
@@ -61,7 +61,8 @@ public class ServeurImpl implements Serveur {
 						new ConstantParameter(params.get("user")),
 						new ConstantParameter(params.get("password"))
 				);
-			} else {
+			}
+			else {
 				pico.addComponent(componentClass, component.hasImplementation() ? Class.forName(component.getClassName().concat("Impl")) : componentClass);
 			}
 		}
@@ -103,6 +104,9 @@ public class ServeurImpl implements Serveur {
 		return dbAccess;
 	}
 
+	/**
+	 * Permet de tester le bon fonctionnement du serveur/moteur de containérisation.
+	 */
 	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
 		new ServeurImpl();
 	}

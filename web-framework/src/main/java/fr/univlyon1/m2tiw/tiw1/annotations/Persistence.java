@@ -9,4 +9,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.SOURCE)
 public @interface Persistence {
     COMPONENT_TYPE type() default COMPONENT_TYPE.PERSISTENCE;
+    String url() default "jdbc:postgresql://localhost/mdldb";
+    String username() default "mdl";
+    String password() default "mdlmdp";
 }

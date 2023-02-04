@@ -8,12 +8,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
-//import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
+import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
 
 /**
  * Implémente les méthodes de {@link OptionDAO}.
  */
-//@Persistence
+@Persistence
 public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
 	private PreparedStatement getOptionStatement = null;
@@ -105,7 +105,7 @@ public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
 	/**
 	 * @InheritDoc
-	 * @see OptionDAO#setOptionVoiture(Long, Option) 
+	 * @see OptionDAO#setOptionVoiture(Long, Option)
 	 */
 	@Override
 	public void setOptionVoiture(Long voitureId, Option option) throws SQLException {
