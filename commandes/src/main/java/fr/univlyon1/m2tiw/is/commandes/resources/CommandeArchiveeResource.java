@@ -16,12 +16,9 @@ public class CommandeArchiveeResource {
 
     private final VoitureService voitureService;
 
-    private final CommandeCouranteResource commandeCouranteResource;
-
-    public CommandeArchiveeResource(CommandeDAO commandeDAO, VoitureService voitureService, CommandeCouranteResource commandeCouranteResource) {
+    public CommandeArchiveeResource(CommandeDAO commandeDAO, VoitureService voitureService) {
         this.commandeDAO = commandeDAO;
         this.voitureService = voitureService;
-        this.commandeCouranteResource = commandeCouranteResource;
     }
 
     /**
@@ -36,14 +33,6 @@ public class CommandeArchiveeResource {
         var commande = commandeDAO.getCommande(id);
         commande.getVoitures().addAll(voitureService.getVoituresByCommande(id));
         return commande;
-    }
-
-    /**
-     * @InheritDoc
-     * @see CommandeCouranteResource#getCommandeCourante()
-     */
-    public Commande getCommandeCourante() {
-        return commandeCouranteResource.getCommandeCourante();
     }
 
 }

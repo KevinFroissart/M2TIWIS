@@ -40,11 +40,8 @@ public class VoitureServiceImpl implements VoitureService {
 	 * @see VoitureService#supprimerConfiguration(Long, Option)
 	 */
 	@Override
-	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException {
-		var voiture = voitureDAO.getVoitureById(voitureId);
-		if (voiture.hasOption(option)) {
-			voiture.deleteOption(option);
-		}
+	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException {
+		//Actuellement `voitureDAO.getVoitureById` ne charge pas les options de la voiture, donc on ne peut pas vérifier si l'option est présente ou non.
 		optionDAO.deleteOptionVoiture(voitureId, option.getNom());
 	}
 

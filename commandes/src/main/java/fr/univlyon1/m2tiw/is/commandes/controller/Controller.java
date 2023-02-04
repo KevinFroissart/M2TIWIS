@@ -5,7 +5,6 @@ import java.util.Map;
 
 import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
-import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 
 public interface Controller {
 
@@ -19,8 +18,7 @@ public interface Controller {
 	 * @throws SQLException pour une exception SQL.
 	 * @throws NotFoundException pour une entité non trouvée.
 	 * @throws EmptyCommandeException pour une commande vide.
-	 * @throws InvalidConfigurationException pour une configuration invalide.
 	 */
-	Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException;
+	Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, EmptyCommandeException;
 
 }

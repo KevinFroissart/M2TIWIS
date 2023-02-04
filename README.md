@@ -18,6 +18,8 @@
 - La classe ServeurImplTest.java teste chaque route avec un maximum de cas de test, pour vérifier le bon fonctionnement des use cases et des exceptions.
 - Chacun des tests a été modifié et adapté pour suivre la template `should...when...then...` et les tags `Given`, `When` et `Then`.
 - Concernant les tests, si le temps me l'avait permis, j'aurais ajouté un fichier de configuration spécifique aux tests, de manière à utiliser une seconde base de données pour les tests, qui se viderait à chaque lancement.
+- La quasi-totalité des méthodes et routes ont été testées, mise-à-part les SQLException qui dans certains cas ne sont pas testables en l'état, et l'aurait été grâce à l'utilisation de Mockito par exemple.
+![Coverage.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FCoverage.PNG)
 
 ## Partie 4
 - Les annotations `@Controller`, `@Service`, `@Persitence` et `@Component` ont été implémentées.

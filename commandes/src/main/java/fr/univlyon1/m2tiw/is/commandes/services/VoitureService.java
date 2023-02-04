@@ -28,10 +28,8 @@ public interface VoitureService {
 	 * @param voitureId l'id de la voiture dont on supprime la configuration.
 	 * @param option l'option à supprimer;
 	 * @throws SQLException pour une exception SQL.
-	 * @throws NotFoundException pour une voiture non trouvée.
-	 * @throws InvalidConfigurationException pour une configuration invalide.
 	 */
-	void supprimerConfiguration(Long voitureId, Option option) throws InvalidConfigurationException, SQLException, NotFoundException;
+	void supprimerConfiguration(Long voitureId, Option option) throws SQLException;
 
 	/**
 	 * Retourne les options d'une voiture donnée.

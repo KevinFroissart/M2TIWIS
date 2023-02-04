@@ -23,7 +23,6 @@ import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
-import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 
 class ServeurImplTest {
 
@@ -36,7 +35,7 @@ class ServeurImplTest {
 
 	// Tests des appels vers CommandeCouranteService
 	@Test
-	void shouldCreerCommandeCourante_whenCreerCommandeCourande() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldCreerCommandeCourante_whenCreerCommandeCourande() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var resultat = serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -45,7 +44,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldGetCommandeCounrate_whenGetCommandeCourande_withoutCommandeCourande() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetCommandeCounrate_whenGetCommandeCourande_withoutCommandeCourande() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var resultat = serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null);
 
@@ -54,7 +53,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldGetCommandeCourante_whenGetCommandeCourante_withCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetCommandeCourante_whenGetCommandeCourante_withCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		var commande = serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -68,7 +67,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldValiderCommandeCourante_whenValiderCommandeCourante_withVoitures() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldValiderCommandeCourante_whenValiderCommandeCourante_withVoitures() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -94,7 +93,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldThrowEmptyCommandeException_whenValiderCommandeCourante_withCommandeVide() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldThrowEmptyCommandeException_whenValiderCommandeCourante_withCommandeVide() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -104,7 +103,7 @@ class ServeurImplTest {
 
 	// Tests des appels vers CommandeCouranteResource
 	@Test
-	void shouldRetournerAucuneVoiture_whenGetAllVoitures_withAucuneVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldRetournerAucuneVoiture_whenGetAllVoitures_withAucuneVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -116,7 +115,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldRetournerDesVoitures_whenGetAllVoitures_withVoitures() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldRetournerDesVoitures_whenGetAllVoitures_withVoitures() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -144,7 +143,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldAjouterUneVoiture_whenAjouterVoiture_withUneVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldAjouterUneVoiture_whenAjouterVoiture_withUneVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -165,7 +164,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldThrowNotFoundException_whenAjouterVoiture_withMauvaisId() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldThrowNotFoundException_whenAjouterVoiture_withMauvaisId() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -174,7 +173,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldSupprimerVoiture_whenSupprimerVoiture_withUneVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldSupprimerVoiture_whenSupprimerVoiture_withUneVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -195,7 +194,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldThrowNotFoundException_whenSupprimerVoiture_withMauvaisId() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldThrowNotFoundException_whenSupprimerVoiture_withMauvaisId() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -205,7 +204,7 @@ class ServeurImplTest {
 
 	// Tests des appels vers CommandeArchiveeService
 	@Test
-	void shouldGetAlloptions_whenGetAllOptions() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetAlloptions_whenGetAllOptions() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		Option option = new Option("test", "test");
 
@@ -229,7 +228,7 @@ class ServeurImplTest {
 
 	// Tests des appels vers VoitureService
 	@Test
-	void shouldAjouterConfiguration_whenAjouterConfiguration_withConfiguration() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldAjouterConfiguration_whenAjouterConfiguration_withConfiguration() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		Option option = new Option("test", "test");
 
@@ -264,7 +263,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldSupprimerConfiguration_whenSupprimerConfiguration_withConfiguration() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldSupprimerConfiguration_whenSupprimerConfiguration_withConfiguration() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		Option option = new Option("test", "test");
 
@@ -286,16 +285,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldThrowNotFoundException_whenSupprimerConfiguration_withVoitureIdIntrouvable() {
-		// Given
-		Option option = new Option("test", "test");
-
-		// When
-		assertThrows(NotFoundException.class, () -> serveur.processRequest(VOITURECONTROLLER, "supprimerConfiguration", Map.of("voitureId", 0L, "option", option)));
-	}
-
-	@Test
-	void shouldGetOptions_whenGetOptionsForVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetOptions_whenGetOptionsForVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		Option option1 = new Option("test", "test");
 		Option option2 = new Option("test2", "test2");
@@ -325,7 +315,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldNeRienRetourner_whenGetOptionsForVoiture_withAucuneOptions() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldNeRienRetourner_whenGetOptionsForVoiture_withAucuneOptions() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		HashMap<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele1");
@@ -336,7 +326,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldGetVoitures_whenGetVoituresByCommande() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetVoitures_whenGetVoituresByCommande() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		CommandeDAO commandeDAO = new CommandeDAOImpl(serveur.getConnection());
 		commandeDAO.init();
@@ -363,7 +353,39 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldNeRienRetourner_whenGetVoituresByCommande_withCommandeIdIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetVoituresEtOptions_whenGetVoituresByCommande_withOptions() throws SQLException, EmptyCommandeException, NotFoundException {
+		// Given
+		CommandeDAO commandeDAO = new CommandeDAOImpl(serveur.getConnection());
+		commandeDAO.init();
+		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
+
+		HashMap<String, Object> parametres = new HashMap<>();
+		parametres.put("modele", "modele1");
+		Voiture voiture1 = (Voiture) serveur.processRequest(VOITURECONTROLLER, "creerVoiture", parametres);
+
+		parametres.put("voitureId", voiture1.getId());
+		parametres.put("option", new Option("test", "test"));
+		serveur.processRequest(VOITURECONTROLLER, "ajouterConfiguration", parametres);
+
+		serveur.processRequest(COMMANDECONTROLLER, "ajouterVoiture", parametres);
+
+		long commandeId = (long) serveur.processRequest(COMMANDECONTROLLER, "validerCommandeCourante", null);
+		parametres.put("id", commandeId);
+
+		// When
+		Collection<Voiture> resultat = (Collection<Voiture>) serveur.processRequest(VOITURECONTROLLER, "getVoituresByCommande", parametres);
+
+		// Then
+		assertNotNull(resultat);
+		assertEquals(1, resultat.size());
+		assertNotNull(resultat.iterator().next().getOptions());
+		serveur.processRequest(VOITURECONTROLLER, "supprimerConfiguration", parametres);
+		serveur.processRequest(COMMANDECONTROLLER, "supprimerVoiture", parametres);
+		commandeDAO.deleteCommande(commandeId);
+	}
+
+	@Test
+	void shouldNeRienRetourner_whenGetVoituresByCommande_withCommandeIdIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -376,7 +398,7 @@ class ServeurImplTest {
 
 	// Tests des appels vers VoitureResource
 	@Test
-	void shouldCreerVoiture_whenCreerVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldCreerVoiture_whenCreerVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		HashMap<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele1");
@@ -391,7 +413,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldGetVoiture_whenGetVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetVoiture_whenGetVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		HashMap<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele1");
@@ -410,7 +432,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldThrowNotFoundException_whenGetVoiture_withVoitureIdIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldThrowNotFoundException_whenGetVoiture_withVoitureIdIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		HashMap<String, Object> parametres = new HashMap<>();
 		parametres.put("voitureId", 0L);
@@ -420,7 +442,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldSupprimerVoiture_whenDeleteVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldSupprimerVoiture_whenDeleteVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		HashMap<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele1");
@@ -442,7 +464,7 @@ class ServeurImplTest {
 
 	// Tests des appels vers OptionResource
 	@Test
-	void shouldGetAllOptions_whenGetAllOption() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetAllOptions_whenGetAllOption() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		Option option = new Option("test", "test");
 
@@ -466,7 +488,7 @@ class ServeurImplTest {
 
 	// Tests des appels null vers les controllers
 	@Test
-	void shouldRetournerNull_whenProcessRequest_withCommandeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldRetournerNull_whenProcessRequest_withCommandeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var resultat = serveur.processRequest("null", "null", null);
 
@@ -475,7 +497,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldRetournerNull_whenProcessCommande_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldRetournerNull_whenProcessCommande_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var resultat = serveur.processRequest(COMMANDECONTROLLER, "null", null);
 
@@ -484,7 +506,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldRetournerNull_whenProcessVoiture_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldRetournerNull_whenProcessVoiture_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var resultat = serveur.processRequest(VOITURECONTROLLER, "null", null);
 
@@ -493,7 +515,7 @@ class ServeurImplTest {
 	}
 
 	@Test
-	void shouldRetournerNull_whenProcessOption_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldRetournerNull_whenProcessOption_withMethodeIntrouvable() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var resultat = serveur.processRequest(OPTIONCONTROLLER, "null", null);
 
