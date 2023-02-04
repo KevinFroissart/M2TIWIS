@@ -38,13 +38,14 @@ class VoitureServiceImplTest {
 	private CommandeCouranteResource commandeCouranteResource;
 	private VoitureDAOImpl voitureDAO;
 	private CommandeDAOImpl commandeDAO;
+	private OptionDAO optionDAO;
 	private Serveur serveur;
 
 	@BeforeEach
 	void setUp() throws SQLException, IOException, ClassNotFoundException {
 		serveur = new ServeurImpl();
 		DBAccess dbAccess = serveur.getConnection();
-		OptionDAO optionDAO = new OptionDAOImpl(dbAccess);
+		optionDAO = new OptionDAOImpl(dbAccess);
 		voitureDAO = new VoitureDAOImpl(dbAccess);
 		commandeDAO = new CommandeDAOImpl(dbAccess);
 
@@ -59,7 +60,7 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldCreerVoiture_whenCreerVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldCreerVoiture_whenCreerVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Map<String, Object> parametres = new HashMap<>();
 		parametres.put("modele", "modele" + counter++);
@@ -75,7 +76,7 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldAjouterConfiguration_whenAjouterConfiguration() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldAjouterConfiguration_whenAjouterConfiguration() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
 		Option option = new Option("nom" + counter++, "valeur" + counter++);
@@ -91,7 +92,7 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldSupprimerConfiguration_whenSupprimerConfiguration() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldSupprimerConfiguration_whenSupprimerConfiguration() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
 		Option option = new Option("nom" + counter++, "valeur" + counter++);
@@ -107,7 +108,7 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldGetOptionsForVoiture_whenGetOptionsForVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetOptionsForVoiture_whenGetOptionsForVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
 		Option option = new Option("nom" + counter++, "valeur" + counter++);
@@ -128,20 +129,23 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldGetVoiture_whenGetVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetVoiture_whenGetVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
+		optionDAO.setOptionVoiture(v.getId(), new Option("nom0", "valeur0"));
 
 		// When
 		var v2 = (Voiture) serveur.processRequest(VOITURECONTROLLER, "getVoiture", Map.of("voitureId", v.getId()));
 
 		// Then
 		assertEquals(v, v2);
+		assertNotNull(v2.getOptions());
+		optionDAO.deleteOptionVoiture(v.getId(),"nom0");
 		voitureResource.supprimerVoiture(v.getId());
 	}
 
 	@Test
-	void shouldSauverVoiture_whenSauverVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldSauverVoiture_whenSauverVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Commande c = commandeCouranteResource.creerCommandeCourante();
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
@@ -159,7 +163,7 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldGetVoituresByCommande_whenGetVoituresByCommande() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetVoituresByCommande_whenGetVoituresByCommande() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Commande c = commandeCouranteResource.creerCommandeCourante();
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
@@ -177,7 +181,7 @@ class VoitureServiceImplTest {
 	}
 
 	@Test
-	void shouldSupprimerVoiture_whenSupprimerVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldSupprimerVoiture_whenSupprimerVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = voitureResource.creerVoiture("modele" + counter++);
 

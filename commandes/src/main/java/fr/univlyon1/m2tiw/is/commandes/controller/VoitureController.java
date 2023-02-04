@@ -12,7 +12,6 @@ import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 import fr.univlyon1.m2tiw.is.commandes.services.VoitureService;
 import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
 
@@ -37,7 +36,7 @@ public class VoitureController extends AbstractController {
 	 * @inheritDoc
 	 * @see AbstractController#process(String, Map)
 	 */
-	public Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException, InvalidConfigurationException {
+	public Object process(String methode, Map<String, Object> parametres) throws SQLException, NotFoundException {
 		switch (methode) {
 			case "creervoiture":
 				return creerVoiture((String) parametres.get("modele"));
@@ -86,7 +85,7 @@ public class VoitureController extends AbstractController {
 	 * @inheritDoc
 	 * @see VoitureService#supprimerConfiguration(Long, Option)
 	 */
-	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException, NotFoundException, InvalidConfigurationException {
+	public void supprimerConfiguration(Long voitureId, Option option) throws SQLException {
 		LOG.info("Méthode appelée: supprimerConfiguration, avec comme paramètres(s): {}, {}", voitureId, option);
 		voitureService.supprimerConfiguration(voitureId, option);
 	}

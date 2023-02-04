@@ -23,7 +23,7 @@ import fr.univlyon1.m2tiw.is.commandes.serveur.ServeurImpl;
 class OptionServiceImplTest {
 
 	@Test
-	void shouldGetAllOptions_whenGetAllOptions() throws SQLException, NotFoundException, IOException, ClassNotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetAllOptions_whenGetAllOptions() throws SQLException, NotFoundException, IOException, ClassNotFoundException, EmptyCommandeException {
 		// Given
 		Serveur serveur = new ServeurImpl();
 		DBAccess dbAccess = serveur.getConnection();

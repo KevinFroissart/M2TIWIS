@@ -71,16 +71,12 @@ public class Voiture {
         this.options.remove(option.getNom());
     }
 
-    public boolean hasOption(Option option) {
-        return this.options.containsKey(option.getNom());
-    }
+//    public boolean hasOption(Option option) {
+//        return this.options.containsKey(option.getNom());
+//    }
 
     public Collection<Option> getOptions() {
         return options.values();
     }
 
-    @Override
-    public String toString() {
-        return "Voiture id=" + getId();
-    }
 }

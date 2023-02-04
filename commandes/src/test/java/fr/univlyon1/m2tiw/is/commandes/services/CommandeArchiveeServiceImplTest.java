@@ -51,7 +51,7 @@ class CommandeArchiveeServiceImplTest {
 	}
 
 	@Test
-	void shouldGetAllOptions_whenGetAllOptions() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetAllOptions_whenGetAllOptions() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Commande c = commandeDAO.saveCommande(new Commande(false));
 		Voiture v = voitureDAO.saveVoiture(new Voiture("modele"), c.getId());
@@ -69,7 +69,7 @@ class CommandeArchiveeServiceImplTest {
 	}
 
 	@Test
-	void shouldGetCommande_whenGetCommande() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetCommande_whenGetCommande() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = voitureResource.creerVoiture("modele");
 		commandeCouranteService.ajouterVoiture(v.getId());
@@ -83,7 +83,7 @@ class CommandeArchiveeServiceImplTest {
 	}
 
 	@Test
-	void shouldGetCommandeCourante_whenGetCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetCommandeCourante_whenGetCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException {
 		assertNotNull(serveur.processRequest(COMMANDECONTROLLER, "getCommandeCourante", null));
 	}
 }

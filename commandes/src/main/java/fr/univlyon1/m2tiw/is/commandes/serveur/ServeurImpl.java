@@ -22,7 +22,6 @@ import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
-import fr.univlyon1.m2tiw.is.commandes.services.InvalidConfigurationException;
 import fr.univlyon1.m2tiw.tiw1.annotations.Component;
 
 /**
@@ -67,14 +66,15 @@ public class ServeurImpl implements Serveur {
 			}
 		}
 
+		// L'ordre d'initialisation est important.
+		pico.getComponent(CommandeDAO.class).init();
+		pico.getComponent(VoitureDAO.class).init();
+		pico.getComponent(OptionDAO.class).init();
+
 		voitureController = pico.getComponent(VoitureController.class);
 		optionController = pico.getComponent(OptionController.class);
 		commandeController = pico.getComponent(CommandeController.class);
 		dbAccess = pico.getComponent(DBAccess.class);
-
-		pico.getComponent(CommandeDAO.class).init();
-		pico.getComponent(OptionDAO.class).init();
-		pico.getComponent(VoitureDAO.class).init();
 
 		pico.start();
 	}
@@ -83,7 +83,7 @@ public class ServeurImpl implements Serveur {
 	 * @InheritDoc
 	 * @see Serveur#processRequest(String, String, Map)
 	 */
-	public Object processRequest(String commande, String methode, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	public Object processRequest(String commande, String methode, Map<String, Object> parametres) throws SQLException, EmptyCommandeException, NotFoundException {
 		switch (commande.toLowerCase()) {
 			case "commandecontroller":
 				return commandeController.process(methode.toLowerCase(), parametres);

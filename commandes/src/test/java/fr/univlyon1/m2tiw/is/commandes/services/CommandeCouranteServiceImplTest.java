@@ -31,17 +31,17 @@ class CommandeCouranteServiceImplTest {
 	private Serveur serveur;
 
 	@BeforeEach
-	public void before() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException, IOException, ClassNotFoundException {
+	public void before() throws SQLException, EmptyCommandeException, NotFoundException, IOException, ClassNotFoundException {
 		serveur = new ServeurImpl();
 		serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 	}
 
-	private Voiture createVoiture() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	private Voiture createVoiture() throws SQLException, EmptyCommandeException, NotFoundException {
 		return (Voiture) serveur.processRequest(VOITURECONTROLLER, "creerVoiture", Map.of("modele", "modele" + counter++));
 	}
 
 	@Test
-	void shouldCreerCommandeCourante_whenCreerCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldCreerCommandeCourante_whenCreerCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException {
 		// When
 		var c = (Commande) serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -51,7 +51,7 @@ class CommandeCouranteServiceImplTest {
 	}
 
 	@Test
-	void shouldAjouterVoiture_whenAjouterVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldAjouterVoiture_whenAjouterVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = createVoiture();
 
@@ -63,7 +63,7 @@ class CommandeCouranteServiceImplTest {
 	}
 
 	@Test
-	void shouldSupprimerVoiture_whenSupprimerVoiture() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldSupprimerVoiture_whenSupprimerVoiture() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = createVoiture();
 		Map<String, Object> parametres = new HashMap<>();
@@ -79,7 +79,7 @@ class CommandeCouranteServiceImplTest {
 	}
 
 	@Test
-	void shouldGetAllVoitures_whenGetAllVoitures() throws SQLException, NotFoundException, EmptyCommandeException, InvalidConfigurationException {
+	void shouldGetAllVoitures_whenGetAllVoitures() throws SQLException, NotFoundException, EmptyCommandeException {
 		// Given
 		Voiture v = createVoiture();
 		Map<String, Object> parametres = new HashMap<>();
@@ -96,7 +96,7 @@ class CommandeCouranteServiceImplTest {
 	}
 
 	@Test
-	void shouldGetCommandeCourante_whenGetCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException, InvalidConfigurationException {
+	void shouldGetCommandeCourante_whenGetCommandeCourante() throws SQLException, EmptyCommandeException, NotFoundException {
 		// Given
 		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 
@@ -105,7 +105,7 @@ class CommandeCouranteServiceImplTest {
 	}
 
 	@Test
-	void shouldValiderCommandeCourante_whenValiderCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException, InvalidConfigurationException {
+	void shouldValiderCommandeCourante_whenValiderCommandeCourante() throws EmptyCommandeException, SQLException, NotFoundException {
 		// Given
 		Commande c = (Commande) serveur.processRequest(COMMANDECONTROLLER, "creerCommandeCourante", null);
 		Voiture v = createVoiture();
