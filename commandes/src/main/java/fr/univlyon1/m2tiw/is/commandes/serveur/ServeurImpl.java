@@ -22,12 +22,12 @@ import fr.univlyon1.m2tiw.is.commandes.dao.NotFoundException;
 import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
-import fr.univlyon1.m2tiw.tiw1.annotations.Component;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Component;
 
 /**
  * Implémentation de {@link Serveur}.
  */
-@Component
+//@Component
 public class ServeurImpl implements Serveur {
 
 	private final VoitureController voitureController;
@@ -102,6 +102,10 @@ public class ServeurImpl implements Serveur {
 	 */
 	public DBAccess getConnection() {
 		return dbAccess;
+	}
+
+	public static void main(String[] args) throws SQLException, IOException, ClassNotFoundException {
+		new ServeurImpl();
 	}
 
 }

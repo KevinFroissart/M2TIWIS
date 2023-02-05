@@ -19,15 +19,17 @@
 - Chacun des tests a été modifié et adapté pour suivre la template `should...when...then...` et les tags `Given`, `When` et `Then`.
 - Concernant les tests, si le temps me l'avait permis, j'aurais ajouté un fichier de configuration spécifique aux tests, de manière à utiliser une seconde base de données pour les tests, qui se viderait à chaque lancement.
 - La quasi-totalité des méthodes et routes ont été testées, mise-à-part les SQLException qui dans certains cas ne sont pas testables en l'état, et l'aurait été grâce à l'utilisation de Mockito par exemple.
-![Coverage.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FCoverage.PNG)
+
+- ![Coverage.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FCoverage.PNG)
 
 #### Un détail supplémentaire concernant les tests...
-La tâche `mvn test` semble créer des problèmes au sein du projet.
-En effet, lors de l'exécution de cette commande, une erreur de compilation apparaît, de plus, après cette opération le projet commande ne semble plus pouvoir fonctionner correctement.
-Les tests peuvent être lancés via l'IDE après avoir exécuté la commande `mvn clean install` qui permet de générer les classes nécessaires à l'exécution des tests.
+L'ajout des annotations semble créer des problèmes au sein du projet, du moins au niveau des tests.
+En effet, la tâche `mvn test` renvoie une erreur de compilation si deux ou plus d'annotations sont présentes dans le projet.
+Il est tout de même possible de lancer les tests via l'IDE malgré cette erreur.
 Vous pouvez alors exécuter l'ensemble des tests en faisant clic droit sur le dossier `test/java` puis `Run 'All Tests'`.
-Pour vous assurer de la bonne exécution des tests vous pouvez aussi en voir la mention lors de l'exécution de la commande `mvn clean install`.
-Pour ne pas avoir de problèmes de dépendances avec le web-framework, il est nécessaire de lancer les tests depuis la racine du projet.
+De plus vous pouvez vérifier que les tests sont bien lancés en exécutant la commande `mvn clean install` ou `mvn clean package`, étape à faire aussi avant de lancer les tests avec l'IDE.
+
+En espérant vous simplifier la vie, j'ai ajouté taggé une version du projet qui fonctionne sans les annotations, si vous souhaitez lancer les tests depuis `mvn test` ou que vous souhaitez adresser le problème.
 
 ## Partie 4
 - Les annotations `@Controller`, `@Service`, `@Persitence` et `@Component` ont été implémentées.

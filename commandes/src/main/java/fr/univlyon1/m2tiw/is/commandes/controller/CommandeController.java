@@ -16,12 +16,12 @@ import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.services.CommandeCouranteService;
 import fr.univlyon1.m2tiw.is.commandes.services.EmptyCommandeException;
 import fr.univlyon1.m2tiw.is.commandes.services.CommandeArchiveeService;
-import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Controller;
 
 /**
  * Classe de contrôle des commandes.
  */
-@Controller
+//@Controller
 public class CommandeController extends AbstractController {
 
 	private static final Logger LOG = LoggerFactory.getLogger(CommandeController.class);
