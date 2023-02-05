@@ -8,12 +8,12 @@ import fr.univlyon1.m2tiw.is.commandes.model.Commande;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
 import fr.univlyon1.m2tiw.is.commandes.resources.CommandeCouranteResource;
 import fr.univlyon1.m2tiw.is.commandes.resources.VoitureResource;
-import fr.univlyon1.m2tiw.tiw1.annotations.Service;
+//import fr.univlyon1.m2tiw.tiw1.annotations.Service;
 
 /**
  * Implémentation de {@link CommandeCouranteService}.
  */
-@Service
+//@Service
 public class CommandeCouranteServiceImpl implements CommandeCouranteService {
 
 	private Commande commandeCourante;
