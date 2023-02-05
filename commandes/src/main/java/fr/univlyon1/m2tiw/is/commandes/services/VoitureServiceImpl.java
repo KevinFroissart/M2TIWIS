@@ -8,12 +8,12 @@ import fr.univlyon1.m2tiw.is.commandes.dao.OptionDAO;
 import fr.univlyon1.m2tiw.is.commandes.dao.VoitureDAO;
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
 import fr.univlyon1.m2tiw.is.commandes.model.Voiture;
-//import fr.univlyon1.m2tiw.tiw1.annotations.Service;
+import fr.univlyon1.m2tiw.tiw1.annotations.Service;
 
 /**
  * Implémentation de {@link VoitureService}.
  */
-//@Service
+@Service
 public class VoitureServiceImpl implements VoitureService {
 
 	private final VoitureDAO voitureDAO;

@@ -11,12 +11,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.univlyon1.m2tiw.is.commandes.model.Option;
-//import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
+import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
 
 /**
  * Implémente les méthodes de {@link OptionDAO}.
  */
-//@Persistence
+@Persistence
 public class OptionDAOImpl extends AbstractSQLDAO implements OptionDAO {
 
 	private PreparedStatement getOptionStatement = null;
