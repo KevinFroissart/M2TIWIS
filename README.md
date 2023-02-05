@@ -20,17 +20,11 @@
 - Concernant les tests, si le temps me l'avait permis, j'aurais ajouté un fichier de configuration spécifique aux tests, de manière à utiliser une seconde base de données pour les tests, qui se viderait à chaque lancement.
 - La quasi-totalité des méthodes et routes ont été testées, mise-à-part les SQLException qui dans certains cas ne sont pas testables en l'état, et l'aurait été grâce à l'utilisation de Mockito par exemple.
 
-![GeneratedClasses.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FGeneratedClasses.PNG)
+![GeneratedClasses.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FCoverage.PNG)
 
 ### Un détail supplémentaire concernant les tests...
-L'ajout des annotations semble créer des problèmes au sein du projet, du moins au niveau des tests.  
-En effet, la tâche `mvn test` renvoie une erreur de compilation si deux ou plus d'annotations sont présentes dans le projet.  
-Il est tout de même possible de lancer les tests via l'IDE malgré cette erreur.  
-Vous pouvez alors exécuter l'ensemble des tests en faisant clic droit sur le dossier `test/java` puis `Run 'All Tests'`.  
-De plus vous pouvez vérifier que les tests sont bien lancés en exécutant la commande `mvn clean install` ou `mvn clean package`, étape à faire aussi avant de lancer les tests avec l'IDE.
+Pour lancer les tests, il est nécessaire d'utiliser la commande `mvn clean test`, si le lancement des tests est précédé de `mvn clean install/package/compile`, les tests ne seront pas lancés.
 
-En espérant vous simplifier la vie, j'ai ajouté une branche avec une version du projet qui fonctionne sans les annotations, si vous souhaitez lancer les tests depuis `mvn test` ou que vous souhaitez adresser le problème.  
-La branche s'appelle `TP2_sans_annotations`.
 
 ## Partie 4
 - Les annotations `@Controller`, `@Service`, `@Persitence` et `@Component` ont été implémentées.
@@ -41,4 +35,10 @@ La branche s'appelle `TP2_sans_annotations`.
 ![GeneratedClasses.PNG](commandes%2Fsrc%2Fmain%2Fresources%2Fcaptures%2FGeneratedClasses.PNG)
 
 ## Lancez le projet
-- Positionnez-vous à la racine du projet et exécutez la commande `mvn clean install`.
+- Positionnez-vous à la racine du projet et exécutez les commandes :
+    - <b>INSTALL<b>: `mvn clean install`.
+    - <b>COMPILE<b>: `mvn clean compile`.
+    - <b>PACKAGE<b>: `mvn clean package`.
+    - <b>TEST<b>: `mvn clean test`.
+
+Pour assurer leur bon fonctionnement, les commandes doivent être précédées de `mvn clean` afin de supprimer les anciens fichiers compilés.
