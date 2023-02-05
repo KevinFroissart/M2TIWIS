@@ -34,7 +34,7 @@ package-catalogue:
     - cd catalogue
     - mvn $MAVEN_CLI_OPTS install -DskipTests
 
-unit-test-catalogue:
+unit-test:
   stage: test
   services:
     - name: "postgres:15"
@@ -43,6 +43,5 @@ unit-test-catalogue:
     POSTGRES_USER: mdl
     POSTGRES_PASSWORD: mdlpwd
   script:
-    - cd catalogue
     - mvn $MAVEN_CLI_OPTS install -DskipTests
     - mvn $MAVEN_CLI_OPTS -Dspring.profiles.active=ci test

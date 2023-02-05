@@ -7,12 +7,12 @@ import java.sql.SQLException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
+import fr.univlyon1.m2tiw.tiw1.annotations.Persistence;
 
 /**
  * Encapsulate DB connections setup, management
  */
-//@Persistence
+@Persistence
 public class DBAccess {
 
 	private static final Logger LOG = LoggerFactory.getLogger(DBAccess.class);
