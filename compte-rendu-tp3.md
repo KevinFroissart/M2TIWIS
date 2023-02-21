@@ -34,6 +34,8 @@ Il n'y a pas de route définie dans machine. Les composants présents dans machi
 - `Runner` : qui permet de recevoir les messages
 - `MachineApplication` : qui permet de lancer l'application
 
+Le paramètre `spring.main.web-application-type=none` dans le fichier `application.properties` de machine empêche l'application de démarrer un serveur web.
+
 ### Q1.4. Expliquer pourquoi machine affiche Reçoit les messages sur la queue 'queue-machine1' au démarrage. Ce message reflète-il la réalité en l'état ?
 Le fichier `Runner` implémente l'interface `CommandLineRunner` qui permet de lancer une méthode au démarrage de l'application. Cette méthode affiche le message `Reçoit les messages sur la queue 'queue-machine1'`.    
 Ce message ne reflète pas la réalité, car la queue sur laquelle la machine va recevoir les messages est définie dans le fichier `ConfigurationService` via l'annotation `@Value("${tiw.is.machine.queue}")` qui viens récupérer la valeur définie dans `application.properties`.
@@ -47,15 +49,40 @@ La méthode `receive(byte[] message)` de la classe `ConfigurationConfirmationRec
 
 ## 2. Clients REST
 ### Q2.1. Quelles modifications avez-vous apporté à chain-manager ? Copier/coller le code de getMachines.
+Dans un premier nous avons ajouté un `@Bean` `RestTemplate` dans la classe `ChainManagerApplication` pour pouvoir utiliser `RestTemplate` dans les autres classes.   
+Nous avons ensuite injecté `RestTemplate` dans la classe `MachineService` pour pouvoir communiquer avec l'application `CatalogueApplication`.   
 
+Voici le code de `getMachines` mis à jour :
+```java
+public Collection<MachineDTO> getMachines() {
+	ResponseEntity<MachineDTO[]> response = restTemplate.getForEntity("http://localhost:8080/machine", MachineDTO[].class);
+	return Arrays.asList(response.getBody());
+}
+```
 
 ### Q2.2. Y a-t-il besoin d'informations additionnelles pour réaliser ces changements ? Si oui, lesquelles ?
-
+Pour réaliser les changements, il faut ajouter les informations de connexion à l'application Catalogue et s'assurer que les deux applications sont bien en communication.
 
 ### Q2.3. Quels problèmes risquent de se poser avec la gestion des informations des machines du catalogue telle qu'elle est proposée ?
+Les problèmes qui pourraient se poser avec la gestion des informations des machines dans le catalogue telle qu'elle est proposée sont les suivants :
 
+- Si plusieurs instances de l'application machine sont exécutées, il est possible qu'elles créent chacune une nouvelle entrée dans le catalogue pour la même machine.   
+Pour éviter cela, il faudrait utiliser une clé unique pour identifier chaque machine et empêcher la création de doublons.
+- Si l'application machine n'arrive pas à contacter l'application catalogue, elle ne pourra pas mettre à jour ses informations ou vérifier que sa machine est bien présente dans le catalogue.   
+Il faudrait donc gérer les erreurs de communication entre les deux applications et avoir un plan de secours en cas de défaillance d'une des applications.
 
 ### Q2.4. Quels changements avez-vous apporté aux applications et en quoi ces changements résolvent-ils le problème précédent ?
+Dans un premier temps nous avons ajouté toutes les informations de connexion dans le fichier `application.properties` de l'application `machine`.     
+Ensuite, nous avons mis en place la classe `CataloguePing` qui permet de vérifier que l'application `machine` est bien en communication avec l'application `catalogue` en lançant un ping à interval régulier.
+Les pings non fructueux sont loggés afin de pouvoir les traiter en cas de problème.   
+
+Une classe `CatalogueInitializer` a été ajoutée dans l'application `machine` pour s'assurer que la machine est bien présente dans le catalogue en faisant un appel à la méthode `getOrCreateMachine` du service `CatalogueService` créé a cet effet.
+Si la machine n'est pas présente dans le catalogue, elle est créée, grâce à des appels RestTemplate à l'application `catalogue`.   
+
+De plus une clé unique à notre machine a été ajoutée dans le fichier `application.properties`, de manière à ce que plusieurs instances de l'application `machine` ne créent pas plusieurs entrées dans le catalogue pour la même machine.
+
+Ces changes permettent de résoudre le problème de création de doublons dans le catalogue et de vérifier que l'application `machine` est bien en communication avec l'application `catalogue`.
+
 
 ## 3. Réception de message par les machines
 ### Q3.1. Quelles erreurs peuvent se produire lors de la gestion du JSON ?Quels problèmes se posent si on souhaite gérer correctement ces erreurs ?
