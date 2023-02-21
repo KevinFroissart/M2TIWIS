@@ -1,0 +1,17 @@
+services:
+  postgres:
+    image: postgres:15
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: mdlpwd
+      POSTGRES_USER: mdl
+      POSTGRES_DB: mdldb
+    volumes:
+      - "./pg-init:/docker-entrypoint-initdb.d"
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
