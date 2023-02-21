@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class Runner implements CommandLineRunner {
-    private ConfigurationService configurationService;
+    private final ConfigurationService configurationService;
 
     public Runner(ConfigurationService configurationService) {
         this.configurationService = configurationService;

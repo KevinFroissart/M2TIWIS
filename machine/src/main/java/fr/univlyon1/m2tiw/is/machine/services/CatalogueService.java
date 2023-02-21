@@ -10,7 +10,9 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import fr.univlyon1.m2tiw.is.machine.services.dtos.MachineDTO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class CatalogueService {
 
@@ -37,7 +39,8 @@ public class CatalogueService {
 		try {
 			String url = catalogueUrl + "/machine/{machineNumber}";
 			return restTemplate.getForEntity(url, MachineDTO.class, machineNumber).getStatusCode() == HttpStatus.OK;
-		} catch (RestClientException e) {
+		}
+		catch (RestClientException e) {
 			return false;
 		}
 	}

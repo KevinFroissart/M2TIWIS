@@ -14,7 +14,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path = "/option")
 public class OptionController {
-    private OptionService optionService;
+    private final OptionService optionService;
 
     public OptionController(OptionService optionService) {
         this.optionService = optionService;

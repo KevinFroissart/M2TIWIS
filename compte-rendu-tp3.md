@@ -34,7 +34,7 @@ Il n'y a pas de route définie dans machine. Les composants présents dans machi
 - `Runner` : qui permet de recevoir les messages
 - `MachineApplication` : qui permet de lancer l'application
 
-Le paramètre `spring.main.web-application-type=none` dans le fichier `application.properties` de machine empêche l'application de démarrer un serveur web.
+Le paramètre `spring.main.web-application-type=none` dans le fichier `application.properties` de `machine` empêche l'application de démarrer un serveur web.
 
 ### Q1.4. Expliquer pourquoi machine affiche Reçoit les messages sur la queue 'queue-machine1' au démarrage. Ce message reflète-il la réalité en l'état ?
 Le fichier `Runner` implémente l'interface `CommandLineRunner` qui permet de lancer une méthode au démarrage de l'application. Cette méthode affiche le message `Reçoit les messages sur la queue 'queue-machine1'`.    
@@ -62,6 +62,14 @@ public Collection<MachineDTO> getMachines() {
 
 ### Q2.2. Y a-t-il besoin d'informations additionnelles pour réaliser ces changements ? Si oui, lesquelles ?
 Pour réaliser les changements, il faut ajouter les informations de connexion à l'application Catalogue et s'assurer que les deux applications sont bien en communication.
+Voici notre `application.properties` après avoir ajouter ces informations :
+```properties
+spring.main.web-application-type=none
+tiw.is.machine.queue=queue-machine1
+tiw.is.machine.number=1
+tiw.is.catalogue.url=http://localhost:8080
+tiw.is.catalogue.ping-interval=30000
+```
 
 ### Q2.3. Quels problèmes risquent de se poser avec la gestion des informations des machines du catalogue telle qu'elle est proposée ?
 Les problèmes qui pourraient se poser avec la gestion des informations des machines dans le catalogue telle qu'elle est proposée sont les suivants :
@@ -81,15 +89,44 @@ Si la machine n'est pas présente dans le catalogue, elle est créée, grâce à
 
 De plus une clé unique à notre machine a été ajoutée dans le fichier `application.properties`, de manière à ce que plusieurs instances de l'application `machine` ne créent pas plusieurs entrées dans le catalogue pour la même machine.
 
-Ces changes permettent de résoudre le problème de création de doublons dans le catalogue et de vérifier que l'application `machine` est bien en communication avec l'application `catalogue`.
+Ces changements permettent de résoudre le problème de création de doublons dans le catalogue et de vérifier que l'application `machine` est bien en communication avec l'application `catalogue`.
 
 
 ## 3. Réception de message par les machines
-### Q3.1. Quelles erreurs peuvent se produire lors de la gestion du JSON ?Quels problèmes se posent si on souhaite gérer correctement ces erreurs ?
+### Q3.1. Quelles erreurs peuvent se produire lors de la gestion du JSON ? Quels problèmes se posent si on souhaite gérer correctement ces erreurs ?
+Pour gérer les JSON, les erreurs suivantes peuvent se produire :
 
+- Erreur de syntaxe : Le JSON est malformé
+- Erreur de deserialization : Le JSON est valide, mais ne peut pas être converti en objet Java
 
 ### Q3.2 Copier/coller le code de votre @RabbitListener
+Voici le code de notre `@RabbitListener` :
+```java
+@Slf4j
+@Component
+public class RabbitListener {
 
+	private final ConfigurationService configurationService;
+
+	@Autowired
+	public RabbitListener(ConfigurationService configurationService) {
+		this.configurationService = configurationService;
+	}
+
+	@org.springframework.amqp.rabbit.annotation.RabbitListener(queues = "${tiw.is.machine.queue}")
+	public void receiveReconfiguration(@Payload String payload) {
+		log.info("RabbitListener received: {}", payload);
+		try {
+			ObjectMapper objectMapper = new ObjectMapper();
+			VehicleDTO vehicleDTO = objectMapper.readValue(payload, VehicleDTO.class);
+			configurationService.reconfigure(vehicleDTO);
+		} catch (Exception e) {
+			log.error("Error deserializing VehicleDTO object: ", e);
+		}
+	}
+
+}
+```
 ## 4. Envoi de message par chain-manager et machine
 ### Q4.1 Copier/coller le code de la méthode envoieOptionsVoiture
 
@@ -112,5 +149,5 @@ Ces changes permettent de résoudre le problème de création de doublons dans l
 ## Comment lancer l'application ?
 - Lancer les serveurs RabbitMQ et PostgreSQL via le docker avec la commande `docker-compose up -d`
 - Se rendre sur http://localhost:15672/ pour accéder à l'interface web de RabbitMQ, avec les identifiants `guest` et `guest`
-- Se rendre sur http://localhost:15672/#/queues et ajouter une queue `chainmanager`
-- Lancer l'application chain-manager avec la commande `mvn spring-boot:run` ou via l'IDE
+- Se rendre sur http://localhost:15672/#/queues et ajouter une queue `chainmanager` ainsi qu'une queue `queue-machine1`
+- Lancer les applications avec la commande `mvn spring-boot:run` ou via l'IDE

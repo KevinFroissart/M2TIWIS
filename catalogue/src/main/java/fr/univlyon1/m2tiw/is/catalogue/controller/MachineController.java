@@ -14,7 +14,7 @@ import java.util.Collection;
 @RestController
 @RequestMapping(path = "/machine")
 public class MachineController {
-    private MachineService machineService;
+    private final MachineService machineService;
 
     public MachineController(MachineService machineService) {
         this.machineService = machineService;

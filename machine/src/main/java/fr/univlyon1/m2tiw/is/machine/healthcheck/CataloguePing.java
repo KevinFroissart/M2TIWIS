@@ -41,6 +41,7 @@ public class CataloguePing {
 			pingCount++;
 		} catch (RestClientException e) {
 			log.error("Catalogue is not responding, ping count: {}, interval is {}", pingCount, configurationService.getPingInterval());
+			log.error("Error pinging catalogue: ", e);
 		}
 	}
 }

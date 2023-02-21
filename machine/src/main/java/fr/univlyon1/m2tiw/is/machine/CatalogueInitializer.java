@@ -9,7 +9,7 @@ import fr.univlyon1.m2tiw.is.machine.services.CatalogueService;
 @Component
 public class CatalogueInitializer implements CommandLineRunner {
 
-	private CatalogueService catalogueService;
+	private final CatalogueService catalogueService;
 
 	@Autowired
 	public CatalogueInitializer(CatalogueService catalogueService) {

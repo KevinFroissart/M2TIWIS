@@ -14,7 +14,7 @@ import java.util.Collection;
 @RequestMapping(path="/configuration")
 public class ConfigurationController {
 
-    private ConfigurationService configurationService;
+    private final ConfigurationService configurationService;
 
     public ConfigurationController(ConfigurationService configurationService) {
         this.configurationService = configurationService;
