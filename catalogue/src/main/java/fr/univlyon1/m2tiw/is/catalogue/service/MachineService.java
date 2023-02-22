@@ -12,8 +12,7 @@ import java.util.Optional;
 @Service
 @Transactional
 public class MachineService {
-    private MachineRepository machineRepository;
-
+    private final MachineRepository machineRepository;
     public MachineService(MachineRepository machineRepository) {
         this.machineRepository = machineRepository;
     }

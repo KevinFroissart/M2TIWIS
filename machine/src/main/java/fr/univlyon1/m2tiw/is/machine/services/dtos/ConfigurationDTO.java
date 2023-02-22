@@ -2,19 +2,31 @@ package fr.univlyon1.m2tiw.is.machine.services.dtos;
 
 public class ConfigurationDTO {
 
-	public MachineDTO machine;
-	public OptionDTO option;
+	public Long machineId;
+	public String optionId;
 	public String cfg;
 
-	public MachineDTO getMachine() {
-		return machine;
+	public Long getMachineId() {
+		return machineId;
 	}
 
-	public OptionDTO getOption() {
-		return option;
+	public String getOptionId() {
+		return optionId;
 	}
 
 	public String getCfg() {
 		return cfg;
+	}
+
+	public void setMachineId(Long machineId) {
+		this.machineId = machineId;
+	}
+
+	public void setOptionId(String optionId) {
+		this.optionId = optionId;
+	}
+
+	public void setCfg(String cfg) {
+		this.cfg = cfg;
 	}
 }

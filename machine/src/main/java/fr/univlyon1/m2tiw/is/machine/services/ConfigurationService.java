@@ -1,13 +1,20 @@
 package fr.univlyon1.m2tiw.is.machine.services;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fr.univlyon1.m2tiw.is.machine.models.Voiture;
 import fr.univlyon1.m2tiw.is.machine.services.dtos.ConfigurationDTO;
-import fr.univlyon1.m2tiw.is.machine.services.dtos.VehicleDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -17,7 +24,9 @@ public class ConfigurationService {
 	@Value("${tiw.is.machine.queue}")
 	private String queueName;
 
-	@Value("${tiw.is.machine.number}")
+	@Value("${tiw.is.machine.confirm-queue}")
+	private String confirmQueueName;
+
 	private Long machineNumber;
 
 	@Value("${tiw.is.catalogue.url}")
@@ -27,10 +36,12 @@ public class ConfigurationService {
 	private int pingInterval;
 
 	private final RestTemplate restTemplate;
+	private final RabbitTemplate rabbitTemplate;
 
 	@Autowired
-	public ConfigurationService(RestTemplate restTemplate) {
+	public ConfigurationService(RestTemplate restTemplate, RabbitTemplate rabbitTemplate) {
 		this.restTemplate = restTemplate;
+		this.rabbitTemplate = rabbitTemplate;
 	}
 
 	public String getQueueName() {
@@ -53,13 +64,23 @@ public class ConfigurationService {
 		this.machineNumber = machineNumber;
 	}
 
-	public void reconfigure(VehicleDTO vehicleDTO) {
-		log.info("Reconfiguring machine {} with options: {}", machineNumber, vehicleDTO.getOptions());
+	public void reconfigure(Voiture voiture) throws JsonProcessingException {
+		log.info("Reconfiguring machine {} with options: {}", machineNumber, voiture.getOptions());
 
-		for (String optionName : vehicleDTO.getOptions()) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+
+		for (String optionName : voiture.getOptions()) {
+			HttpEntity<String> requestEntity = new HttpEntity<>("{\"cfg\":\"" + machineNumber + "cfg\"}", headers);
+			restTemplate.exchange(catalogueUrl + "/configuration/" + machineNumber + "/" + optionName, HttpMethod.PUT, requestEntity, String.class);
+
 			ConfigurationDTO configurationDTO = getConfigurationByMachineNumberAndOptionName(machineNumber, optionName);
-			log.info("Machine: {}, Option: {}, Configuration: {}", configurationDTO.getMachine().getId(), configurationDTO.getOption(), configurationDTO.getCfg());
+			log.info("Verification for Machine: {} with Option: {}, Configuration: {}", configurationDTO.getMachineId(), configurationDTO.getOptionId(), configurationDTO.getCfg());
 		}
+
+		ObjectMapper objectMapper = new ObjectMapper();
+		String payload = objectMapper.writeValueAsString(voiture);
+		rabbitTemplate.convertAndSend(confirmQueueName, payload);
 	}
 
 	private ConfigurationDTO getConfigurationByMachineNumberAndOptionName(Long machineNumber, String optionName) {

@@ -1,14 +1,11 @@
 package fr.univlyon1.m2tiw.is.chainmanager.services.dtos;
 
-import fr.univlyon1.m2tiw.is.chainmanager.models.Statut;
-import fr.univlyon1.m2tiw.is.chainmanager.models.Voiture;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-
 import java.util.Collection;
-import java.util.Map;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import fr.univlyon1.m2tiw.is.chainmanager.models.Voiture;
+
+@JsonDeserialize(as = VoitureDTO.class)
 public class VoitureDTO {
     public Long id;
     public Collection<String> options;

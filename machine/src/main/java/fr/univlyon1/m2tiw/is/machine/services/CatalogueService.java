@@ -1,9 +1,10 @@
 package fr.univlyon1.m2tiw.is.machine.services;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
@@ -30,15 +31,26 @@ public class CatalogueService {
 	}
 
 	public void getOrCreateMachine() {
-		if (!isMachineInCatalogue(configurationService.getMachineNumber())) {
+		if (!isMachineInCatalogue()) {
+			log.info("No machine found in catalogue with queue name {}, creating a new one", queueName);
 			createMachine();
+		}
+		else {
+			log.info("Machine found in catalogue with queue name {}", queueName);
 		}
 	}
 
-	private boolean isMachineInCatalogue(Long machineNumber) {
+	private boolean isMachineInCatalogue() {
 		try {
-			String url = catalogueUrl + "/machine/{machineNumber}";
-			return restTemplate.getForEntity(url, MachineDTO.class, machineNumber).getStatusCode() == HttpStatus.OK;
+			String url = catalogueUrl + "/machine";
+			return Arrays.stream(Objects.requireNonNull(restTemplate.exchange(url, HttpMethod.GET, null, MachineDTO[].class).getBody()))
+					.filter(m -> m.getQueue().equals(queueName))
+					.findFirst()
+					.map(m -> {
+						configurationService.setMachineNumber(m.getId());
+						return true;
+					})
+					.orElse(false);
 		}
 		catch (RestClientException e) {
 			return false;

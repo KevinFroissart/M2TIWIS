@@ -1,26 +1,27 @@
-package fr.univlyon1.m2tiw.is.chainmanager.models;
-
-import jakarta.persistence.*;
+package fr.univlyon1.m2tiw.is.machine.models;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 
-@Entity
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+/**
+ * Copie de la classe Voiture de chain-manager, permet de serialiser les objets voiture.
+ */
 public class Voiture implements Serializable {
 
-    @Id
-    @GeneratedValue
+    @JsonProperty("id")
     private Long id;
-    @ElementCollection
-    private Collection<String> options = new HashSet<>();
-    @Enumerated(EnumType.STRING)
-    private Statut statut = Statut.AFAIRE;
-    @ElementCollection
-    @Enumerated(EnumType.STRING)
-    private Map<String, Statut> machineJobs = new HashMap<>();
+
+    @JsonProperty("options")
+    private Collection<String> options ;
+
+    @JsonProperty("statut")
+    private Statut statut;
+
+    @JsonProperty("machineJobs")
+    private Map<String, Statut> machineJobs;
 
     public Voiture() {
     }

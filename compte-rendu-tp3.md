@@ -38,7 +38,7 @@ Le paramètre `spring.main.web-application-type=none` dans le fichier `applicati
 
 ### Q1.4. Expliquer pourquoi machine affiche Reçoit les messages sur la queue 'queue-machine1' au démarrage. Ce message reflète-il la réalité en l'état ?
 Le fichier `Runner` implémente l'interface `CommandLineRunner` qui permet de lancer une méthode au démarrage de l'application. Cette méthode affiche le message `Reçoit les messages sur la queue 'queue-machine1'`.    
-Ce message ne reflète pas la réalité, car la queue sur laquelle la machine va recevoir les messages est définie dans le fichier `ConfigurationService` via l'annotation `@Value("${tiw.is.machine.queue}")` qui viens récupérer la valeur définie dans `application.properties`.
+Ce message ne reflète pas la réalité, en l'état, l'application `machine` ne reçoit pas de messages, elle pourra le faire plus tard losrque l'on ajoutera un RabbitListener.
 
 ### Q1.5. chain-manager est configurée pour recevoir des messages. Sur quelle queue va-t-elle les chercher ?
 chain-manager va chercher les messages sur la queue `chainmanager` tel que défini dans son `application.properties`.
@@ -66,7 +66,6 @@ Voici notre `application.properties` après avoir ajouter ces informations :
 ```properties
 spring.main.web-application-type=none
 tiw.is.machine.queue=queue-machine1
-tiw.is.machine.number=1
 tiw.is.catalogue.url=http://localhost:8080
 tiw.is.catalogue.ping-interval=30000
 ```
@@ -87,8 +86,6 @@ Les pings non fructueux sont loggés afin de pouvoir les traiter en cas de probl
 Une classe `CatalogueInitializer` a été ajoutée dans l'application `machine` pour s'assurer que la machine est bien présente dans le catalogue en faisant un appel à la méthode `getOrCreateMachine` du service `CatalogueService` créé a cet effet.
 Si la machine n'est pas présente dans le catalogue, elle est créée, grâce à des appels RestTemplate à l'application `catalogue`.   
 
-De plus une clé unique à notre machine a été ajoutée dans le fichier `application.properties`, de manière à ce que plusieurs instances de l'application `machine` ne créent pas plusieurs entrées dans le catalogue pour la même machine.
-
 Ces changements permettent de résoudre le problème de création de doublons dans le catalogue et de vérifier que l'application `machine` est bien en communication avec l'application `catalogue`.
 
 
@@ -99,42 +96,62 @@ Pour gérer les JSON, les erreurs suivantes peuvent se produire :
 - Erreur de syntaxe : Le JSON est malformé
 - Erreur de deserialization : Le JSON est valide, mais ne peut pas être converti en objet Java
 
+Si on souhaite gérer correctement ces erreurs, plusieurs problèmes se posent.   
+Si les objets sont sérialisés et que l'on souhaite les désérialiser, il faut que les classes Java correspondent exactement à la structure du JSON.   
+Ce qui nous oblige à soit avoir une dépendance directe vers le projet qui contient les classes Java, soit à dupliquer les classes Java dans le projet qui désérialise les objets.   
+
+Par choix de simplicité, j'ai décidé de dupliquer le code, et dans certains cas de transformer les objets en `String` pour les envoyer dans la queue et les traiter comme de pures JSON.   
+De cette manière, aucun problème de déserialisation ne se pose, puisqu'on l'on utilise des structures de données identiques dans les deux projets.
+
 ### Q3.2 Copier/coller le code de votre @RabbitListener
 Voici le code de notre `@RabbitListener` :
 ```java
 @Slf4j
 @Component
-public class RabbitListener {
+public class RabbitMQListener {
 
 	private final ConfigurationService configurationService;
 
 	@Autowired
-	public RabbitListener(ConfigurationService configurationService) {
+	public RabbitMQListener(ConfigurationService configurationService) {
 		this.configurationService = configurationService;
 	}
 
-	@org.springframework.amqp.rabbit.annotation.RabbitListener(queues = "${tiw.is.machine.queue}")
+	@RabbitListener(queues = "${tiw.is.machine.queue}")
 	public void receiveReconfiguration(@Payload String payload) {
 		log.info("RabbitListener received: {}", payload);
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
-			VehicleDTO vehicleDTO = objectMapper.readValue(payload, VehicleDTO.class);
-			configurationService.reconfigure(vehicleDTO);
-		} catch (Exception e) {
-			log.error("Error deserializing VehicleDTO object: ", e);
+			Voiture voiture = objectMapper.readValue(payload, Voiture.class);
+			configurationService.reconfigure(voiture);
+		}
+		catch (Exception e) {
+			log.error("Error deserializing Voiture object: ", e);
 		}
 	}
-
 }
 ```
 ## 4. Envoi de message par chain-manager et machine
 ### Q4.1 Copier/coller le code de la méthode envoieOptionsVoiture
-
+Voici le code de la méthode `envoieOptionsVoiture` :
+```java
+public void envoieOptionsVoiture(String queueName, Voiture voiture) throws JsonProcessingException {
+	Collection<String> options = voiture.getOptions();
+	log.info("Envoi des options '{}' pour la voiture {} sur la queue '{}'", options, voiture.getId(), queueName);
+	if (queueName != null) {
+	    String payload = new ObjectMapper().writeValueAsString(voiture);
+	    rabbitTemplate.convertAndSend(queueName, payload);
+	}
+}
+```
 
 ### Q4.2 Seul le premier appel déclenche la production de message(s) dans RabbitMQ. Pourquoi ?
-
+Car la méthode `demarreConfigurationVoiture` est appelée lors de l'ajout d'une voiture.   
+Dans cette méthode, on vérifie si la voiture est déjà en cours de configuration en regardant le statut des voitures. Si c'est le cas, on ne fait rien.
 
 ### Q4.3. Quelles sont les informations transmises lors de la confirmation de reconfiguration ? Avez-vous du ajouter des données dans la demande de reconfiguration ? Si oui, lesquelles ?
+Non, aucune donnée n'a été ajoutée dans la demande de reconfiguration. Nous avons simplement utilisé les options de la voiture ainsi que le numéro de la machine pour les configurer un par un en faisant des appels RestTemplate vers `CatalogueApplication`.   
+Une fois l'opération terminée, nous envoyons un message de confirmation à chain-manager avec en objet la voiture reconfigurée, de manière à ce que chain-manager puisse mettre à jour le statut de la voiture.
 
 
 ## 5. Synchronisation et démarrage de la configuration suivante
@@ -146,8 +163,15 @@ public class RabbitListener {
 
 ### Q5.3 Normalement, la voiture ne passe pas au statut TERMINE. Pourquoi ? Élaborer une stratégie qui permettrait de mitiger (à défaut de faire disparaitre) le problème.
 
-## Comment lancer l'application ?
+## Comment lancer les applications ?
 - Lancer les serveurs RabbitMQ et PostgreSQL via le docker avec la commande `docker-compose up -d`
 - Se rendre sur http://localhost:15672/ pour accéder à l'interface web de RabbitMQ, avec les identifiants `guest` et `guest`
-- Se rendre sur http://localhost:15672/#/queues et ajouter une queue `chainmanager` ainsi qu'une queue `queue-machine1`
-- Lancer les applications avec la commande `mvn spring-boot:run` ou via l'IDE
+- Se rendre sur http://localhost:15672/#/queues et ajouter une *queue* `queue-machine1`, les autres *queues* seront créées __automatiquement__
+- Lancer les applications avec la commande `mvn spring-boot:run` ou via l'IDE dans l'ordre suivant :
+    - `catalogue`
+    - `chain-manager`
+    - `machine`
+
+Commandes pour tester les queues :
+- `curl -X POST -H "Content-Type: application/json" -d '{"nom": "option1"}' http://localhost:8080/option`. Cette commande ajoute une option au catalogue.
+- `curl -X POST -H "Content-Type: application/json" -d '{"options": ["option1"]}' http://localhost:8081/voiture`. Cette commande ajoute une voiture et déclenche sa reconfiguration.

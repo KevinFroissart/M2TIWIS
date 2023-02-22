@@ -15,9 +15,9 @@ import java.util.Collection;
 @Service
 @Transactional
 public class ConfigurationService {
-    private ConfigurationRepository configurationRepository;
-    private MachineRepository machineRepository;
-    private OptionRepository optionRepository;
+    private final ConfigurationRepository configurationRepository;
+    private final MachineRepository machineRepository;
+    private final OptionRepository optionRepository;
 
     public ConfigurationService(ConfigurationRepository configurationRepository, MachineRepository machineRepository, OptionRepository optionRepository) {
         this.configurationRepository = configurationRepository;
