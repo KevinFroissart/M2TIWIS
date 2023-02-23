@@ -7,9 +7,9 @@ import fr.univlyon1.m2tiw.is.chainmanager.models.Voiture;
 
 @JsonDeserialize(as = VoitureDTO.class)
 public class VoitureDTO {
-    public Long id;
-    public Collection<String> options;
-    public String statut;
+    private Long id;
+    private Collection<String> options;
+    private String statut;
 
     public VoitureDTO() {
     }

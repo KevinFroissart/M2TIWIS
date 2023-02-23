@@ -37,7 +37,7 @@ public class CataloguePing {
 
 	private void pingCatalogue() {
 		try {
-			restTemplate.getForObject(configurationService.getCatalogueUrl() + "/machine", Void.class);
+			restTemplate.getForObject(configurationService.getCatalogueUrl().concat("/machine"), Void.class);
 			pingCount++;
 		} catch (RestClientException e) {
 			log.error("Catalogue is not responding, ping count: {}, interval is {}", pingCount, configurationService.getPingInterval());

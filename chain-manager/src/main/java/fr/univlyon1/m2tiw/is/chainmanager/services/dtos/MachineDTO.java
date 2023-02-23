@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class MachineDTO {
 
-	public Long id;
+	private Long id;
 
 	@JsonProperty(value = "modele")
 	public String queue;

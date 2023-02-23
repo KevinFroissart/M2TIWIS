@@ -1,4 +1,4 @@
-package fr.univlyon1.m2tiw.is.machine.configuration;
+package fr.univlyon1.m2tiw.is.machine.controller;
 
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +21,21 @@ public class RabbitMQListener {
 		this.configurationService = configurationService;
 	}
 
+	/**
+	 * Reçoit un message de la queue RabbitMQ et lance la reconfiguration de la machine.
+	 *
+	 * @param payload le message reçu.
+	 */
 	@RabbitListener(queues = "${tiw.is.machine.queue}")
 	public void receiveReconfiguration(@Payload String payload) {
-		log.info("RabbitListener received: {}", payload);
+		log.info("RabbitListener a reçu: {}", payload);
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			Voiture voiture = objectMapper.readValue(payload, Voiture.class);
 			configurationService.reconfigure(voiture);
 		}
 		catch (Exception e) {
-			log.error("Error deserializing Voiture object: ", e);
+			log.error("Erreur de désérialisation de l'objet Voiture: ", e);
 		}
 	}
 }

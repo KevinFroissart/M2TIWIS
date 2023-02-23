@@ -17,25 +17,27 @@ public class RabbitConfig {
 	@Value("${tiw.is.machine.confirm-queue}")
 	String confirmQueueName;
 
+	@Value("${tiw.is.machine.config-queue}")
+	String configQueueName;
+
 	@Bean
 	public Queue machineQueue() {
 		return new Queue(queueName, false);
 	}
 
-	/**
-	 * Création de la queue de confirmation.
-	 */
 	@Bean
 	public Queue confirmMachineQueue() {
 		return new Queue(confirmQueueName, false);
 	}
 
 	@Bean
+	public Queue configMachineQueue() {
+		return new Queue(configQueueName, false);
+	}
+
+	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setExchange("");
-		rabbitTemplate.setRoutingKey(queueName);
-		return rabbitTemplate;
+		return new RabbitTemplate(connectionFactory);
 	}
 
 }

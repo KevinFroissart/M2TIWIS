@@ -6,12 +6,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class MachineDTO {
 
-	public Long id;
+	private Long id;
 
 	@JsonProperty(value = "modele")
-	public String queue;
+	private String queue;
 
-	public Collection<String> options;
+	private Collection<String> options;
 
 	public Long getId() {
 		return id;

@@ -30,19 +30,27 @@ public class CatalogueService {
 		this.configurationService = configurationService;
 	}
 
+	/**
+	 * Récupère la machine dans le catalogue ou la crée si elle n'existe pas.
+	 */
 	public void getOrCreateMachine() {
 		if (!isMachineInCatalogue()) {
-			log.info("No machine found in catalogue with queue name {}, creating a new one", queueName);
+			log.info("Aucune machine trouvée dans le catalogue avec la queue {}, création d'une nouvelle machine", queueName);
 			createMachine();
 		}
 		else {
-			log.info("Machine found in catalogue with queue name {}", queueName);
+			log.info("Une machine a été trouvée dans le catalogue avec la queue {}", queueName);
 		}
 	}
 
+	/**
+	 * Vérifie si la machine est présente dans le catalogue.
+	 *
+	 * @return true si la machine est présente dans le catalogue, false sinon.
+	 */
 	private boolean isMachineInCatalogue() {
 		try {
-			String url = catalogueUrl + "/machine";
+			String url = catalogueUrl.concat("/machine");
 			return Arrays.stream(Objects.requireNonNull(restTemplate.exchange(url, HttpMethod.GET, null, MachineDTO[].class).getBody()))
 					.filter(m -> m.getQueue().equals(queueName))
 					.findFirst()
@@ -57,10 +65,13 @@ public class CatalogueService {
 		}
 	}
 
+	/**
+	 * Crée une machine dans le catalogue.
+	 */
 	private void createMachine() {
 		MachineDTO machine = new MachineDTO();
 		machine.setQueue(queueName);
-		String url = catalogueUrl + "/machine";
+		String url = catalogueUrl.concat("/machine");
 		ResponseEntity<MachineDTO> response = restTemplate.postForEntity(url, machine, MachineDTO.class);
 		configurationService.setMachineNumber(Objects.requireNonNull(response.getBody()).getId());
 	}

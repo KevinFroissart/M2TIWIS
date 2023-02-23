@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 import java.nio.charset.StandardCharsets;
 
 @Slf4j
-// Rmq: injection du nom de la queue à partir de la configuration définie dans application.properties
 @RabbitListener(queues = "${tiw.is.chainmanager.queue}")
 @Component
 public class ConfigurationConfirmationReceiver {

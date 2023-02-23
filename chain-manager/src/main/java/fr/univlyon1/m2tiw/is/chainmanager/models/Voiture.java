@@ -20,7 +20,7 @@ public class Voiture implements Serializable {
     private Statut statut = Statut.AFAIRE;
     @ElementCollection
     @Enumerated(EnumType.STRING)
-    private Map<String, Statut> machineJobs = new HashMap<>();
+    private Map<String, Statut> machine_jobs = new HashMap<>();
 
     public Voiture() {
     }
@@ -50,11 +50,11 @@ public class Voiture implements Serializable {
     }
 
     public Map<String, Statut> getMachineJobs() {
-        return machineJobs;
+        return machine_jobs;
     }
 
     public void setMachineJobs(Map<String, Statut> machineJobs) {
-        this.machineJobs = machineJobs;
+        this.machine_jobs = machineJobs;
     }
 
     public void addOption(String option) {
@@ -62,6 +62,6 @@ public class Voiture implements Serializable {
     }
 
     public void setMachineJobStatus(String machine, Statut statut) {
-        machineJobs.put(machine,statut);
+        machine_jobs.put(machine,statut);
     }
 }

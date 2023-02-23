@@ -2,9 +2,9 @@ package fr.univlyon1.m2tiw.is.machine.services.dtos;
 
 public class ConfigurationDTO {
 
-	public Long machineId;
-	public String optionId;
-	public String cfg;
+	private Long machineId;
+	private String optionId;
+	private String cfg;
 
 	public Long getMachineId() {
 		return machineId;

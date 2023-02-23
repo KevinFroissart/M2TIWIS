@@ -38,7 +38,7 @@ Le paramètre `spring.main.web-application-type=none` dans le fichier `applicati
 
 ### Q1.4. Expliquer pourquoi machine affiche Reçoit les messages sur la queue 'queue-machine1' au démarrage. Ce message reflète-il la réalité en l'état ?
 Le fichier `Runner` implémente l'interface `CommandLineRunner` qui permet de lancer une méthode au démarrage de l'application. Cette méthode affiche le message `Reçoit les messages sur la queue 'queue-machine1'`.    
-Ce message ne reflète pas la réalité, en l'état, l'application `machine` ne reçoit pas de messages, elle pourra le faire plus tard losrque l'on ajoutera un RabbitListener.
+Ce message ne reflète pas la réalité, en l'état, l'application `machine` ne reçoit pas de messages, elle pourra le faire plus tard lorsque l'on ajoutera un RabbitListener.
 
 ### Q1.5. chain-manager est configurée pour recevoir des messages. Sur quelle queue va-t-elle les chercher ?
 chain-manager va chercher les messages sur la queue `chainmanager` tel que défini dans son `application.properties`.
@@ -94,7 +94,7 @@ Ces changements permettent de résoudre le problème de création de doublons da
 Pour gérer les JSON, les erreurs suivantes peuvent se produire :
 
 - Erreur de syntaxe : Le JSON est malformé
-- Erreur de deserialization : Le JSON est valide, mais ne peut pas être converti en objet Java
+- Erreur de désérialization : Le JSON est valide, mais ne peut pas être converti en objet Java
 
 Si on souhaite gérer correctement ces erreurs, plusieurs problèmes se posent.   
 Si les objets sont sérialisés et que l'on souhaite les désérialiser, il faut que les classes Java correspondent exactement à la structure du JSON.   
@@ -110,25 +110,30 @@ Voici le code de notre `@RabbitListener` :
 @Component
 public class RabbitMQListener {
 
-	private final ConfigurationService configurationService;
+    private final ConfigurationService configurationService;
 
-	@Autowired
-	public RabbitMQListener(ConfigurationService configurationService) {
-		this.configurationService = configurationService;
-	}
+    @Autowired
+    public RabbitMQListener(ConfigurationService configurationService) {
+        this.configurationService = configurationService;
+    }
 
-	@RabbitListener(queues = "${tiw.is.machine.queue}")
-	public void receiveReconfiguration(@Payload String payload) {
-		log.info("RabbitListener received: {}", payload);
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			Voiture voiture = objectMapper.readValue(payload, Voiture.class);
-			configurationService.reconfigure(voiture);
-		}
-		catch (Exception e) {
-			log.error("Error deserializing Voiture object: ", e);
-		}
-	}
+  /**
+   * Reçoit un message de la queue RabbitMQ et lance la reconfiguration de la machine.
+   *
+   * @param payload le message reçu.
+   */
+    @RabbitListener(queues = "${tiw.is.machine.queue}")
+    public void receiveReconfiguration(@Payload String payload) {
+        log.info("RabbitListener a reçu: {}", payload);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            Voiture voiture = objectMapper.readValue(payload, Voiture.class);
+            configurationService.reconfigure(voiture);
+        }
+        catch (Exception e) {
+            log.error("Erreur de désérialisation de l'objet Voiture: ", e);
+        }
+    }
 }
 ```
 ## 4. Envoi de message par chain-manager et machine
@@ -136,12 +141,12 @@ public class RabbitMQListener {
 Voici le code de la méthode `envoieOptionsVoiture` :
 ```java
 public void envoieOptionsVoiture(String queueName, Voiture voiture) throws JsonProcessingException {
-	Collection<String> options = voiture.getOptions();
-	log.info("Envoi des options '{}' pour la voiture {} sur la queue '{}'", options, voiture.getId(), queueName);
-	if (queueName != null) {
-	    String payload = new ObjectMapper().writeValueAsString(voiture);
-	    rabbitTemplate.convertAndSend(queueName, payload);
-	}
+    Collection<String> options = voiture.getOptions();
+    if (queueName != null) {
+        log.info("Envoi des options '{}' pour la voiture {} sur la queue '{}'", options, voiture.getId(), queueName);
+        String payload = new ObjectMapper().writeValueAsString(voiture);
+        rabbitTemplate.convertAndSend(queueName, payload);
+    }
 }
 ```
 
@@ -151,26 +156,63 @@ Dans cette méthode, on vérifie si la voiture est déjà en cours de configurat
 
 ### Q4.3. Quelles sont les informations transmises lors de la confirmation de reconfiguration ? Avez-vous du ajouter des données dans la demande de reconfiguration ? Si oui, lesquelles ?
 Non, aucune donnée n'a été ajoutée dans la demande de reconfiguration. Nous avons simplement utilisé les options de la voiture ainsi que le numéro de la machine pour les configurer un par un en faisant des appels RestTemplate vers `CatalogueApplication`.   
-Une fois l'opération terminée, nous envoyons un message de confirmation à chain-manager avec en objet la voiture reconfigurée, de manière à ce que chain-manager puisse mettre à jour le statut de la voiture.
+Une fois l'opération terminée, nous envoyons un message de confirmation à chain-manager avec en objet la voiture reconfigurée, de manière à ce que chain-manager puisse mettre à jour le statut de la voiture en question.
 
 
 ## 5. Synchronisation et démarrage de la configuration suivante
 ### Q5.1. Quel champ de Voiture dans chain-manager est particulièrement utile ici ? A quel moment ce champ doit-il être réellement initialisé ?
-
+Le champ `machineJobs` de la classe `Voiture` est utile ici. Il est initialisé lorsque la reconfiguration d'une machine commence.
 
 ### Q5.2. Avez-vous du ajouter des informations dans certains messages ? Si oui, lesquelles ?
-
+Oui, au lieu de communiquer uniquement le numéro de la voiture, nous avons ajouté le nom de la queue de la machine qui se reconfigure dans les messages échangés.
 
 ### Q5.3 Normalement, la voiture ne passe pas au statut TERMINE. Pourquoi ? Élaborer une stratégie qui permettrait de mitiger (à défaut de faire disparaitre) le problème.
+Dans notre implémentation, la voiture passe bien au statut `TERMINE` lorsque la reconfiguration est terminée.   
+Nous envoyons un premier message à chain-manager pour lui dire que la reconfiguration d'une machine a commencé, celui-ci insère donc les informations appropriées dans la table `voiture_machine_jobs`.
+Une fois la reconfiguration faite (i.e. le Thread.sleep terminé), nous envoyons un second message à chain-manager pour lui dire que la reconfiguration d'une machine est terminée.   
+De son côté chain-manager vérifie dans la base de donnée que toutes les machines qui ont déclarées avoir commencé leur configuration ont également déclarées l'avoir terminée.   
+Si c'est le cas, chain-manager met à jour le statut de la voiture en `TERMINE`.   
+
+Tous ces échanges peuvent être visualisés dans les logs des applications.   
+
+Depuis `chain-manager` :
+```log
+f.u.m.i.c.services.MachineService  : Envoi des options '[option-un-peu-plus-longue]' pour la voiture 2 sur la queue 'queue-machine1'
+f.u.m.i.c.services.MachineService  : Envoi des options '[option-un-peu-plus-longue]' pour la voiture 2 sur la queue 'queue-machine2'
+f.u.m.i.c.services.VoitureService  : Reconfiguration en cours pour la voiture 2 et la machine qui a pour queue : queue-machine1
+f.u.m.i.c.services.VoitureService  : Reconfiguration en cours pour la voiture 2 et la machine qui a pour queue : queue-machine2
+f.u.m.i.c.services.VoitureService  : Voiture 2 reçue dans la queue de confirmation
+f.u.m.i.c.services.VoitureService  : Voiture 2 reçue dans la queue de confirmation
+f.u.m.i.c.services.VoitureService  : Toutes les machines ont terminé la reconfiguration de la voiture : 2
+```
+
+Depuis `machine` avec la queue `queue-machine1` :
+```log
+f.u.m.i.m.controller.RabbitMQListener    : RabbitListener a reçu: {"id":2,"options":["option-un-peu-plus-longue"],"statut":"DEMARRE","machineJobs":{}}
+f.u.m.i.m.services.ConfigurationService  : Envoi du signal de début de reconfiguration de la machine 1 avec les options: [option-un-peu-plus-longue]
+f.u.m.i.m.services.ConfigurationService  : Vérification pour la machine: 1 avec les options: option-un-peu-plus-longue, et la configuration: 1cfg
+f.u.m.i.m.services.ConfigurationService  : Envoi du signal de fin de reconfiguration de la machine 1 avec les options: [option-un-peu-plus-longue]
+```
+
+Depuis `machine` avec la queue `queue-machine2` :
+```log
+f.u.m.i.m.controller.RabbitMQListener    : RabbitListener a reçu: {"id":2,"options":["option-un-peu-plus-longue"],"statut":"DEMARRE","machineJobs":{}}
+f.u.m.i.m.services.ConfigurationService  : Envoi du signal de début de reconfiguration de la machine 2 avec les options: [option-un-peu-plus-longue]
+f.u.m.i.m.services.ConfigurationService  : Vérification pour la machine: 2 avec les options: option-un-peu-plus-longue, et la configuration: 2cfg
+f.u.m.i.m.services.ConfigurationService  : Envoi du signal de fin de reconfiguration de la machine 2 avec les options: [option-un-peu-plus-longue]
+```
+
+À noter que les numéros 1 et 2 des machines correspondent aux ID qui leur ont été attribués dans la base de données lors de leur création.
 
 ## Comment lancer les applications ?
-- Lancer les serveurs RabbitMQ et PostgreSQL via le docker avec la commande `docker-compose up -d`
+- Lancer les serveurs RabbitMQ et PostgreSQL via le docker avec la commande `docker compose up -d`
 - Se rendre sur http://localhost:15672/ pour accéder à l'interface web de RabbitMQ, avec les identifiants `guest` et `guest`
-- Se rendre sur http://localhost:15672/#/queues et ajouter une *queue* `queue-machine1`, les autres *queues* seront créées __automatiquement__
+- Se rendre sur http://localhost:15672/#/queues et ajouter une *queue* `queue-machine1` et `queue-machine2`, les autres *queues* seront créées __automatiquement__
 - Lancer les applications avec la commande `mvn spring-boot:run` ou via l'IDE dans l'ordre suivant :
     - `catalogue`
     - `chain-manager`
     - `machine`
+- Pour lancer une seconde machine, lancez la commande `java -jar machine/target/machine-0.0.1-SNAPSHOT.jar --spring.profiles.active=other` après avoir `mvn clean package` dans le dossier `machine`
 
 Commandes pour tester les queues :
 - `curl -X POST -H "Content-Type: application/json" -d '{"nom": "option1"}' http://localhost:8080/option`. Cette commande ajoute une option au catalogue.

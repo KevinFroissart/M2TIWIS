@@ -16,25 +16,27 @@ import fr.univlyon1.m2tiw.is.chainmanager.services.VoitureService;
 import fr.univlyon1.m2tiw.is.chainmanager.services.dtos.VoitureDTO;
 
 @RestController
-@RequestMapping(path="/voiture")
+@RequestMapping(path = "/voiture")
 public class VoitureController {
-    private final VoitureService voitureService;
 
-    public VoitureController(VoitureService voitureService) {
-        this.voitureService = voitureService;
-    }
+	private final VoitureService voitureService;
 
-    @PostMapping
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    public VoitureDTO ajouteVoiture(@RequestBody VoitureDTO voitureDTO) throws JsonProcessingException {
-        return voitureService.ajouteVoiture(voitureDTO);
-    }
+	public VoitureController(VoitureService voitureService) {
+		this.voitureService = voitureService;
+	}
 
-    @GetMapping
-    @ResponseBody
-    @ResponseStatus(HttpStatus.OK)
-    public Collection<VoitureDTO> getAllVoitures() {
-        return voitureService.getAllVoitures();
-    }
+	@PostMapping
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public VoitureDTO ajouteVoiture(@RequestBody VoitureDTO voitureDTO) throws JsonProcessingException {
+		return voitureService.ajouteVoiture(voitureDTO);
+	}
+
+	@GetMapping
+	@ResponseBody
+	@ResponseStatus(HttpStatus.OK)
+	public Collection<VoitureDTO> getAllVoitures() {
+		return voitureService.getAllVoitures();
+	}
+
 }

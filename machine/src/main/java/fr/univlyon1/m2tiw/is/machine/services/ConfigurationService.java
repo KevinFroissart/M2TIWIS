@@ -15,6 +15,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.univlyon1.m2tiw.is.machine.models.Voiture;
 import fr.univlyon1.m2tiw.is.machine.services.dtos.ConfigurationDTO;
+import fr.univlyon1.m2tiw.is.machine.services.dtos.VoitureMachineJobsDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -26,6 +27,9 @@ public class ConfigurationService {
 
 	@Value("${tiw.is.machine.confirm-queue}")
 	private String confirmQueueName;
+
+	@Value("${tiw.is.machine.config-queue}")
+	private String configQueueName;
 
 	private Long machineNumber;
 
@@ -65,21 +69,37 @@ public class ConfigurationService {
 	}
 
 	public void reconfigure(Voiture voiture) throws JsonProcessingException {
-		log.info("Reconfiguring machine {} with options: {}", machineNumber, voiture.getOptions());
+		VoitureMachineJobsDTO voitureMachineJobsDTO = new VoitureMachineJobsDTO(voiture.getId(), queueName);
+		ObjectMapper objectMapper = new ObjectMapper();
+
+		log.info("Envoi du signal de début de reconfiguration de la machine {} avec les options: {}", getMachineNumber(), voiture.getOptions());
+		String payload = objectMapper.writeValueAsString(voitureMachineJobsDTO);
+		rabbitTemplate.convertAndSend(configQueueName, payload);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 
-		for (String optionName : voiture.getOptions()) {
-			HttpEntity<String> requestEntity = new HttpEntity<>("{\"cfg\":\"" + machineNumber + "cfg\"}", headers);
-			restTemplate.exchange(catalogueUrl + "/configuration/" + machineNumber + "/" + optionName, HttpMethod.PUT, requestEntity, String.class);
+		int maxLen = 0;
 
-			ConfigurationDTO configurationDTO = getConfigurationByMachineNumberAndOptionName(machineNumber, optionName);
-			log.info("Verification for Machine: {} with Option: {}, Configuration: {}", configurationDTO.getMachineId(), configurationDTO.getOptionId(), configurationDTO.getCfg());
+		for (String optionName : voiture.getOptions()) {
+			HttpEntity<String> requestEntity = new HttpEntity<>("{\"cfg\":\"" + getMachineNumber() + "cfg\"}", headers);
+			restTemplate.exchange(catalogueUrl + "/configuration/" + getMachineNumber() + "/" + optionName, HttpMethod.PUT, requestEntity, String.class);
+
+			ConfigurationDTO configurationDTO = getConfigurationByMachineNumberAndOptionName(getMachineNumber(), optionName);
+			log.info("Vérification pour la machine: {} avec les options: {}, et la configuration: {}", configurationDTO.getMachineId(), configurationDTO.getOptionId(), configurationDTO.getCfg());
+
+			maxLen = Math.max(maxLen, optionName.length());
 		}
 
-		ObjectMapper objectMapper = new ObjectMapper();
-		String payload = objectMapper.writeValueAsString(voiture);
+		try {
+			Thread.sleep(maxLen * 1000L);
+		}
+		catch (InterruptedException e) {
+			log.error("Erreur survenue au cours du sleep(): {}", e.getMessage());
+			Thread.currentThread().interrupt();
+		}
+
+		log.info("Envoi du signal de fin de reconfiguration de la machine {} avec les options: {}", machineNumber, voiture.getOptions());
 		rabbitTemplate.convertAndSend(confirmQueueName, payload);
 	}
 
@@ -89,7 +109,7 @@ public class ConfigurationService {
 			return restTemplate.getForEntity(url, ConfigurationDTO.class, machineNumber, optionName).getBody();
 		}
 		catch (RestClientException e) {
-			log.error("Error while getting configuration for machine {} and option {}", machineNumber, optionName);
+			log.error("Erreur lors de la récupération de la configuration pour la machine {} et l'option {}", machineNumber, optionName);
 			throw e;
 		}
 	}

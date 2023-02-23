@@ -22,6 +22,9 @@ public class RabbitConfig {
 	@Value("${tiw.is.chainmanager.confirm-queue}")
 	String confirmQueueName;
 
+	@Value("${tiw.is.chainmanager.config-queue}")
+	String configQueueName;
+
 	@Bean
 	public Queue machineQueue() {
 		return new Queue(queueName, false);
@@ -33,10 +36,12 @@ public class RabbitConfig {
 	}
 
 	@Bean
+	public Queue configQueue() {
+		return new Queue(configQueueName, false);
+	}
+
+	@Bean
 	public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-		RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory);
-		rabbitTemplate.setExchange("");
-		rabbitTemplate.setRoutingKey(queueName);
-		return rabbitTemplate;
+		return new RabbitTemplate(connectionFactory);
 	}
 }
