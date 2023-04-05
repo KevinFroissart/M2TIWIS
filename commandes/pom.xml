@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>root-project</artifactId>
+        <groupId>fr.univlyon1.m2tiw.is</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <artifactId>commandes</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>commandes</name>
+    <description>Microservice gérant les commandes</description>
+
+    <dependencies>
+        <!-- versions specified in parent project -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>2.0.0-alpha6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.picocontainer</groupId>
+            <artifactId>picocontainer</artifactId>
+            <version>2.15</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.14.1</version>
+        </dependency>
+        <dependency>
+            <groupId>fr.univlyon1.m2tiw.tiw1</groupId>
+            <artifactId>web-framework</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin> <!-- config inherited from parent project -->
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>UTF-8</encoding>
+                    <generatedSourcesDirectory>${project.build.directory}/generated-sources/</generatedSourcesDirectory>
+                    <annotationProcessors>
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.BaseProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.ServiceProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.ControllerProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.PersistenceProcessor
+                        </annotationProcessor>
+                        <annotationProcessor>
+                            fr.univlyon1.m2tiw.tiw1.annotations.ConfigurationProcessor
+                        </annotationProcessor>
+                    </annotationProcessors>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
